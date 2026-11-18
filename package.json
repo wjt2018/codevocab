@@ -1,0 +1,195 @@
+{
+  "name": "codevocab",
+  "displayName": "CodeVocab · 码上背单词",
+  "description": "写代码时在后台朗读单词本，状态栏同步显示单词、词性和中文释义。",
+  "version": "0.1.0",
+  "publisher": "your-publisher-id",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Education",
+    "Other"
+  ],
+  "keywords": [
+    "vocabulary",
+    "english",
+    "单词",
+    "背单词",
+    "英语"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codevocab.togglePlay",
+        "title": "播放 / 暂停",
+        "category": "CodeVocab",
+        "icon": "$(play)"
+      },
+      {
+        "command": "codevocab.toggleVisible",
+        "title": "显示 / 隐藏单词",
+        "category": "CodeVocab",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "codevocab.toggleMute",
+        "title": "静音 / 取消静音",
+        "category": "CodeVocab",
+        "icon": "$(mute)"
+      },
+      {
+        "command": "codevocab.next",
+        "title": "下一个单词",
+        "category": "CodeVocab"
+      },
+      {
+        "command": "codevocab.previous",
+        "title": "上一个单词",
+        "category": "CodeVocab"
+      },
+      {
+        "command": "codevocab.goTo",
+        "title": "跳转到单词…",
+        "category": "CodeVocab"
+      },
+      {
+        "command": "codevocab.selectWordbook",
+        "title": "选择单词本…",
+        "category": "CodeVocab"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "codevocab.togglePlay",
+        "key": "ctrl+alt+p",
+        "mac": "cmd+alt+p"
+      },
+      {
+        "command": "codevocab.toggleVisible",
+        "key": "ctrl+alt+h",
+        "mac": "cmd+alt+h"
+      },
+      {
+        "command": "codevocab.toggleMute",
+        "key": "ctrl+alt+m",
+        "mac": "cmd+alt+m"
+      },
+      {
+        "command": "codevocab.next",
+        "key": "ctrl+alt+]",
+        "mac": "cmd+alt+]"
+      },
+      {
+        "command": "codevocab.previous",
+        "key": "ctrl+alt+[",
+        "mac": "cmd+alt+["
+      },
+      {
+        "command": "codevocab.goTo",
+        "key": "ctrl+alt+g",
+        "mac": "cmd+alt+g"
+      }
+    ],
+    "configuration": {
+      "title": "CodeVocab",
+      "properties": {
+        "codevocab.builtinWordbook": {
+          "type": "string",
+          "default": "cet4",
+          "enum": [
+            "cet4",
+            "cet6",
+            "kaoyan",
+            "ielts",
+            "toefl",
+            "gre",
+            "gaokao",
+            "zhongkao"
+          ],
+          "enumItemLabels": [
+            "大学英语四级",
+            "大学英语六级",
+            "考研",
+            "雅思 IELTS",
+            "托福 TOEFL",
+            "GRE",
+            "高考",
+            "中考"
+          ],
+          "markdownDescription": "内置单词本（数据来自 ECDICT）。仅在 `#codevocab.wordbookPath#` 为空时生效。"
+        },
+        "codevocab.wordbookPath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "自定义单词本文件路径（`.json` / `.csv` / `.tsv` / `.txt`）。留空则使用 `#codevocab.builtinWordbook#` 指定的内置单词本。相对路径相对于当前工作区根目录。"
+        },
+        "codevocab.interval": {
+          "type": "number",
+          "default": 2000,
+          "minimum": 0,
+          "description": "一个单词读完后，间隔多少毫秒播下一个。"
+        },
+        "codevocab.mutedDuration": {
+          "type": "number",
+          "default": 5000,
+          "minimum": 500,
+          "description": "静音时每个单词在状态栏停留多少毫秒，然后切换到下一个。"
+        },
+        "codevocab.speakMeaning": {
+          "type": "boolean",
+          "default": true,
+          "description": "读完英文后是否再朗读中文释义。"
+        },
+        "codevocab.rate": {
+          "type": "number",
+          "default": 0.9,
+          "minimum": 0.5,
+          "maximum": 2,
+          "description": "朗读语速（1 为正常速度）。"
+        },
+        "codevocab.maxMeaningLength": {
+          "type": "number",
+          "default": 30,
+          "minimum": 5,
+          "description": "状态栏中释义最多显示多少个字符，超出部分用省略号代替（悬停可看完整释义）。"
+        }
+      }
+    },
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "codevocab",
+          "title": "CodeVocab",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "codevocab": [
+        {
+          "type": "webview",
+          "id": "codevocab.player",
+          "name": "发音"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "~1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "typescript": "^5.4.0"
+  }
+}
