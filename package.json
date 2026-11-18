@@ -1,10 +1,24 @@
 {
   "name": "codevocab",
   "displayName": "CodeVocab · 码上背单词",
-  "description": "写代码时在后台朗读单词本，状态栏同步显示单词、词性和中文释义。",
+  "description": "写代码时在后台朗读单词和中文释义，状态栏同步显示词性和意思。内置四六级、考研、雅思、托福、GRE 词库。Listen to vocabulary while you code.",
   "version": "0.1.0",
   "publisher": "your-publisher-id",
   "license": "MIT",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#2563EB",
+    "theme": "dark"
+  },
+  "pricing": "Free",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wjt2018/codevocab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wjt2018/codevocab/issues"
+  },
+  "homepage": "https://github.com/wjt2018/codevocab#readme",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -15,9 +29,25 @@
   "keywords": [
     "vocabulary",
     "english",
-    "单词",
+    "learn english",
+    "word",
+    "dictionary",
+    "tts",
+    "statusbar",
+    "cet4",
+    "cet6",
+    "ielts",
+    "toefl",
+    "gre",
     "背单词",
-    "英语"
+    "单词",
+    "英语",
+    "词汇",
+    "四级",
+    "六级",
+    "考研",
+    "雅思",
+    "托福"
   ],
   "activationEvents": [
     "onStartupFinished"
