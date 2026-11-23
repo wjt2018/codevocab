@@ -1,7 +1,8 @@
 /**
  * 发音面板的网页。用浏览器自带的 Web Speech API（speechSynthesis）朗读。
  * 插件发来 speak / stop / show 消息，网页读完一个单词后回复 done。
- * 面板里的跳转控件发送 jump / jumpIndex / goTo 消息给插件。
+ * 面板里的跳转控件发送 jump / jumpIndex / goTo 消息给插件，
+ * 单词本下拉框发送 selectBook / importBook 消息给插件。
  */
 export function getWebviewHtml(nonce: string): string {
   return /* html */ `<!DOCTYPE html>
@@ -39,9 +40,20 @@ export function getWebviewHtml(nonce: string): string {
     border: 1px solid var(--vscode-input-border, transparent);
   }
   .row input[type=text]:focus { outline: 1px solid var(--vscode-focusBorder); }
+  .book { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; font-size: .9em; }
+  .book select {
+    padding: 3px 4px; max-width: 260px;
+    background: var(--vscode-dropdown-background); color: var(--vscode-dropdown-foreground);
+    border: 1px solid var(--vscode-dropdown-border, transparent);
+  }
+  .book select:focus { outline: 1px solid var(--vscode-focusBorder); }
 </style>
 </head>
 <body>
+  <div class="book">
+    <label for="book" class="muted">单词本</label>
+    <select id="book" title="切换单词本"></select>
+  </div>
   <div class="word"><span id="word">—</span><span class="phonetic" id="phonetic"></span></div>
   <div class="meaning" id="meaning"></div>
   <p class="muted" id="progress"></p>
@@ -124,11 +136,50 @@ export function getWebviewHtml(nonce: string): string {
     }
   }
 
+  // ---- 单词本下拉框 ----
+  let bookSignature = '';
+  let currentBookId = '';
+
+  function renderBooks(book, builtinBooks) {
+    if (!book || !builtinBooks) return;
+    currentBookId = book.id;
+    const signature = JSON.stringify([book, builtinBooks]);
+    if (signature === bookSignature) return;  // 没变化就不重建，避免打断正在操作的下拉框
+    bookSignature = signature;
+
+    const select = $('book');
+    select.textContent = '';
+    const builtin = document.createElement('optgroup');
+    builtin.label = '内置单词本';
+    for (const [id, name] of Object.entries(builtinBooks)) {
+      builtin.appendChild(new Option(name, id));
+    }
+    select.appendChild(builtin);
+
+    const custom = document.createElement('optgroup');
+    custom.label = '自定义';
+    if (book.id === 'custom') custom.appendChild(new Option('📄 ' + book.name, 'custom'));
+    custom.appendChild(new Option('📂 从文件导入…', 'import'));
+    select.appendChild(custom);
+
+    select.value = book.id;
+  }
+
+  $('book').addEventListener('change', () => {
+    const value = $('book').value;
+    // 先恢复成当前单词本：切换成功后插件会发来新的状态；用户取消导入时也能保持原样
+    $('book').value = currentBookId;
+    if (value === currentBookId) return;
+    if (value === 'import') vscode.postMessage({ type: 'importBook' });
+    else vscode.postMessage({ type: 'selectBook', book: value });
+  });
+
   let dragging = false;  // 拖动进度条时不要被插件发来的进度覆盖
   let lastShow = null;
 
   function show(m) {
     lastShow = m;
+    renderBooks(m.book, m.builtinBooks);
     const w = m.word;
     const slider = $('slider');
     slider.max = String(Math.max(m.total, 1));

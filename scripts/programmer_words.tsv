@@ -1,0 +1,724 @@
+# CodeVocab 程序员词汇表
+#
+# 格式：单词<Tab>词性<Tab>编程语境下的中文释义[<Tab>音标（可选，ECDICT 没有或不准时填写）]
+# 以 # 开头的行是注释。词表由人工整理：从 ECDICT 带 [计] 标签的词中筛选，并补充了常用的编程词汇。
+# 音标和通用释义由 build_wordbooks.py 从 ECDICT 补充。
+
+# ---- 基础概念 ----
+code	n.	代码
+program	n.	程序
+programming	n.	编程
+programmer	n.	程序员
+developer	n.	开发者
+software	n.	软件
+hardware	n.	硬件
+computing	n.	计算
+algorithm	n.	算法
+logic	n.	逻辑
+syntax	n.	语法
+semantic	adj.	语义的
+compile	v.	编译
+compiler	n.	编译器
+compilation	n.	编译
+interpret	v.	解释（执行）
+interpreter	n.	解释器
+execute	v.	执行
+execution	n.	执行
+run	v.	运行
+runtime	n.	运行时
+debug	v.	调试
+debugger	n.	调试器
+source	n.	源（代码）；来源
+binary	adj.	二进制的
+byte	n.	字节
+bit	n.	比特；位
+digit	n.	数字；位数
+decimal	adj.	十进制的
+hexadecimal	adj.	十六进制的
+encoding	n.	编码
+encode	v.	编码
+decode	v.	解码
+character	n.	字符
+token	n.	令牌；词法单元
+keyword	n.	关键字
+identifier	n.	标识符
+comment	n.	注释
+indentation	n.	缩进
+whitespace	n.	空白字符
+notation	n.	表示法；记法
+
+# ---- 数据类型与值 ----
+type	n.	类型
+data	n.	数据
+value	n.	值
+variable	n.	变量
+constant	n.	常量
+literal	n.	字面量
+string	n.	字符串
+integer	n.	整数
+float	n.	浮点数
+boolean	n.	布尔值	/ˈbuːliən/
+null	n.	空值
+undefined	adj.	未定义的
+array	n.	数组
+list	n.	列表
+tuple	n.	元组
+dictionary	n.	字典
+map	n.	映射；字典
+set	n.	集合
+object	n.	对象
+struct	n.	结构体	/strʌkt/
+enum	n.	枚举	/ˈiːnʌm/
+pointer	n.	指针
+reference	n.	引用
+primitive	adj.	原始的；基本类型的
+signed	adj.	有符号的
+unsigned	adj.	无符号的
+generic	adj.	泛型的；通用的
+subtype	n.	子类型
+nullable	adj.	可为空的	/ˈnʌləbl/
+immutable	adj.	不可变的
+mutable	adj.	可变的
+infinity	n.	无穷大
+precision	n.	精度
+overflow	n.	溢出
+truncate	v.	截断
+cast	v.	类型转换
+conversion	n.	转换
+convert	v.	转换
+
+# ---- 语句与表达式 ----
+expression	n.	表达式
+statement	n.	语句
+operator	n.	运算符
+operand	n.	操作数
+assignment	n.	赋值
+declaration	n.	声明
+declare	v.	声明
+define	v.	定义
+definition	n.	定义
+condition	n.	条件
+conditional	adj.	条件的
+loop	n.	循环
+iteration	n.	迭代
+iterate	v.	迭代
+iterator	n.	迭代器
+recursion	n.	递归
+recursive	adj.	递归的
+nested	adj.	嵌套的
+nesting	n.	嵌套
+branch	n.	分支
+switch	n.	开关；switch 语句
+case	n.	情况；分支
+default	n.	默认值
+return	v.	返回
+yield	v.	产出；让出
+break	v.	跳出（循环）
+continue	v.	继续（下一次循环）
+increment	n.	增量；自增
+decrement	n.	减量；自减
+precedence	n.	优先级
+scope	n.	作用域
+global	adj.	全局的
+local	adj.	局部的
+namespace	n.	命名空间
+alias	n.	别名
+placeholder	n.	占位符
+wildcard	n.	通配符
+asterisk	n.	星号
+bracket	n.	方括号
+brace	n.	花括号
+parenthesis	n.	圆括号
+semicolon	n.	分号
+colon	n.	冒号
+quote	n.	引号
+slash	n.	斜杠
+backslash	n.	反斜杠
+underscore	n.	下划线
+hyphen	n.	连字符
+tilde	n.	波浪号
+ampersand	n.	& 符号
+caret	n.	^ 符号；插入符
+
+# ---- 函数与面向对象 ----
+function	n.	函数
+method	n.	方法
+procedure	n.	过程
+routine	n.	例程
+parameter	n.	参数；形参
+argument	n.	参数；实参
+callback	n.	回调
+closure	n.	闭包
+lambda	n.	匿名函数
+invoke	v.	调用
+invocation	n.	调用
+call	v.	调用
+signature	n.	签名
+overload	v.	重载
+override	v.	重写；覆盖
+class	n.	类
+instance	n.	实例
+instantiate	v.	实例化
+constructor	n.	构造函数
+destructor	n.	析构函数
+property	n.	属性
+attribute	n.	属性；特性
+field	n.	字段
+member	n.	成员
+static	adj.	静态的
+abstract	adj.	抽象的
+abstraction	n.	抽象
+interface	n.	接口；界面
+implement	v.	实现
+implementation	n.	实现
+inherit	v.	继承
+inheritance	n.	继承
+derive	v.	派生
+polymorphism	n.	多态
+encapsulation	n.	封装
+encapsulate	v.	封装
+visibility	n.	可见性
+private	adj.	私有的
+public	adj.	公有的
+protected	adj.	受保护的
+accessor	n.	访问器	/əkˈsesə/
+getter	n.	取值函数	/ˈgetə/
+setter	n.	赋值函数	/ˈsetə/
+decorator	n.	装饰器
+annotation	n.	注解
+mixin	n.	混入	/ˈmɪksɪn/
+singleton	n.	单例
+factory	n.	工厂
+pattern	n.	模式
+delegate	n.	委托
+proxy	n.	代理
+adapter	n.	适配器
+wrapper	n.	包装器
+wrap	v.	包装
+handler	n.	处理程序
+listener	n.	监听器
+observer	n.	观察者
+subscriber	n.	订阅者
+emit	v.	发出（事件）
+dispatch	v.	分发；派发
+dispatcher	n.	分发器
+hook	n.	钩子
+
+# ---- 数据结构与算法 ----
+stack	n.	栈
+queue	n.	队列
+heap	n.	堆
+tree	n.	树
+node	n.	节点
+graph	n.	图
+vertex	n.	顶点
+edge	n.	边
+hash	n.	哈希
+collision	n.	冲突；碰撞
+bucket	n.	桶
+matrix	n.	矩阵
+vector	n.	向量
+index	n.	索引；下标
+offset	n.	偏移量
+length	n.	长度
+capacity	n.	容量
+element	n.	元素
+item	n.	项
+entry	n.	条目
+key	n.	键
+pair	n.	对
+subset	n.	子集
+sort	v.	排序
+ascending	adj.	升序的
+descending	adj.	降序的
+search	v.	搜索
+traverse	v.	遍历
+traversal	n.	遍历
+insertion	n.	插入
+deletion	n.	删除
+lookup	n.	查找
+filter	v.	过滤
+filtering	n.	过滤
+reduce	v.	归约；减少
+aggregate	v.	聚合
+merge	v.	合并
+split	v.	拆分
+concatenate	v.	拼接
+append	v.	追加
+prepend	v.	前置追加	/priːˈpend/
+duplicate	n.	重复项；副本
+unique	adj.	唯一的
+complexity	n.	复杂度
+linear	adj.	线性的
+logarithmic	adj.	对数的
+exponential	adj.	指数的
+optimal	adj.	最优的
+heuristic	adj.	启发式的
+greedy	adj.	贪心的
+dynamic	adj.	动态的
+brute	adj.	暴力的（brute force 暴力破解）
+binding	n.	绑定
+mapping	n.	映射
+serialize	v.	序列化
+deserialize	v.	反序列化	/ˌdiːˈsɪəriəlaɪz/
+parse	v.	解析
+parser	n.	解析器
+format	n.	格式
+template	n.	模板
+regex	n.	正则表达式	/ˈregeks/
+
+# ---- 错误与调试 ----
+error	n.	错误
+exception	n.	异常
+throw	v.	抛出（异常）
+catch	v.	捕获（异常）
+raise	v.	抛出（异常）
+handle	v.	处理
+bug	n.	程序错误；缺陷
+glitch	n.	小故障
+crash	v.	崩溃
+fault	n.	故障
+failure	n.	失败
+warning	n.	警告
+assert	v.	断言
+assertion	n.	断言
+trace	n.	跟踪；堆栈信息
+stacktrace	n.	堆栈跟踪	/ˈstæktreɪs/
+breakpoint	n.	断点	/ˈbreɪkpɔɪnt/
+inspect	v.	检查
+log	n.	日志
+logger	n.	日志记录器
+verbose	adj.	详细的（输出）
+diagnostic	n.	诊断信息
+invalid	adj.	无效的
+illegal	adj.	非法的
+unexpected	adj.	意外的
+unhandled	adj.	未处理的	/ʌnˈhændld/
+unresolved	adj.	未解决的；无法解析的
+deprecated	adj.	已弃用的
+deprecate	v.	弃用
+obsolete	adj.	过时的
+legacy	adj.	遗留的
+workaround	n.	变通方案
+fallback	n.	回退方案；兜底
+retry	v.	重试
+timeout	n.	超时
+abort	v.	中止
+terminate	v.	终止
+corrupt	adj.	损坏的
+corruption	n.	损坏
+leak	n.	泄漏（内存泄漏）
+regression	n.	回归（问题）
+reproduce	v.	复现
+troubleshoot	v.	排查故障
+mitigate	v.	缓解
+
+# ---- 测试与质量 ----
+test	n.	测试
+testing	n.	测试
+unit	n.	单元
+integration	n.	集成
+coverage	n.	覆盖率
+mock	n.	模拟对象
+stub	n.	桩
+fixture	n.	测试夹具
+benchmark	n.	基准测试
+validate	v.	校验
+validation	n.	校验
+verify	v.	验证
+verification	n.	验证
+lint	n.	代码检查	/lɪnt/
+linter	n.	代码检查工具	/ˈlɪntə/
+refactor	v.	重构	/riːˈfæktə/
+refactoring	n.	重构	/riːˈfæktərɪŋ/
+readability	n.	可读性
+maintainability	n.	可维护性
+maintenance	n.	维护
+robust	adj.	健壮的
+reliability	n.	可靠性
+consistency	n.	一致性
+correctness	n.	正确性
+redundancy	n.	冗余
+redundant	adj.	冗余的
+boilerplate	n.	样板代码
+snippet	n.	代码片段
+convention	n.	约定；惯例
+specification	n.	规范；规格
+compliance	n.	合规；遵从
+
+# ---- 版本控制与协作 ----
+repository	n.	仓库
+commit	v.	提交
+push	v.	推送
+pull	v.	拉取
+fetch	v.	获取
+clone	v.	克隆
+fork	v.	派生（仓库）
+rebase	v.	变基	/riːˈbeɪs/
+conflict	n.	冲突
+diff	n.	差异	/dɪf/
+patch	n.	补丁
+revert	v.	撤销；还原
+checkout	v.	检出；切换
+stash	v.	暂存
+tag	n.	标签
+release	n.	发布；版本
+version	n.	版本
+changelog	n.	更新日志	/ˈtʃeɪndʒlɒg/
+issue	n.	问题；议题
+review	n.	审查
+approve	v.	批准
+contributor	n.	贡献者
+maintainer	n.	维护者
+upstream	n.	上游
+downstream	n.	下游
+snapshot	n.	快照
+revision	n.	修订版本
+history	n.	历史记录
+documentation	n.	文档
+readme	n.	说明文件	/ˈriːdmiː/
+license	n.	许可证
+open	adj.	开放的（open source 开源）
+
+# ---- 构建与部署 ----
+build	v.	构建
+bundle	n.	打包文件
+bundler	n.	打包工具	/ˈbʌndlə/
+package	n.	包
+dependency	n.	依赖
+install	v.	安装
+installation	n.	安装
+uninstall	v.	卸载
+upgrade	v.	升级
+update	v.	更新
+library	n.	库
+framework	n.	框架
+plugin	n.	插件	/ˈplʌgɪn/
+extension	n.	扩展
+module	n.	模块
+modular	adj.	模块化的
+component	n.	组件
+toolchain	n.	工具链	/ˈtuːltʃeɪn/
+toolkit	n.	工具包
+script	n.	脚本
+command	n.	命令
+terminal	n.	终端
+shell	n.	命令行外壳
+console	n.	控制台
+prompt	n.	提示符
+flag	n.	标志；命令行选项
+option	n.	选项
+setting	n.	设置
+configuration	n.	配置
+configure	v.	配置
+environment	n.	环境
+deploy	v.	部署
+deployment	n.	部署
+pipeline	n.	流水线
+artifact	n.	构建产物
+container	n.	容器
+image	n.	镜像
+cluster	n.	集群
+orchestration	n.	编排
+provision	v.	预置；配置资源
+staging	n.	预发布环境
+production	n.	生产环境
+rollback	n.	回滚
+migration	n.	迁移
+migrate	v.	迁移
+compatible	adj.	兼容的
+compatibility	n.	兼容性
+incompatible	adj.	不兼容的
+portable	adj.	可移植的
+platform	n.	平台
+target	n.	目标（平台）
+minify	v.	压缩（代码）	/ˈmɪnɪfaɪ/
+transpile	v.	转译	/trænsˈpaɪl/
+polyfill	n.	兼容补丁	/ˈpɒlifɪl/
+
+# ---- 系统与并发 ----
+system	n.	系统
+operating	adj.	操作的（operating system 操作系统）
+kernel	n.	内核
+process	n.	进程
+thread	n.	线程
+concurrent	adj.	并发的
+concurrency	n.	并发
+parallel	adj.	并行的
+synchronous	adj.	同步的
+asynchronous	adj.	异步的
+async	adj.	异步的	/əˈsɪŋk/
+await	v.	等待
+promise	n.	承诺对象（Promise）
+sync	v.	同步
+lock	n.	锁
+mutex	n.	互斥锁	/ˈmjuːteks/
+deadlock	n.	死锁
+race	n.	竞争（race condition 竞态条件）
+atomic	adj.	原子的
+blocking	adj.	阻塞的
+idle	adj.	空闲的
+schedule	v.	调度
+scheduler	n.	调度器
+scheduling	n.	调度
+priority	n.	优先级
+worker	n.	工作线程
+daemon	n.	守护进程
+signal	n.	信号
+interrupt	n.	中断
+memory	n.	内存
+allocate	v.	分配
+allocation	n.	分配
+garbage	n.	垃圾（garbage collection 垃圾回收）
+buffer	n.	缓冲区
+cache	n.	缓存
+storage	n.	存储
+disk	n.	磁盘
+file	n.	文件
+folder	n.	文件夹
+directory	n.	目录
+path	n.	路径
+root	n.	根；根目录
+permission	n.	权限
+privilege	n.	特权
+executable	n.	可执行文件
+processor	n.	处理器
+virtual	adj.	虚拟的
+resource	n.	资源
+quota	n.	配额
+throttle	v.	节流
+debounce	v.	防抖	/diːˈbaʊns/
+
+# ---- 网络与 Web ----
+network	n.	网络
+networking	n.	网络通信
+protocol	n.	协议
+request	n.	请求
+response	n.	响应
+server	n.	服务器
+client	n.	客户端
+host	n.	主机
+port	n.	端口
+socket	n.	套接字
+packet	n.	数据包
+header	n.	请求头；头部
+payload	n.	负载；请求体
+endpoint	n.	端点；接口地址
+route	n.	路由
+router	n.	路由器；路由
+gateway	n.	网关
+domain	n.	域名；领域
+address	n.	地址
+bandwidth	n.	带宽
+latency	n.	延迟
+throughput	n.	吞吐量
+traffic	n.	流量
+upload	v.	上传
+download	v.	下载
+browser	n.	浏览器
+render	v.	渲染
+rendering	n.	渲染
+layout	n.	布局
+viewport	n.	视口	/ˈvjuːpɔːt/
+responsive	adj.	响应式的
+stylesheet	n.	样式表	/ˈstaɪlʃiːt/
+selector	n.	选择器
+query	n.	查询
+session	n.	会话
+cookie	n.	Cookie；小型文本文件
+redirect	v.	重定向
+redirection	n.	重定向
+middleware	n.	中间件
+webhook	n.	网络钩子	/ˈwebhʊk/
+backend	n.	后端	/ˈbækend/
+frontend	n.	前端	/ˈfrʌntend/
+online	adj.	在线的
+offline	adj.	离线的
+
+# ---- 数据库 ----
+database	n.	数据库
+table	n.	表
+column	n.	列
+row	n.	行
+record	n.	记录
+schema	n.	模式；表结构
+relational	adj.	关系型的
+transaction	n.	事务
+constraint	n.	约束
+primary	adj.	主要的（primary key 主键）
+foreign	adj.	外部的（foreign key 外键）
+join	n.	连接（查询）
+retrieval	n.	检索
+retrieve	v.	检索；获取
+persist	v.	持久化
+persistence	n.	持久化
+replica	n.	副本
+replication	n.	复制
+shard	n.	分片	/ʃɑːd/
+partition	n.	分区
+backup	n.	备份
+restore	v.	恢复
+integrity	n.	完整性
+durability	n.	持久性
+entity	n.	实体
+model	n.	模型
+cursor	n.	游标；光标
+
+# ---- 安全 ----
+security	n.	安全
+authentication	n.	身份认证
+authorization	n.	授权
+authenticate	v.	认证
+credential	n.	凭据
+password	n.	密码
+encryption	n.	加密
+encrypt	v.	加密
+decrypt	v.	解密
+cipher	n.	密码算法
+certificate	n.	证书
+vulnerability	n.	漏洞
+exploit	n.	漏洞利用
+injection	n.	注入
+firewall	n.	防火墙
+sanitize	v.	清理；过滤（输入）
+escape	v.	转义
+privacy	n.	隐私
+anonymous	adj.	匿名的
+confidentiality	n.	机密性
+hacker	n.	黑客
+malicious	adj.	恶意的
+
+# ---- 界面与交互 ----
+interactive	adj.	交互式的
+widget	n.	控件
+button	n.	按钮
+checkbox	n.	复选框	/ˈtʃekbɒks/
+dropdown	n.	下拉菜单	/ˈdrɒpdaʊn/
+dialog	n.	对话框
+modal	n.	模态框
+tooltip	n.	工具提示	/ˈtuːltɪp/
+icon	n.	图标
+font	n.	字体
+pixel	n.	像素
+palette	n.	调色板；命令面板
+theme	n.	主题
+animation	n.	动画
+transition	n.	过渡
+scroll	v.	滚动
+toggle	v.	切换
+shortcut	n.	快捷键；快捷方式
+clipboard	n.	剪贴板
+foreground	n.	前台；前景
+background	n.	后台；背景
+accessibility	n.	无障碍；可访问性
+navigation	n.	导航
+desktop	n.	桌面
+editor	n.	编辑器
+preview	n.	预览
+highlight	v.	高亮
+
+# ---- 性能与架构 ----
+performance	n.	性能
+optimize	v.	优化
+optimization	n.	优化
+efficient	adj.	高效的
+overhead	n.	开销
+bottleneck	n.	瓶颈
+scalable	adj.	可扩展的
+scalability	n.	可扩展性
+availability	n.	可用性
+distributed	adj.	分布式的
+architecture	n.	架构
+infrastructure	n.	基础设施
+service	n.	服务
+microservice	n.	微服务	/ˈmaɪkrəʊsɜːvɪs/
+monolith	n.	单体（应用）
+layer	n.	层
+tier	n.	层级
+coupling	n.	耦合
+cohesion	n.	内聚
+granularity	n.	粒度
+hierarchy	n.	层级结构
+hierarchical	adj.	层级的
+lazy	adj.	惰性的；延迟的
+eager	adj.	急切的；立即的
+deferred	adj.	延迟的
+preload	v.	预加载	/priːˈləʊd/
+prefetch	v.	预取	/priːˈfetʃ/
+polling	n.	轮询
+stream	n.	流
+pipe	n.	管道
+event	n.	事件
+trigger	v.	触发
+lifecycle	n.	生命周期	/ˈlaɪfsaɪkl/
+state	n.	状态
+stateless	adj.	无状态的
+idempotent	adj.	幂等的	/ˌaɪdemˈpəʊtənt/
+deterministic	adj.	确定性的
+metadata	n.	元数据
+monitoring	n.	监控
+metric	n.	指标
+threshold	n.	阈值
+granular	adj.	细粒度的
+
+# ---- 文档常用词 ----
+specify	v.	指定
+specified	adj.	指定的
+optional	adj.	可选的
+required	adj.	必需的
+mandatory	adj.	强制的
+explicit	adj.	显式的
+implicit	adj.	隐式的
+arbitrary	adj.	任意的
+corresponding	adj.	对应的
+respectively	adv.	分别地
+subsequent	adj.	后续的
+preceding	adj.	前面的
+underlying	adj.	底层的
+built	adj.	内置的（built-in）
+native	adj.	原生的
+custom	adj.	自定义的
+customize	v.	自定义
+enable	v.	启用
+disable	v.	禁用
+initialize	v.	初始化
+initial	adj.	初始的
+omit	v.	省略
+ignore	v.	忽略
+expose	v.	暴露；公开
+leverage	v.	利用
+utilize	v.	利用
+utility	n.	工具；实用程序
+helper	n.	辅助函数
+feature	n.	特性；功能
+functionality	n.	功能
+capability	n.	能力
+behavior	n.	行为
+mechanism	n.	机制
+approach	n.	方法；方式
+scenario	n.	场景
+workflow	n.	工作流
+guideline	n.	指南
+tutorial	n.	教程
+overview	n.	概述
+prerequisite	n.	前提条件
+caveat	n.	注意事项
+limitation	n.	限制
+trade-off	n.	权衡	/ˈtreɪdɒf/
+best	adj.	最佳的（best practice 最佳实践）
+recommend	v.	推荐
+appropriate	adj.	合适的
+sufficient	adj.	足够的
+valid	adj.	有效的
+populate	v.	填充
+propagate	v.	传播
+consume	v.	消费；使用
+expire	v.	过期
+revoke	v.	撤销
+grant	v.	授予
+manifest	n.	清单文件
+experimental	adj.	实验性的
+stable	adj.	稳定的
+beta	n.	测试版
+breaking	adj.	破坏性的（breaking change 不兼容变更）
+backward	adj.	向后的（backward compatible 向后兼容）

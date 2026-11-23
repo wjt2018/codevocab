@@ -1,0 +1,29 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "codevocab",
+    "ECDICT",
+    "IELTS",
+    "TOEFL",
+    "Kaoyan",
+    "Gaokao",
+    "Zhongkao",
+    "reservior",
+    "vsce",
+    "ovsx",
+    "VSCodium",
+    "Miaoo",
+    "wordbook",
+    "wordbooks"
+  ],
+  "ignorePaths": [
+    "wordbooks/**",
+    "scripts/*.tsv",
+    "node_modules/**",
+    "out/**"
+  ],
+  "ignoreRegExpList": [
+    "/\\/[^/\\s]*[ˈˌəɪʊɒʌæɜɔθðʃʒŋː][^/\\s]*\\//g"
+  ]
+}

@@ -9,3 +9,4 @@ node_modules/**
 CONTRIBUTING.md
 images/**
 !images/icon.png
+cspell.json

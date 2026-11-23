@@ -1,0 +1,524 @@
+# CodeVocab 商务英语词汇表
+#
+# 格式：单词<Tab>词性<Tab>商务语境下的中文释义[<Tab>音标（可选，ECDICT 没有或不准时填写）]
+# 以 # 开头的行是注释。词表由人工整理，覆盖职场和商务场景最常用的词汇（参考 BEC 等商务英语考试的常见话题）。
+# 音标和通用释义由 build_wordbooks.py 从 ECDICT 补充。
+
+# ---- 公司与组织 ----
+corporation	n.	公司；企业
+enterprise	n.	企业
+firm	n.	公司；商行
+subsidiary	n.	子公司
+headquarters	n.	总部
+branch	n.	分公司；分支机构
+division	n.	事业部；部门
+department	n.	部门
+startup	n.	初创公司	/ˈstɑːtʌp/
+conglomerate	n.	企业集团
+partnership	n.	合伙关系；合伙企业
+venture	n.	企业；投机项目（joint venture 合资企业）
+franchise	n.	特许经营权
+affiliate	n.	附属公司；联营机构
+stakeholder	n.	利益相关者
+shareholder	n.	股东
+board	n.	董事会
+chairman	n.	董事长
+executive	n.	高管；主管
+founder	n.	创始人
+entrepreneur	n.	企业家；创业者
+proprietor	n.	所有者；业主
+incorporate	v.	成立公司
+merger	n.	合并
+acquisition	n.	收购
+acquire	v.	收购
+restructure	v.	重组
+restructuring	n.	重组
+downsize	v.	裁员；缩减规模
+outsource	v.	外包
+outsourcing	n.	外包
+headcount	n.	员工人数
+corporate	adj.	公司的；企业的
+organizational	adj.	组织的
+hierarchy	n.	层级；等级制度
+bureaucracy	n.	官僚作风
+mission	n.	使命
+vision	n.	愿景
+culture	n.	企业文化
+sector	n.	行业；部门
+industry	n.	行业；产业
+
+# ---- 职位与人力资源 ----
+employer	n.	雇主
+employee	n.	雇员；员工
+recruit	v.	招聘
+recruitment	n.	招聘
+recruiter	n.	招聘人员
+candidate	n.	候选人；应聘者
+applicant	n.	申请人
+résumé	n.	简历	/ˈrezjuːmeɪ/
+vacancy	n.	空缺职位
+position	n.	职位
+interview	n.	面试
+hire	v.	雇用
+onboarding	n.	入职培训	/ˈɒnbɔːdɪŋ/
+probation	n.	试用期
+appraisal	n.	绩效评估
+evaluation	n.	评估
+promotion	n.	晋升；促销
+resign	v.	辞职
+resignation	n.	辞职
+dismiss	v.	解雇
+layoff	n.	裁员
+redundancy	n.	裁员；冗员
+retire	v.	退休
+retirement	n.	退休
+pension	n.	养老金
+salary	n.	薪水
+wage	n.	工资（按时计）
+payroll	n.	工资单；在职人数
+bonus	n.	奖金
+commission	n.	佣金；提成
+incentive	n.	激励；奖励
+compensation	n.	薪酬；赔偿
+benefit	n.	福利
+allowance	n.	津贴
+overtime	n.	加班
+leave	n.	休假
+intern	n.	实习生
+internship	n.	实习
+colleague	n.	同事
+supervisor	n.	主管；上司
+subordinate	n.	下属
+personnel	n.	全体员工；人事部门
+workforce	n.	劳动力；全体员工
+morale	n.	士气
+turnover	n.	营业额；人员流动率
+qualification	n.	资格；资历
+competence	n.	能力；胜任
+expertise	n.	专业知识
+mentor	n.	导师
+delegate	v.	委派；授权
+responsibility	n.	职责
+accountability	n.	问责；责任
+workload	n.	工作量
+deadline	n.	截止日期
+remote	adj.	远程的
+freelance	adj.	自由职业的
+freelancer	n.	自由职业者
+
+# ---- 财务与会计 ----
+finance	n.	财务；金融
+financial	adj.	财务的；金融的
+accounting	n.	会计
+accountant	n.	会计师
+audit	n.	审计
+auditor	n.	审计师
+budget	n.	预算
+forecast	n.	预测
+revenue	n.	收入；营收
+income	n.	收入
+profit	n.	利润
+profitable	adj.	有利可图的
+profitability	n.	盈利能力
+loss	n.	亏损
+margin	n.	利润率
+gross	adj.	毛的；总的（gross profit 毛利）
+net	adj.	净的（net profit 净利润）
+expense	n.	费用；开支
+expenditure	n.	支出
+cost	n.	成本
+overhead	n.	管理费用；经常性开支
+asset	n.	资产
+liability	n.	负债；责任
+equity	n.	股本；所有者权益
+capital	n.	资本
+fund	n.	资金；基金
+funding	n.	资金；融资
+cash	n.	现金（cash flow 现金流）
+liquidity	n.	流动性
+balance	n.	余额；平衡（balance sheet 资产负债表）
+statement	n.	报表；结算单
+invoice	n.	发票
+receipt	n.	收据
+reimburse	v.	报销
+reimbursement	n.	报销
+deficit	n.	赤字
+surplus	n.	盈余
+depreciation	n.	折旧；贬值
+amortization	n.	摊销
+dividend	n.	股息；红利
+earnings	n.	收益
+fiscal	adj.	财政的（fiscal year 财年）
+quarter	n.	季度
+quarterly	adj.	季度的
+annual	adj.	年度的
+valuation	n.	估值
+tax	n.	税
+taxation	n.	税收
+deduction	n.	扣除
+deductible	adj.	可扣除的
+payable	adj.	应付的（accounts payable 应付账款）
+receivable	adj.	应收的（accounts receivable 应收账款）
+ledger	n.	分类账
+bookkeeping	n.	记账
+insolvent	adj.	无力偿债的
+bankruptcy	n.	破产
+bankrupt	adj.	破产的
+debt	n.	债务
+creditor	n.	债权人
+debtor	n.	债务人
+default	n.	违约；拖欠
+
+# ---- 银行与投资 ----
+bank	n.	银行
+banking	n.	银行业
+account	n.	账户
+deposit	n.	存款；定金
+withdraw	v.	取款；撤回
+withdrawal	n.	取款
+transfer	n.	转账
+loan	n.	贷款
+mortgage	n.	抵押贷款
+interest	n.	利息
+rate	n.	利率；费率
+credit	n.	信用；贷方
+installment	n.	分期付款
+collateral	n.	抵押品
+investment	n.	投资
+investor	n.	投资者
+portfolio	n.	投资组合
+stock	n.	股票；库存
+share	n.	股份
+bond	n.	债券
+securities	n.	证券
+exchange	n.	交易所；兑换
+currency	n.	货币
+inflation	n.	通货膨胀
+recession	n.	经济衰退
+volatility	n.	波动性
+yield	n.	收益率
+return	n.	回报（return on investment 投资回报率）
+risk	n.	风险
+hedge	v.	对冲
+speculate	v.	投机
+stake	n.	股份；利害关系
+IPO	n.	首次公开募股	/ˌaɪ piː ˈəʊ/
+listed	adj.	上市的
+commodity	n.	大宗商品
+benchmark	n.	基准
+
+# ---- 经济 ----
+economy	n.	经济
+economic	adj.	经济的
+economical	adj.	节约的；经济实惠的
+market	n.	市场
+demand	n.	需求
+supply	n.	供应
+growth	n.	增长
+downturn	n.	衰退；下滑
+boom	n.	繁荣
+slump	n.	暴跌；萧条
+fluctuate	v.	波动
+fluctuation	n.	波动
+indicator	n.	指标
+GDP	n.	国内生产总值	/ˌdʒiː diː ˈpiː/
+monopoly	n.	垄断
+competition	n.	竞争
+competitor	n.	竞争对手
+competitive	adj.	有竞争力的
+globalization	n.	全球化
+tariff	n.	关税
+subsidy	n.	补贴
+regulation	n.	监管；规章
+deregulation	n.	放松管制
+sustainable	adj.	可持续的
+sustainability	n.	可持续性
+
+# ---- 市场营销 ----
+marketing	n.	市场营销
+brand	n.	品牌
+branding	n.	品牌建设
+campaign	n.	（营销）活动
+advertise	v.	做广告
+advertisement	n.	广告
+advertising	n.	广告业
+promote	v.	推广；促销
+promotional	adj.	促销的
+consumer	n.	消费者
+customer	n.	客户；顾客
+client	n.	客户；委托人
+target	n.	目标（target market 目标市场）
+segment	n.	细分市场
+positioning	n.	市场定位
+survey	n.	调查
+research	n.	调研（market research 市场调研）
+trend	n.	趋势
+niche	n.	细分市场；利基
+launch	v.	推出；发布
+endorse	v.	代言；背书
+sponsor	n.	赞助商
+sponsorship	n.	赞助
+publicity	n.	宣传；公众关注
+exposure	n.	曝光度
+awareness	n.	认知度（brand awareness 品牌知名度）
+loyalty	n.	忠诚度
+engagement	n.	互动；参与度
+conversion	n.	转化
+retention	n.	留存
+outreach	n.	拓展；外联
+influencer	n.	网红；意见领袖	/ˈɪnfluənsə/
+slogan	n.	口号；广告语
+logo	n.	标志
+packaging	n.	包装
+feedback	n.	反馈
+testimonial	n.	客户推荐；用户评价
+demographic	n.	人口统计特征
+
+# ---- 销售与客户 ----
+sales	n.	销售；销售额
+salesperson	n.	销售员
+retail	n.	零售
+retailer	n.	零售商
+wholesale	n.	批发
+wholesaler	n.	批发商
+distributor	n.	经销商；分销商
+dealer	n.	经销商
+vendor	n.	供应商；卖方
+supplier	n.	供应商
+purchase	v.	采购；购买
+procurement	n.	采购
+quotation	n.	报价
+quote	v.	报价
+discount	n.	折扣
+rebate	n.	返利
+pricing	n.	定价
+estimate	n.	估价
+bargain	v.	讨价还价
+inquiry	n.	询价；咨询
+prospect	n.	潜在客户
+lead	n.	销售线索
+pitch	n.	推销说辞；提案
+deal	n.	交易
+transaction	n.	交易
+quota	n.	配额；销售定额
+upsell	v.	追加销售	/ˈʌpsel/
+refund	n.	退款
+warranty	n.	保修
+guarantee	n.	保证；担保
+complaint	n.	投诉
+satisfaction	n.	满意度
+subscription	n.	订阅
+renewal	n.	续约；续订
+
+# ---- 贸易与物流 ----
+trade	n.	贸易
+import	v.	进口
+export	v.	出口
+logistics	n.	物流
+shipment	n.	货物；装运
+shipping	n.	运输；发货
+freight	n.	货运；运费
+cargo	n.	货物
+consignment	n.	托运货物；寄售
+inventory	n.	库存
+warehouse	n.	仓库
+storage	n.	仓储
+delivery	n.	交付；送货
+dispatch	v.	发货
+courier	n.	快递员；快递公司
+customs	n.	海关
+clearance	n.	清关；许可
+declaration	n.	申报
+manufacturer	n.	制造商
+manufacturing	n.	制造业
+production	n.	生产
+capacity	n.	产能
+assembly	n.	装配
+sourcing	n.	采购；寻源
+backlog	n.	积压订单
+shortage	n.	短缺
+bulk	n.	大量；批量
+packing	n.	包装
+label	n.	标签
+tracking	n.	物流跟踪
+insurance	n.	保险
+premium	n.	保险费；溢价
+
+# ---- 合同与法务 ----
+contract	n.	合同
+agreement	n.	协议
+clause	n.	条款
+term	n.	条款；期限
+condition	n.	条件
+provision	n.	规定；条款
+party	n.	（合同的）一方
+sign	v.	签署
+signature	n.	签名
+negotiate	v.	谈判
+negotiation	n.	谈判
+breach	n.	违约
+violate	v.	违反
+terminate	v.	终止
+termination	n.	终止
+renew	v.	续签
+amendment	n.	修订
+draft	n.	草案
+binding	adj.	有约束力的
+legal	adj.	法律的
+lawsuit	n.	诉讼
+litigation	n.	诉讼
+dispute	n.	纠纷
+settlement	n.	和解；结算
+arbitration	n.	仲裁
+indemnity	n.	赔偿；保障
+confidential	adj.	机密的
+confidentiality	n.	保密（性）
+disclosure	n.	披露
+compliance	n.	合规
+regulatory	adj.	监管的
+license	n.	许可证；执照
+patent	n.	专利
+trademark	n.	商标
+copyright	n.	版权
+intellectual	adj.	知识的（intellectual property 知识产权）
+jurisdiction	n.	管辖权
+authorize	v.	授权
+authorization	n.	授权
+consent	n.	同意
+obligation	n.	义务
+entitle	v.	使有权
+valid	adj.	有效的
+void	adj.	无效的
+penalty	n.	罚款；违约金
+
+# ---- 会议与谈判 ----
+meeting	n.	会议
+conference	n.	会议；大会
+agenda	n.	议程
+minutes	n.	会议纪要
+attendee	n.	与会者
+participant	n.	参与者
+chair	v.	主持（会议）
+host	v.	主办
+facilitate	v.	促进；主持
+presentation	n.	演示；汇报
+proposal	n.	提案；建议书
+brainstorm	v.	头脑风暴
+consensus	n.	共识
+compromise	n.	妥协
+concession	n.	让步
+counteroffer	n.	还价	/ˈkaʊntərɒfə/
+leverage	n.	筹码；杠杆
+objective	n.	目标
+priority	n.	优先事项
+postpone	v.	推迟
+reschedule	v.	重新安排时间
+cancel	v.	取消
+adjourn	v.	休会
+summarize	v.	总结
+clarify	v.	澄清
+elaborate	v.	详细说明
+overview	n.	概述
+briefing	n.	简报会
+workshop	n.	研讨会
+seminar	n.	研讨会
+webinar	n.	网络研讨会	/ˈwebɪnɑː/
+teleconference	n.	电话会议
+venue	n.	会场；场地
+itinerary	n.	行程安排
+networking	n.	建立人脉
+
+# ---- 项目与管理 ----
+management	n.	管理；管理层
+manager	n.	经理
+administration	n.	行政；管理
+strategy	n.	战略
+strategic	adj.	战略的
+initiative	n.	举措；倡议
+milestone	n.	里程碑
+timeline	n.	时间表
+schedule	n.	日程；进度表
+scope	n.	范围
+deliverable	n.	可交付成果	/dɪˈlɪvərəbl/
+resource	n.	资源
+allocate	v.	分配
+allocation	n.	分配
+coordinate	v.	协调
+coordination	n.	协调
+implement	v.	实施
+implementation	n.	实施
+execute	v.	执行
+monitor	v.	监控
+assess	v.	评估
+assessment	n.	评估
+metric	n.	指标
+KPI	n.	关键绩效指标	/ˌkeɪ piː ˈaɪ/
+performance	n.	绩效；业绩
+efficiency	n.	效率
+productivity	n.	生产率
+optimize	v.	优化
+streamline	v.	精简；使高效
+workflow	n.	工作流程
+procedure	n.	程序；流程
+policy	n.	政策；制度
+guideline	n.	指导方针
+framework	n.	框架
+roadmap	n.	路线图	/ˈrəʊdmæp/
+feasibility	n.	可行性
+contingency	n.	应急（contingency plan 应急计划）
+bottleneck	n.	瓶颈
+mitigate	v.	降低（风险）
+escalate	v.	上报；升级
+oversee	v.	监督
+supervise	v.	监管
+approve	v.	批准
+approval	n.	批准
+sign-off	n.	批准；签字确认	/ˈsaɪnɒf/
+outcome	n.	结果
+synergy	n.	协同效应
+scalable	adj.	可扩展的
+agile	adj.	敏捷的
+
+# ---- 商务邮件与沟通 ----
+regarding	prep.	关于
+attached	adj.	附上的
+attachment	n.	附件
+enclose	v.	随函附上
+correspondence	n.	信函；通信
+memo	n.	备忘录
+reminder	n.	提醒
+confirm	v.	确认
+confirmation	n.	确认
+acknowledge	v.	确认收到
+appreciate	v.	感激
+apologize	v.	道歉
+inconvenience	n.	不便
+convenience	n.	方便（at your earliest convenience 尽早）
+urgent	adj.	紧急的
+prompt	adj.	及时的
+promptly	adv.	及时地
+pending	adj.	待定的；待处理的
+follow-up	n.	跟进	/ˈfɒləʊʌp/
+update	n.	最新进展
+notify	v.	通知
+notification	n.	通知
+recipient	n.	收件人
+forward	v.	转发
+CC	v.	抄送	/ˌsiː ˈsiː/
+reply	v.	回复
+respond	v.	回应
+availability	n.	空闲时间；可用性
+appointment	n.	预约
+arrange	v.	安排
+accommodate	v.	容纳；满足（需求）
+assistance	n.	帮助
+sincerely	adv.	真诚地（Yours sincerely 谨上）
+cordially	adv.	诚挚地
+behalf	n.	代表（on behalf of 代表……）
+accordingly	adv.	相应地
+hereby	adv.	特此
+aforementioned	adj.	上述的
+respectively	adv.	分别地
+in-house	adj.	内部的	/ˌɪnˈhaʊs/
+ASAP	adv.	尽快	/ˌeɪ es eɪ ˈpiː/
+FYI	n.	供参考	/ˌef waɪ ˈaɪ/
