@@ -35,13 +35,13 @@ jobs:
       # 推送标签时为 false；手动运行时取决于“只打包”选项
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # 需要完整历史来找上一个版本标签
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: 安装依赖
@@ -94,7 +94,7 @@ jobs:
         run: npx vsce package --out "${{ steps.version.outputs.vsix }}"
 
       - name: 上传安装包
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.version.outputs.vsix }}
           path: ${{ steps.version.outputs.vsix }}
