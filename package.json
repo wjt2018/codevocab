@@ -1,7 +1,7 @@
 {
   "name": "codevocab",
   "displayName": "CodeVocab · 码上背单词",
-  "description": "写代码时在后台朗读单词和中文释义，状态栏同步显示词性和意思。内置四六级、考研、雅思、托福、GRE 词库。Listen to vocabulary while you code.",
+  "description": "写代码时在后台朗读单词和中文释义，状态栏同步显示词性和意思。内置程序员词汇、程序员易读错词、商务英语，以及四六级、考研、雅思、托福、GRE 词库。Listen to vocabulary while you code.",
   "version": "0.1.0",
   "publisher": "Miaoo",
   "license": "MIT",
@@ -47,7 +47,14 @@
     "六级",
     "考研",
     "雅思",
-    "托福"
+    "托福",
+    "programmer",
+    "developer",
+    "程序员",
+    "business english",
+    "商务英语",
+    "pronunciation",
+    "发音"
   ],
   "activationEvents": [
     "onStartupFinished"
@@ -131,8 +138,11 @@
       "properties": {
         "codevocab.builtinWordbook": {
           "type": "string",
-          "default": "cet4",
+          "default": "programmer",
           "enum": [
+            "programmer",
+            "business",
+            "mispronounced",
             "cet4",
             "cet6",
             "kaoyan",
@@ -143,6 +153,9 @@
             "zhongkao"
           ],
           "enumItemLabels": [
+            "程序员词汇",
+            "商务英语",
+            "程序员易读错词",
             "大学英语四级",
             "大学英语六级",
             "考研",
@@ -152,7 +165,7 @@
             "高考",
             "中考"
           ],
-          "markdownDescription": "内置单词本（数据来自 ECDICT）。仅在 `#codevocab.wordbookPath#` 为空时生效。"
+          "markdownDescription": "内置单词本。仅在 `#codevocab.wordbookPath#` 为空时生效。"
         },
         "codevocab.wordbookPath": {
           "type": "string",
@@ -188,6 +201,11 @@
           "default": 30,
           "minimum": 5,
           "description": "状态栏中释义最多显示多少个字符，超出部分用省略号代替（悬停可看完整释义）。"
+        },
+        "codevocab.showPhonetic": {
+          "type": "boolean",
+          "default": false,
+          "description": "在状态栏中显示音标（使用「程序员易读错词」时建议开启）。"
         }
       }
     },

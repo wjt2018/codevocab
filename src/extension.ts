@@ -13,10 +13,15 @@ interface Word {
   meaning: string;
   /** 完整释义（可多行）：显示在悬停提示和发音面板里 */
   detail?: string;
+  /** 朗读文本：系统语音直接读单词可能读错时（如 Nginx），改为朗读这段文本 */
+  speak?: string;
 }
 
 /** 内置单词本，数据由 scripts/build_wordbooks.py 从 ECDICT 生成 */
 const BUILTIN_BOOKS: Record<string, string> = {
+  programmer: '程序员词汇',
+  business: '商务英语',
+  mispronounced: '程序员易读错词',
   cet4: '大学英语四级',
   cet6: '大学英语六级',
   kaoyan: '考研',
@@ -41,7 +46,13 @@ type FromWebview =
   /** 面板「搜索…」按钮 */
   | { type: 'goTo' }
   /** 面板控制按钮 */
-  | { type: 'control'; action: 'togglePlay' | 'toggleVisible' | 'toggleMute' | 'next' | 'previous' };
+  | { type: 'control'; action: 'togglePlay' | 'toggleVisible' | 'toggleMute' | 'next' | 'previous' }
+  /** 面板单词本下拉框：切换内置单词本 */
+  | { type: 'selectBook'; book: string }
+  /** 面板单词本下拉框：从文件导入 */
+  | { type: 'importBook' };
+/** 首次安装时默认使用的单词本 */
+const DEFAULT_BOOK = 'programmer';
 
 const VIEW_ID = 'codevocab.player';
 /** 一个单词如果 30 秒还没读完，就认为卡住了，直接跳到下一个 */
@@ -316,7 +327,7 @@ class Player implements vscode.Disposable {
   async selectWordbook() {
     const cfg = this.cfg();
     const custom = cfg.get<string>('wordbookPath', '').trim();
-    const current = custom ? '' : cfg.get<string>('builtinWordbook', 'cet4');
+    const current = custom ? '' : cfg.get<string>('builtinWordbook', DEFAULT_BOOK);
     type Item = vscode.QuickPickItem & { book?: string; browse?: boolean };
     const items: Item[] = [
       { label: '内置单词本', kind: vscode.QuickPickItemKind.Separator },
@@ -336,20 +347,45 @@ class Player implements vscode.Disposable {
     if (!choice) {
       return;
     }
-    // 修改配置会触发 onDidChangeConfiguration，自动重新加载
     if (choice.book) {
-      await cfg.update('builtinWordbook', choice.book, vscode.ConfigurationTarget.Global);
-      await cfg.update('wordbookPath', '', vscode.ConfigurationTarget.Global);
+      await this.useBuiltinWordbook(choice.book);
+    } else {
+      await this.importWordbook();
+    }
+  }
+
+  /** 切换到内置单词本。修改配置会触发 onDidChangeConfiguration，自动重新加载。 */
+  private async useBuiltinWordbook(book: string) {
+    if (!(book in BUILTIN_BOOKS)) {
       return;
     }
+    const cfg = this.cfg();
+    await cfg.update('builtinWordbook', book, vscode.ConfigurationTarget.Global);
+    await cfg.update('wordbookPath', '', vscode.ConfigurationTarget.Global);
+  }
+
+  /** 从文件导入单词本 */
+  private async importWordbook() {
     const picked = await vscode.window.showOpenDialog({
       title: '选择单词本文件',
       canSelectMany: false,
       filters: { 单词本: ['json', 'csv', 'tsv', 'txt'] },
     });
     if (picked?.[0]) {
-      await cfg.update('wordbookPath', picked[0].fsPath, vscode.ConfigurationTarget.Global);
+      await this.cfg().update('wordbookPath', picked[0].fsPath, vscode.ConfigurationTarget.Global);
     }
+  }
+
+  /** 当前单词本：内置的返回 key，自定义的返回 'custom' */
+  private currentBook(): { id: string; name: string } {
+    const cfg = this.cfg();
+    const custom = cfg.get<string>('wordbookPath', '').trim();
+    if (custom) {
+      return { id: 'custom', name: path.basename(custom) };
+    }
+    const book = cfg.get<string>('builtinWordbook', DEFAULT_BOOK);
+    const id = book in BUILTIN_BOOKS ? book : DEFAULT_BOOK;
+    return { id, name: BUILTIN_BOOKS[id] };
   }
 
   // ---- 播放流程 ----
@@ -401,7 +437,7 @@ class Player implements vscode.Disposable {
     this.view.post({
       type: 'speak',
       id,
-      word: w.word,
+      word: w.speak || w.word,
       meaning: w.meaning,
       speakMeaning: cfg.get<boolean>('speakMeaning', true),
       rate: cfg.get<number>('rate', 0.9),
@@ -454,6 +490,12 @@ class Player implements vscode.Disposable {
       case 'goTo':
         this.goTo();
         break;
+      case 'selectBook':
+        void this.useBuiltinWordbook(m.book);
+        break;
+      case 'importBook':
+        void this.importWordbook();
+        break;
       case 'control':
         switch (m.action) {
           case 'togglePlay':
@@ -494,9 +536,9 @@ class Player implements vscode.Disposable {
 
   private load() {
     const configured = this.cfg().get<string>('wordbookPath', '').trim();
-    let builtin = this.cfg().get<string>('builtinWordbook', 'cet4');
+    let builtin = this.cfg().get<string>('builtinWordbook', DEFAULT_BOOK);
     if (!(builtin in BUILTIN_BOOKS)) {
-      builtin = 'cet4';
+      builtin = DEFAULT_BOOK;
     }
     const file = configured
       ? resolvePath(configured)
@@ -525,7 +567,8 @@ class Player implements vscode.Disposable {
       const max = this.cfg().get<number>('maxMeaningLength', 30);
       const icon = (this.playing ? '$(debug-pause)' : '$(play)') + (this.muted ? ' $(mute)' : '');
       const meaning = w.meaning.length > max ? w.meaning.slice(0, max) + '…' : w.meaning;
-      this.status.text = `${icon} ${w.word}  ${[w.pos, meaning].filter(Boolean).join(' ')}`;
+      const phonetic = this.cfg().get<boolean>('showPhonetic', false) && w.phonetic ? ` ${w.phonetic}` : '';
+      this.status.text = `${icon} ${w.word}${phonetic}  ${[w.pos, meaning].filter(Boolean).join(' ')}`;
       this.status.command = 'codevocab.togglePlay';
 
       const tip = new vscode.MarkdownString();
@@ -556,6 +599,8 @@ class Player implements vscode.Disposable {
       playing: this.playing,
       visible: this.visible,
       muted: this.muted,
+      book: this.currentBook(),
+      builtinBooks: BUILTIN_BOOKS,
     });
   }
 }
@@ -625,5 +670,6 @@ function parseWordbook(file: string): Word[] {
       pos: w.pos ? String(w.pos).trim() : undefined,
       meaning: String(w.meaning ?? '').trim(),
       detail: w.detail ? String(w.detail).trim() : undefined,
+      speak: w.speak ? String(w.speak).trim() : undefined,
     }));
 }
