@@ -1,11 +1,13 @@
 # 推送版本标签（如 v0.3.0）时自动发布：
 #   1. 检查标签和 package.json 的版本号一致，CHANGELOG 里有这个版本的说明
 #   2. 打包 .vsix
-#   3. 发布到 VS Code 插件商店（需要仓库密钥 VSCE_PAT）
-#   4. 发布到 Open VSX（需要仓库密钥 OVSX_PAT）
+#   3. 发布到 VS Code 插件商店：默认使用 Trusted Publishing（OIDC，不需要令牌，
+#      需要先在插件商店的发布者设置里为本工作流创建可信发布策略）；
+#      如果配置了仓库密钥 VSCE_PAT，则改用令牌发布
+#   4. 发布到 Open VSX（需要仓库密钥 OVSX_PAT，没有配置时跳过）
 #   5. 创建 GitHub Release，发布说明取自 CHANGELOG
 #
-# 没有配置某个密钥时，对应的发布步骤会跳过并给出提示。
+# 某个平台发布失败时，后续平台仍会继续发布，最后整个运行标记为失败。
 # 也可以在 Actions 页面手动运行，默认只打包不发布，用来测试流程。
 name: Release
 
@@ -20,7 +22,8 @@ on:
         default: true
 
 permissions:
-  contents: write
+  contents: write # 创建 GitHub Release
+  id-token: write # Trusted Publishing：向插件商店证明身份
 
 concurrency:
   group: release-${{ github.ref }}
@@ -100,15 +103,25 @@ jobs:
           path: ${{ steps.version.outputs.vsix }}
 
       - name: 发布到 VS Code 插件商店
-        if: env.DRY_RUN != 'true' && env.VSCE_PAT != ''
-        run: npx vsce publish --packagePath "${{ steps.version.outputs.vsix }}" --pat "$VSCE_PAT"
+        if: env.DRY_RUN != 'true'
+        run: |
+          if [ -n "$VSCE_PAT" ]; then
+            echo "使用仓库密钥 VSCE_PAT 发布"
+            npx vsce publish --packagePath "${{ steps.version.outputs.vsix }}" --pat "$VSCE_PAT"
+          else
+            echo "使用 Trusted Publishing（OIDC）发布"
+            npx vsce publish --packagePath "${{ steps.version.outputs.vsix }}" --oidc || {
+              echo "::error::发布到 VS Code 插件商店失败。请确认已在 https://marketplace.visualstudio.com/manage 的发布者设置 → Trusted Publishing 中为仓库 ${{ github.repository }}、工作流 release.yml 创建了策略。"
+              exit 1
+            }
+          fi
 
       - name: 发布到 Open VSX
-        if: env.DRY_RUN != 'true' && env.OVSX_PAT != ''
+        if: ${{ !cancelled() && env.DRY_RUN != 'true' && env.OVSX_PAT != '' }}
         run: npx ovsx publish "${{ steps.version.outputs.vsix }}" --pat "$OVSX_PAT"
 
       - name: 创建 GitHub Release
-        if: env.DRY_RUN != 'true' && github.ref_type == 'tag'
+        if: ${{ !cancelled() && env.DRY_RUN != 'true' && github.ref_type == 'tag' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -123,11 +136,5 @@ jobs:
           fi
 
       - name: 提示未配置的密钥
-        if: env.DRY_RUN != 'true' && (env.VSCE_PAT == '' || env.OVSX_PAT == '')
-        run: |
-          if [ -z "$VSCE_PAT" ]; then
-            echo "::warning::没有配置仓库密钥 VSCE_PAT，已跳过发布到 VS Code 插件商店。可以手动上传本次构建产物中的 .vsix。"
-          fi
-          if [ -z "$OVSX_PAT" ]; then
-            echo "::warning::没有配置仓库密钥 OVSX_PAT，已跳过发布到 Open VSX。"
-          fi
+        if: ${{ !cancelled() && env.DRY_RUN != 'true' && env.OVSX_PAT == '' }}
+        run: echo "::warning::没有配置仓库密钥 OVSX_PAT，已跳过发布到 Open VSX。"

@@ -167,16 +167,34 @@ extension.ts（播放进度、状态栏）  ── speak / stop / show ──▶
 
 发布由 [Release 工作流](.github/workflows/release.yml) 自动完成：推送 `v*` 版本标签后，它会检查版本号、打包，并发布到 VS Code 插件商店、Open VSX 和 GitHub Release。
 
-### 一次性配置：仓库密钥
+### 一次性配置
 
-在 GitHub 仓库的 **Settings → Secrets and variables → Actions → New repository secret** 中添加：
+**VS Code 插件商店：Trusted Publishing（推荐，不需要令牌）**
 
-| 密钥名 | 用途 | 获取方式 |
-|---|---|---|
-| `VSCE_PAT` | 发布到 VS Code 插件商店 | [Azure DevOps](https://dev.azure.com) → User settings → Personal access tokens → New Token。Organization 选 **All accessible organizations**，Scopes 选 Custom defined → **Marketplace → Manage** |
-| `OVSX_PAT` | 发布到 Open VSX | [open-vsx.org](https://open-vsx.org/user-settings/tokens) → Access Tokens → Generate New Token（需要先完成 Eclipse 账号注册、签署发布协议、创建 `Miaoo` 命名空间） |
+插件商店信任来自本仓库 Release 工作流的发布请求，不需要保存任何令牌：
 
-没有配置的密钥对应的平台会被跳过，工作流会给出提示，其他平台照常发布。令牌有过期时间，过期后在原处重新生成并更新密钥即可。
+1. 打开 [插件管理页面](https://marketplace.visualstudio.com/manage)，进入发布者 **Miaoo**，选择 **Trusted Publishing**，展开 **Create**。
+2. 填写策略：
+
+   | 字段 | 值 |
+   |---|---|
+   | Policy name | 任意，例如 `github-release` |
+   | Repository owner | `wjt2018` |
+   | Repository | `codevocab` |
+   | Workflow | `release.yml` |
+   | Environment | 留空 |
+
+3. 点 **Create**。
+
+> 旧的做法是在 Azure DevOps 生成“All accessible organizations”范围的令牌，保存为仓库密钥 `VSCE_PAT`。这种全局令牌正在被微软淘汰，不建议再用。工作流仍然兼容：配置了 `VSCE_PAT` 时会优先用它。
+
+**Open VSX：仓库密钥 `OVSX_PAT`**
+
+1. 注册 [Eclipse 账号](https://accounts.eclipse.org/user/register)（填写 GitHub 用户名），用 GitHub 登录 [open-vsx.org](https://open-vsx.org)，在 [个人设置](https://open-vsx.org/user-settings/profile) 里点 **Log in with Eclipse** 并签署 Publisher Agreement。
+2. 创建命名空间（只需一次）：`npx ovsx create-namespace Miaoo -p <令牌>`。
+3. 在 [Access Tokens](https://open-vsx.org/user-settings/tokens) 生成令牌，添加到 GitHub 仓库的 **Settings → Secrets and variables → Actions**，名称为 `OVSX_PAT`。
+
+没有配置 `OVSX_PAT` 时会跳过 Open VSX，并给出提示。
 
 ### 每次发版
 
@@ -212,7 +230,7 @@ extension.ts（播放进度、状态栏）  ── speak / stop / show ──▶
 
 ```bash
 npx vsce package
-npx vsce publish --packagePath codevocab-x.y.z.vsix --pat <VSCE_PAT>   # 或到插件管理页面网页上传
+# VS Code 插件商店：到插件管理页面网页上传 .vsix
 npx ovsx publish codevocab-x.y.z.vsix --pat <OVSX_PAT>
 gh release create vx.y.z codevocab-x.y.z.vsix --notes-file <发布说明>
 ```
