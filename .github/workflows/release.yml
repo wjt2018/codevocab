@@ -118,7 +118,25 @@ jobs:
 
       - name: 发布到 Open VSX
         if: ${{ !cancelled() && env.DRY_RUN != 'true' && env.OVSX_PAT != '' }}
-        run: npx ovsx publish "${{ steps.version.outputs.vsix }}" --pat "$OVSX_PAT"
+        # Open VSX 偶尔会返回 503 等临时错误：最多尝试 3 次，间隔递增。
+        # 如果服务器其实已经收到了上一次的上传，重试时会提示版本已存在，视为成功。
+        run: |
+          set -o pipefail # 让管道返回 ovsx 的退出码，而不是 tee 的
+          for attempt in 1 2 3; do
+            if npx ovsx publish "${{ steps.version.outputs.vsix }}" --pat "$OVSX_PAT" 2>&1 | tee ovsx.log; then
+              exit 0
+            fi
+            if grep -qi "already published\|already exists" ovsx.log; then
+              echo "Open VSX 上已经有这个版本，视为发布成功"
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              echo "::warning::第 $attempt 次发布到 Open VSX 失败，$((attempt * 30)) 秒后重试"
+              sleep $((attempt * 30))
+            fi
+          done
+          echo "::error::发布到 Open VSX 失败（已重试 3 次）。可以稍后在本地运行 npx ovsx publish 手动发布。"
+          exit 1
 
       - name: 创建 GitHub Release
         if: ${{ !cancelled() && env.DRY_RUN != 'true' && github.ref_type == 'tag' }}
