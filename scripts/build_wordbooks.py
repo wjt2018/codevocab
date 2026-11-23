@@ -5,9 +5,15 @@
     python scripts/build_wordbooks.py <ecdict.csv 路径> [输出目录，默认 wordbooks] [--alpha]
 
 默认按词频排序（常用词在前），加 --alpha 改为按字母顺序。
+过于基础的词（中考词汇中词频最高的部分，以及月份、国名等首字母大写的词）不会放进考试词库，规则见 is_basic()。
 
 ECDICT 的 tag 字段里标了每个词属于哪些考试：
     zk 中考  gk 高考  cet4 四级  cet6 六级  ky 考研  ielts 雅思  toefl 托福  gre GRE
+
+另外会根据人工整理的词表生成专业词库，释义使用词表里的专业含义，音标和通用释义从 ECDICT 补充：
+    scripts/programmer_words.tsv -> 程序员词汇（programmer.json）
+    scripts/business_words.tsv   -> 商务英语（business.json）
+    scripts/mispronounced_words.tsv -> 程序员易读错词（mispronounced.json，音标和误读说明均为人工标注）
 """
 
 import csv
@@ -39,14 +45,170 @@ BRACKET = re.compile(r"\[[^\]]*\]|［[^］]*］")
 
 MAX_SENSES = 3  # 状态栏和朗读里每个单词最多保留几个义项
 
+# 过于基础的词（the、in、go、make、good……）不放进考试词库：
+# 中考词汇里词频排在前 BASIC_RANK 名的词，以及首字母大写的词（月份、星期、国名等）。
+BASIC_RANK = 1000
+
+
+# ECDICT 考试标签里的个别脏数据
+WORD_FIXES = {"reservior": "reservoir"}  # 拼写错误 -> 正确拼写
+EXCLUDED_WORDS = {
+    "cance",  # 高考标签下的人名（坎斯）
+    "vcd",  # 释义是“可变电容二极体”，不是影碟
+}
+
+
+def is_basic(row) -> bool:
+    word = row["word"]
+    return word[:1].isupper() or ("zk" in row["tag"].split() and freq_rank(row) <= BASIC_RANK)
+
 
 def convert_phonetic(p: str) -> str:
-    """ECDICT 的音标用了西里尔字母 ә 和 ASCII 撇号，转成标准 IPA 字符。"""
+    """
+    ECDICT 的音标用了西里尔字母 ә、ASCII 撇号和点号，转成标准 IPA 字符：
+    - 有多个读音时写成 "liːd. led"，只取第一个
+    - 次重音写作 "." 或 ","，转成 ˌ
+    """
     p = p.strip()
     if not p:
         return ""
-    p = p.replace("ә", "ə").replace("'", "ˈ").replace(":", "ː").replace(",", "ˌ")
+    p = re.split(r"[.;,]\s+", p)[0].strip()
+    p = p.replace("ә", "ə").replace("'", "ˈ").replace(":", "ː").replace(",", "ˌ").replace(".", "ˌ")
     return f"/{p}/"
+
+
+# ---------------------------------------------------------------------------
+# 音标：ECDICT 没有音标的词，先查人工补充表，再尝试从词根推导
+# ---------------------------------------------------------------------------
+
+OVERRIDES_TSV = Path(__file__).resolve().parent / "phonetic_overrides.tsv"
+
+# 英美拼写差异：(词尾, 替换成)
+SPELLING_VARIANTS = [("re", "er"), ("our", "or"), ("ise", "ize"), ("yse", "yze"), ("sy", "zy"), ("ggon", "gon"), ("l", "ll")]
+SIBILANTS = ("s", "z", "ʃ", "ʒ", "tʃ", "dʒ")
+VOICELESS = ("p", "t", "k", "f", "θ", "s", "ʃ", "tʃ")
+
+
+def _last_sound(ipa: str) -> str:
+    return ipa.strip("/").rstrip("ː ")
+
+
+def plural_sound(ipa: str) -> str:
+    """-s 的读音：咝音后读 /iz/，清辅音后读 /s/，其他读 /z/。"""
+    last = _last_sound(ipa)
+    if last.endswith(SIBILANTS):
+        return "iz"
+    return "s" if last.endswith(VOICELESS) else "z"
+
+
+def past_sound(ipa: str) -> str:
+    """-ed 的读音：t/d 后读 /id/，清辅音后读 /t/，其他读 /d/。"""
+    last = _last_sound(ipa)
+    if last.endswith(("t", "d")):
+        return "id"
+    return "t" if last.endswith(VOICELESS) else "d"
+
+
+def append_sound(ipa: str, sound: str) -> str:
+    """在词根音标后加上后缀读音。单音节词根没有重音符号，加上后缀变成多音节后要补上重音。"""
+    base = ipa.strip("/")
+    if "ˈ" not in base and " " not in base and re.search(r"[aeiouəɪʊɒʌæɜɔ]", sound):
+        base = "ˈ" + base
+    return f"/{base}{sound}/"
+
+
+def load_overrides(path: Path):
+    overrides = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.strip() and not line.lstrip().startswith("#"):
+            word, phonetic = (p.strip() for p in line.split("\t")[:2])
+            overrides[word.lower()] = phonetic
+    return overrides
+
+
+class PhoneticIndex:
+    """查询音标：ECDICT → 人工补充表 → 自动推导（词形变化、拼写变体、合成词、常见后缀）。"""
+
+    def __init__(self, overrides):
+        self.overrides = overrides
+        self.raw = {}  # 小写单词 -> (ECDICT 原始音标, 词形变化)
+        self.derived = 0
+
+    def add(self, row):
+        word = row["word"].lower()
+        phonetic = row["phonetic"].strip()
+        if word not in self.raw or (phonetic and not self.raw[word][0]):
+            self.raw[word] = (phonetic, row["exchange"])
+
+    def lookup(self, word: str, derive: bool = True) -> str:
+        w = word.lower()
+        raw = self.raw.get(w)
+        result = (convert_phonetic(raw[0]) if raw and raw[0] else "") or self.overrides.get(w, "")
+        if not result and derive:
+            result = self._derive(w)
+            self.derived += bool(result)
+        return result
+
+    def _derive(self, w: str) -> str:
+        # 1. 词形变化：ECDICT 的 exchange 字段里，0 是原形，1 是变化类型（s 复数 / p d 过去式 / i 现在分词 / r t 比较级最高级）
+        exchange = (self.raw.get(w) or ("", ""))[1]
+        if exchange:
+            ex = dict(x.split(":", 1) for x in exchange.split("/") if ":" in x)
+            lemma, kinds = ex.get("0", ""), ex.get("1", "")
+            base = self.lookup(lemma, derive=False) if lemma and lemma.lower() != w else ""
+            if base:
+                for kind in kinds:
+                    if kind in "s3":
+                        return append_sound(base, plural_sound(base))
+                    if kind in "pd":
+                        return append_sound(base, past_sound(base))
+                    if kind == "i":
+                        return append_sound(base, "iŋ")
+                    if kind == "r":
+                        return append_sound(base, "ə")
+                    if kind == "t":
+                        return append_sound(base, "ist")
+                return base
+        # 2. 英美拼写差异：theatre -> theater
+        for ending, replacement in SPELLING_VARIANTS:
+            if w.endswith(ending):
+                found = self.lookup(w[: -len(ending)] + replacement, derive=False)
+                if found:
+                    return found
+        # 3. 合成词：well-known、ice cream
+        if re.search(r"[- ]", w):
+            parts = [p for p in re.split(r"[- ]", w) if p]
+            found = [self.lookup(p) for p in parts]
+            if all(found):
+                return "/" + " ".join(p.strip("/") for p in found) + "/"
+            return ""
+        # 4. 常见后缀：(后缀, 可能的词根, 后缀读音)
+        doubled = w[:-4] if len(w) > 5 and w[-4] == w[-5] else None  # planning -> plan
+        rules = [
+            ("ily", [w[:-3] + "y"], "li"),
+            ("bly", [w[:-1] + "e"], "i"),
+            ("ly", [w[:-2]], "li"),
+            ("iness", [w[:-5] + "y"], "nis"),
+            ("ness", [w[:-4]], "nis"),
+            ("ment", [w[:-4]], "mənt"),
+            # 先试“去掉后缀再补 e”（muted -> mute），避免匹配到更短的无关词（mut）
+            ("ing", [w[:-3] + "e", w[:-3], doubled], "iŋ"),
+            ("ed", [w[:-1], w[:-2], w[:-3] if len(w) > 4 and w[-3] == w[-4] else None], None),
+            ("er", [w[:-1], w[:-2]], "ə"),
+            # 先试 -s 再试 -es（sales -> sale，而不是 sal）
+            ("s", [w[:-1]], None),
+            ("es", [w[:-2]], None),
+        ]
+        for suffix, stems, sound in rules:
+            if not w.endswith(suffix):
+                continue
+            for stem in stems:
+                base = self.lookup(stem, derive=False) if stem else ""
+                if base:
+                    if sound is None:
+                        sound = past_sound(base) if suffix == "ed" else plural_sound(base)
+                    return append_sound(base, sound)
+        return ""
 
 
 def parse_translation(raw: str):
@@ -79,13 +241,16 @@ def parse_translation(raw: str):
     return general or domain
 
 
-def build_entry(row):
+def build_entry(row, phonetics: PhoneticIndex):
     parsed = parse_translation(row["translation"])
     if not parsed:
         return None
     pos, senses = parsed[0]
-    entry = {"word": row["word"].strip()}
-    phonetic = convert_phonetic(row["phonetic"])
+    word = row["word"].strip()
+    if word.lower() in EXCLUDED_WORDS:
+        return None
+    entry = {"word": WORD_FIXES.get(word, word)}
+    phonetic = phonetics.lookup(entry["word"])
     if phonetic:
         entry["phonetic"] = phonetic
     if pos:
@@ -117,14 +282,31 @@ def main():
     out_dir = Path(args[1]) if len(args) > 1 else Path(__file__).resolve().parent.parent / "wordbooks"
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    curated = {name: load_curated_words(config["tsv"]) for name, config in CURATED_BOOKS.items()}
+    curated_words = set().union(*curated.values())
+    curated_lower = {w.lower() for w in curated_words}
+    curated_rows = {}  # 人工词表里的词在 ECDICT 中对应的行，键为原词或小写形式
+    phonetics = PhoneticIndex(load_overrides(OVERRIDES_TSV))
+
     tag_to_book = {tag: name for name, (tag, _) in BOOKS.items()}
     rows = {name: [] for name in BOOKS}
+    basic_count = 0
     with src.open(encoding="utf-8", newline="") as f:
         for row in csv.DictReader(f):
-            for tag in row["tag"].split():
-                if tag in tag_to_book:
-                    rows[tag_to_book[tag]].append(row)
+            phonetics.add(row)
+            if row["tag"] and is_basic(row):
+                basic_count += 1
+            else:
+                for tag in row["tag"].split():
+                    if tag in tag_to_book:
+                        rows[tag_to_book[tag]].append(row)
+            word = row["word"]
+            if word in curated_words:
+                curated_rows[word] = row
+            if word.lower() in curated_lower:
+                curated_rows.setdefault(word.lower(), row)
 
+    print(f"已排除 {basic_count} 个基础词（中考词频前 {BASIC_RANK} 名及首字母大写的词）")
     for name, (_, title) in BOOKS.items():
         book_rows = rows[name]
         if sort_mode == "alpha":
@@ -133,15 +315,103 @@ def main():
             book_rows.sort(key=lambda r: (freq_rank(r), r["word"].lower()))
         entries, seen = [], set()
         for row in book_rows:
-            entry = build_entry(row)
+            entry = build_entry(row, phonetics)
             if entry and entry["word"].lower() not in seen:
                 seen.add(entry["word"].lower())
                 entries.append(entry)
-        path = out_dir / f"{name}.json"
-        # 每个单词一行，文件不会太大，也方便查看
-        body = ",\n".join("  " + json.dumps(e, ensure_ascii=False) for e in entries)
-        path.write_text("[\n" + body + "\n]\n", encoding="utf-8")
-        print(f"{title:<12} {len(entries):>5} 词 -> {path}")
+        write_book(out_dir / f"{name}.json", title, entries)
+
+    for name, config in CURATED_BOOKS.items():
+        build_curated_book(name, config, curated[name], curated_rows, phonetics, out_dir, sort_mode)
+    print(f"音标：{len(phonetics.overrides)} 个词使用人工补充表，{phonetics.derived} 个词由词根推导")
+
+
+def write_book(path: Path, title: str, entries):
+    # 每个单词一行，文件不会太大，也方便查看
+    body = ",\n".join("  " + json.dumps(e, ensure_ascii=False) for e in entries)
+    path.write_text("[\n" + body + "\n]\n", encoding="utf-8", newline="\n")
+    print(f"{title:<12} {len(entries):>5} 词 -> {path}")
+
+
+# ---------------------------------------------------------------------------
+# 人工整理的词表：scripts/*_words.tsv 提供释义，ECDICT 补充音标和通用释义
+# ---------------------------------------------------------------------------
+
+SCRIPTS_DIR = Path(__file__).resolve().parent
+CURATED_BOOKS = {
+    # 输出文件名: 配置
+    #   tsv:   词表文件
+    #   title: 显示名称
+    #   label: 完整释义第一行的标签，如【编程】
+    #   order: "freq" 按词频排序 / "file" 按词表中的顺序
+    #   general: 是否在完整释义里附上 ECDICT 的通用释义
+    "programmer": {"tsv": SCRIPTS_DIR / "programmer_words.tsv", "title": "程序员词汇", "label": "编程", "order": "freq", "general": True},
+    "business": {"tsv": SCRIPTS_DIR / "business_words.tsv", "title": "商务英语", "label": "商务", "order": "freq", "general": True},
+    # 易读错词：音标、常见误读和朗读文本都在词表里，不附加 ECDICT 的通用释义
+    "mispronounced": {"tsv": SCRIPTS_DIR / "mispronounced_words.tsv", "title": "程序员易读错词", "label": "读音", "order": "file", "general": False},
+}
+
+
+def load_curated_words(path: Path):
+    """
+    读取人工词表（Tab 分隔）：单词 词性 释义 [音标] [常见误读] [朗读文本]
+    返回 {单词: (词性, 释义, 音标, 常见误读, 朗读文本)}，可选列为空字符串。重复的词只保留第一次出现的。
+    """
+    words, duplicates = {}, []
+    for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        parts = [p.strip() for p in line.split("\t")]
+        if len(parts) < 3 or not all(parts[:3]):
+            sys.exit(f"{path.name} 第 {lineno} 行格式错误（需要 单词<Tab>词性<Tab>释义）：{line}")
+        word, pos, meaning, phonetic, note, speak = (parts + [""] * 6)[:6]
+        if word in words:
+            duplicates.append(word)
+            continue
+        words[word] = (pos, meaning, phonetic, note, speak)
+    if duplicates:
+        print(f"提示：{path.name} 中有重复的词，已保留第一次出现的释义：{', '.join(duplicates)}")
+    return words
+
+
+def build_curated_book(name, config, words, ecdict_rows, phonetics: PhoneticIndex, out_dir: Path, sort_mode: str):
+    label = config["label"]
+    entries, missing = [], []
+    for order, (word, (pos, meaning, phonetic, note, speak)) in enumerate(words.items()):
+        row = ecdict_rows.get(word) or ecdict_rows.get(word.lower())
+        entry = {"word": word}
+        phonetic = phonetic or phonetics.lookup(word)
+        if phonetic:
+            entry["phonetic"] = phonetic
+        entry["pos"] = pos
+        entry["meaning"] = meaning
+        if speak:
+            entry["speak"] = speak
+        detail = [f"【{label}】{pos} {meaning}"]
+        if note:
+            detail.append(f"⚠ 常见误读：{note}")
+        if config["general"]:
+            # 专业词库：附上 ECDICT 的通用释义，方便对照
+            if row:
+                detail += [f"{p} {'；'.join(s)}" if p else "；".join(s) for p, s in parse_translation(row["translation"])]
+            else:
+                missing.append(word)
+        entry["detail"] = "\n".join(detail)
+        if config["order"] == "file":
+            key = (order, "")
+        elif sort_mode == "alpha":
+            key = (0, word.lower())
+        else:
+            key = (freq_rank(row) if row else 10**9, word.lower())
+        entries.append((key, entry))
+
+    entries.sort(key=lambda e: e[0])
+    write_book(out_dir / f"{name}.json", config["title"], [e for _, e in entries])
+    if missing:
+        print(f"提示：ECDICT 中没有以下词，只使用词表里的释义：{', '.join(missing)}")
+    no_phonetic = [e["word"] for _, e in entries if "phonetic" not in e]
+    if no_phonetic:
+        print(f"提示：以下词没有音标，建议在词表第 4 列补上：{', '.join(no_phonetic)}")
 
 
 if __name__ == "__main__":

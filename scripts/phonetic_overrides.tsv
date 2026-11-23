@@ -1,0 +1,79 @@
+# 人工补充的音标（所有词库通用）
+#
+# 格式：单词<Tab>音标
+# ECDICT 里没有音标、也无法从词根推导出来的词（多为合成词和新词），在这里补充。
+# 优先级：人工词表第 4 列 > ECDICT > 本文件 > 自动推导。
+
+affordable	/əˈfɔːdəbl/
+asymmetrical	/ˌeɪsɪˈmetrɪkl/
+avocational	/ˌævəʊˈkeɪʃənl/
+axe	/æks/
+ballpoint	/ˈbɔːlpɔɪnt/
+barbershop	/ˈbɑːbəʃɒp/
+benchmark	/ˈbentʃmɑːk/
+byline	/ˈbaɪlaɪn/
+cardiologist	/ˌkɑːdiˈɒlədʒɪst/
+co-operation	/kəʊˌɒpəˈreɪʃn/
+cometary	/ˈkɒmɪtəri/
+concurrency	/kənˈkʌrənsi/
+confidentiality	/ˌkɒnfɪˌdenʃiˈæləti/
+consultancy	/kənˈsʌltənsi/
+cyberspace	/ˈsaɪbəspeɪs/
+download	/ˌdaʊnˈləʊd/
+dvd	/ˌdiː viː ˈdiː/
+eclat	/eɪˈklɑː/
+facelift	/ˈfeɪslɪft/
+factorable	/ˈfæktərəbl/
+firewall	/ˈfaɪəwɔːl/
+firework	/ˈfaɪəwɜːk/
+flatulence	/ˈflætjʊləns/
+freelance	/ˈfriːlɑːns/
+freelancer	/ˈfriːlɑːnsə/
+girlfriend	/ˈɡɜːlfrend/
+hands-on	/ˌhændz ˈɒn/
+herpetologist	/ˌhɜːpɪˈtɒlədʒɪst/
+hotdog	/ˈhɒtdɒɡ/
+hyperactivity	/ˌhaɪpərækˈtɪvəti/
+indispensability	/ˌɪndɪˌspensəˈbɪləti/
+inextricably	/ˌɪnɪkˈstrɪkəbli/
+iterator	/ˈɪtəreɪtə/
+lackluster	/ˈlæklʌstə/
+laptop	/ˈlæptɒp/
+maintainability	/meɪnˌteɪnəˈbɪləti/
+metadata	/ˈmetədeɪtə/
+mm	/ˌem ˈem/
+multistory	/ˌmʌltiˈstɔːri/
+namespace	/ˈneɪmspeɪs/
+narrator	/nəˈreɪtə/
+offline	/ˌɒfˈlaɪn/
+offstage	/ˌɒfˈsteɪdʒ/
+ohp	/ˌəʊ eɪtʃ ˈpiː/
+online	/ˌɒnˈlaɪn/
+patroller	/pəˈtrəʊlə/
+phd	/ˌpiː eɪtʃ ˈdiː/
+prototypical	/ˌprəʊtəˈtɪpɪkl/
+rentable	/ˈrentəbl/
+roommate	/ˈruːmmeɪt/
+runtime	/ˈrʌntaɪm/
+shiftiness	/ˈʃɪftinəs/
+shoplift	/ˈʃɒplɪft/
+so-called	/ˌsəʊ ˈkɔːld/
+stinginess	/ˈstɪndʒinəs/
+stressful	/ˈstresfl/
+subduct	/səbˈdʌkt/
+timeout	/ˈtaɪmaʊt/
+toolkit	/ˈtuːlkɪt/
+troubleshoot	/ˈtrʌblʃuːt/
+turnpike	/ˈtɜːnpaɪk/
+uninstall	/ˌʌnɪnˈstɔːl/
+unjustified	/ʌnˈdʒʌstɪfaɪd/
+unquestionably	/ʌnˈkwestʃənəbli/
+unregulated	/ʌnˈreɡjuleɪtɪd/
+uptodate	/ˌʌp tə ˈdeɪt/
+videotape	/ˈvɪdiəʊteɪp/
+walkman	/ˈwɔːkmən/
+website	/ˈwebsaɪt/
+workday	/ˈwɜːkdeɪ/
+workforce	/ˈwɜːkfɔːs/
+workmate	/ˈwɜːkmeɪt/
+workplace	/ˈwɜːkpleɪs/

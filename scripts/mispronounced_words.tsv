@@ -1,0 +1,128 @@
+# CodeVocab 程序员易读错词表
+#
+# 格式（Tab 分隔）：单词  词性  中文释义  音标  常见误读  朗读文本（可选）
+# - 中文释义会被中文语音朗读，所以不要在里面写英文
+# - 朗读文本：系统语音直接读单词可能读错时（比如 Nginx、C#），填写让英文语音朗读的文本
+# - 有多种公认读法的，在“常见误读”一栏说明
+# 以 # 开头的行是注释。本词库按文件中的顺序播放。
+
+# ---- AI 与大模型 ----
+Gemini	n.	谷歌的大模型；双子座	/ˈdʒemɪnaɪ/	结尾读“奈” /naɪ/，谷歌官方读法；读成“杰米尼” /ˈdʒemɪniː/ 也常听到
+Claude	n.	一款人工智能助手	/klɔːd/	不要读成 cloud /klaʊd/（云）
+Anthropic	n.	一家人工智能公司	/ænˈθrɒpɪk/	重音在第二个音节，不是 /ˈænθrəpɪk/
+Copilot	n.	编程助手；副驾驶	/ˈkəʊpaɪlət/	co 读 /kəʊ/，不要读成 /ˈkɒpɪlət/
+Llama	n.	一款开源大模型；美洲驼	/ˈlɑːmə/	两个 l 只读一个 /l/
+Ollama	n.	本地运行大模型的工具	/əʊˈlɑːmə/	重音在 la
+Mistral	n.	一家法国人工智能公司	/mɪˈstrɑːl/	重音在第二个音节
+CUDA	n.	英伟达的并行计算平台	/ˈkuːdə/	不要逐个字母读 C-U-D-A
+NVIDIA	n.	英伟达	/enˈvɪdiə/	开头读 /en/，重音在 vi	en vidia
+Jupyter	n.	交互式笔记本	/ˈdʒuːpɪtə/	与 Jupiter（木星）同音，不读“丢派特”	Jupiter
+NumPy	n.	数值计算库	/ˈnʌmpaɪ/	py 读“派” /paɪ/，不读 /pi/	num pie
+SciPy	n.	科学计算库	/ˈsaɪpaɪ/	读“赛派”，不读“斯基皮”	sigh pie
+Matplotlib	n.	绘图库	/mætˈplɒtlɪb/	mat + plot + lib 三段
+Keras	n.	深度学习框架	/ˈkerəs/	读“克拉斯”
+
+# ---- 操作系统与工具 ----
+Linux	n.	开源操作系统	/ˈlɪnəks/	不读“来纳克斯” /ˈlaɪnəks/；创始人 Linus 本人读 /ˈlɪnəks/
+Linus	n.	林纳斯（Linux 创始人的名字）	/ˈliːnəs/	读“里纳斯”
+Unix	n.	一种经典操作系统	/ˈjuːnɪks/	开头读 /juː/（优），不读“乌尼克斯”
+Ubuntu	n.	一个流行的发行版	/ʊˈbʊntuː/	读“乌班图”，不读“优般吐” /juːˈbʌntuː/	oo boon too
+Debian	n.	一个经典的发行版	/ˈdebiən/	读“德比安”，重音在第一个音节
+macOS	n.	苹果电脑操作系统	/ˌmæk əʊ ˈes/	OS 两个字母分开读，不读“马克奥斯”	mac O S
+GNU	n.	自由软件项目	/ɡnuː/	读作一个音节 /ɡnuː/（g 也发音），不逐个字母读	guh new
+Vim	n.	文本编辑器	/vɪm/	读作一个单词，不逐个字母读
+Emacs	n.	文本编辑器	/ˈiːmæks/	读“伊麦克斯”
+sudo	n.	以管理员身份执行	/ˈsuːduː/	也常读 /ˈsuːdəʊ/，两种都可以
+Nginx	n.	高性能网页服务器	/ˌendʒɪnˈeks/	读作 engine x，不读“恩金克斯”	engine x
+Apache	n.	阿帕奇（服务器软件和基金会）	/əˈpætʃi/	结尾有 /i/ 音，不是 /əˈpætʃ/
+Kubernetes	n.	容器编排系统	/ˌkuːbəˈnetiːz/	结尾读 /tiːz/，不要漏掉；简写 k8s	koo ber net eez
+etcd	n.	分布式键值存储	/ˌet siː ˈdiː/	读作 et-cee-dee，不逐个字母读	et see dee
+Ansible	n.	自动化运维工具	/ˈænsəbl/	重音在第一个音节
+Prometheus	n.	监控系统；普罗米修斯	/prəˈmiːθiəs/	重音在 me，不读“普罗米修斯”的中文音
+Grafana	n.	监控可视化工具	/ɡrəˈfɑːnə/	重音在 fa
+Kibana	n.	日志可视化工具	/kɪˈbɑːnə/	重音在 ba
+Hadoop	n.	大数据框架	/həˈduːp/	重音在 doop
+Heroku	n.	云应用平台	/həˈrəʊkuː/	重音在 ro
+Vercel	n.	前端部署平台	/vɜːˈsel/	重音在第二个音节
+Azure	n.	微软的云服务	/ˈæʒə/	读“阿热”，不读“阿祖尔” /əˈzjʊə/
+Wi-Fi	n.	无线网络	/ˈwaɪfaɪ/	读“歪发”，不读“维飞”	why fie
+IEEE	n.	电气电子工程师学会	/aɪ ˈtrɪpl iː/	读作 I triple E	I triple E
+Xeon	n.	英特尔服务器处理器	/ˈziːɒn/	X 读 /z/，不读“艾克斯-恩”	zee on
+Arduino	n.	开源硬件平台	/ɑːˈdwiːnəʊ/	读“阿杜伊诺”
+Raspberry	n.	树莓（树莓派）	/ˈrɑːzbəri/	p 不发音
+
+# ---- 编程语言与框架 ----
+C#	n.	一种编程语言	/ˌsiː ˈʃɑːp/	读作 C sharp，不读“C 井”	C sharp
+Qt	n.	跨平台界面框架	/kjuːt/	读作 cute，不逐个字母读	cute
+Django	n.	网页框架	/ˈdʒæŋɡəʊ/	D 不发音，读“姜戈”	jango
+Vue	n.	前端框架	/vjuː/	读作 view，不逐个字母读	view
+Vite	n.	前端构建工具	/viːt/	法语“快”，读 /viːt/，不读 /vaɪt/	veet
+Svelte	n.	前端框架	/svelt/	一个音节，结尾 e 不发音
+Deno	n.	运行时	/ˈdiːnəʊ/	读“迪诺”
+Laravel	n.	网页框架	/ˈlærəvel/	重音在第一个音节
+Gradle	n.	构建工具	/ˈɡreɪdl/	读“格雷多”，不读 /ˈɡrædl/
+Clojure	n.	一种编程语言	/ˈkləʊʒə/	与 closure 同音	closure
+Scala	n.	一种编程语言	/ˈskɑːlə/	读“斯卡拉”
+Godot	n.	开源游戏引擎	/ˈɡɒdəʊ/	结尾 t 不发音	go doe
+Selenium	n.	浏览器自动化工具；硒	/səˈliːniəm/	重音在 le
+Chromium	n.	开源浏览器项目	/ˈkrəʊmiəm/	读“克罗米厄姆”
+Ajax	n.	异步网页请求技术	/ˈeɪdʒæks/	开头读 /eɪ/ 不读“阿贾克斯”
+regex	n.	正则表达式	/ˈredʒeks/	也常读 /ˈreɡeks/，两种都可以
+
+# ---- 数据库与数据格式 ----
+SQL	n.	结构化查询语言	/ˌes kjuː ˈel/	逐个字母读或读作 sequel /ˈsiːkwəl/ 都可以	S Q L
+MySQL	n.	一种数据库	/ˌmaɪ ˌes kjuː ˈel/	官方读法是 My S-Q-L；读作 my sequel 也常听到	my S Q L
+PostgreSQL	n.	一种数据库	/ˈpəʊstɡres ˌkjuː ˈel/	读作 post-gres-Q-L，常简称 Postgres	post gres Q L
+Redis	n.	内存数据库	/ˈredɪs/	读“瑞迪斯” /ˈredɪs/，不读 /ˈriːdɪs/	red iss
+JSON	n.	一种数据格式	/ˈdʒeɪsən/	读作 Jason，不逐个字母读	Jason
+YAML	n.	一种配置文件格式	/ˈjæməl/	读作一个单词，不逐个字母读	yamel
+TOML	n.	一种配置文件格式	/ˈtɒməl/	读作一个单词	tommel
+ASCII	n.	美国信息交换标准代码	/ˈæski/	读“阿斯基”，不逐个字母读	ask key
+JPEG	n.	一种图片格式	/ˈdʒeɪpeɡ/	读作 jay-peg	jay peg
+GIF	n.	一种动图格式	/ɡɪf/	/ɡɪf/ 和 /dʒɪf/ 都有人用，作者本人读 /dʒɪf/
+PNG	n.	一种图片格式	/pɪŋ/	官方读法是 ping，逐个字母读也常见	ping
+MIME	n.	互联网媒体类型	/maɪm/	读作一个单词，不逐个字母读	mime
+Wasm	n.	网页汇编	/ˈwɒzəm/	读“瓦怎”	wozzum
+
+# ---- 缩写与概念 ----
+GUI	n.	图形用户界面	/ˈɡuːi/	读作 gooey，不逐个字母读	gooey
+SaaS	n.	软件即服务	/sæs/	读作一个音节，不逐个字母读	sass
+JWT	n.	一种身份令牌	/dʒɒt/	官方读法是 jot，逐个字母读也常见	jot
+GitHub	n.	代码托管平台	/ˈɡɪthʌb/	g 读 /ɡ/，不读“吉特哈布” /ˈdʒɪt/
+Git	n.	版本控制工具	/ɡɪt/	g 读 /ɡ/，不读 /dʒɪt/
+gigabyte	n.	吉字节	/ˈɡɪɡəbaɪt/	giga 的 g 读 /ɡ/，不读 /ˈdʒɪɡə/
+Adobe	n.	一家软件公司	/əˈdəʊbi/	结尾有 /i/ 音，读“阿多比”
+async	adj.	异步的	/əˈsɪŋk/	/eɪˈsɪŋk/ 也很常见
+
+# ---- 常被读错的普通单词 ----
+cache	n.	缓存	/kæʃ/	读“卡诗”，不读“凯吃” /keɪtʃ/ 或“卡谢”	cash
+daemon	n.	守护进程	/ˈdiːmən/	与 demon 同音，也可读 /ˈdeɪmən/；不读“戴蒙”	demon
+suite	n.	套件	/swiːt/	与 sweet 同音，不读 suit /suːt/	sweet
+height	n.	高度	/haɪt/	读“嗨特”，不读“黑特” /heɪt/
+width	n.	宽度	/wɪdθ/	i 读短音 /ɪ/，不读“外德” /waɪd/
+align	v.	对齐	/əˈlaɪn/	g 不发音，读“阿莱恩”
+alias	n.	别名	/ˈeɪliəs/	重音在第一个音节，读“诶利厄斯”
+integer	n.	整数	/ˈɪntɪdʒə/	g 读 /dʒ/，不读 /ɡ/
+char	n.	字符类型	/tʃɑː/	读“恰”（同 char 烧焦）；/kær/（同 care）也常见
+deque	n.	双端队列	/dek/	读作 deck，不读“迪Q”	deck
+tuple	n.	元组	/ˈtjuːpl/	/ˈtʌpl/ 也常见，两种都可以
+route	n.	路由	/ruːt/	英式 /ruːt/，美式也常读 /raʊt/
+router	n.	路由器	/ˈruːtə/	英式 /ˈruːtə/，美式 /ˈraʊtər/
+variable	n.	变量	/ˈveəriəbl/	重音在第一个音节，不读 /vəˈraɪəbl/
+parameter	n.	参数	/pəˈræmɪtə/	重音在第二个音节 ra
+component	n.	组件	/kəmˈpəʊnənt/	重音在 po
+determine	v.	确定	/dɪˈtɜːmɪn/	结尾读 /mɪn/，不读 /maɪn/
+facade	n.	外观模式；门面	/fəˈsɑːd/	c 读 /s/，读“法萨德”	fuh sahd
+archive	n.	归档	/ˈɑːkaɪv/	ch 读 /k/，不读 /tʃ/
+architecture	n.	架构	/ˈɑːkɪtektʃə/	arch 读 /ɑːk/，不读 /ɑːtʃ/
+epoch	n.	纪元；训练轮次	/ˈiːpɒk/	读“伊破克”，不读 /ˈepətʃ/
+schema	n.	模式；结构定义	/ˈskiːmə/	sch 读 /sk/，不读 /ʃ/
+scheme	n.	方案；配色方案	/skiːm/	sch 读 /sk/
+infinite	adj.	无限的	/ˈɪnfɪnət/	重音在第一个音节，不读 /ɪnˈfaɪnaɪt/
+image	n.	图像；镜像	/ˈɪmɪdʒ/	重音在第一个音节，不读 /ɪˈmeɪdʒ/
+module	n.	模块	/ˈmɒdjuːl/	o 读 /ɒ/，不读 /ˈməʊdjuːl/
+lambda	n.	匿名函数	/ˈlæmdə/	b 不发音
+native	adj.	原生的	/ˈneɪtɪv/	a 读 /eɪ/，不读 /ˈnætɪv/
+private	adj.	私有的	/ˈpraɪvət/	结尾读 /vət/，不读 /veɪt/
+event	n.	事件	/ɪˈvent/	重音在第二个音节，不读 /ˈiːvent/
+résumé	n.	简历	/ˈrezjuːmeɪ/	不读 resume /rɪˈzjuːm/（继续）	rez oo may
