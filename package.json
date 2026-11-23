@@ -3,7 +3,7 @@
   "displayName": "CodeVocab · 码上背单词",
   "description": "写代码时在后台朗读单词和中文释义，状态栏同步显示词性和意思。内置四六级、考研、雅思、托福、GRE 词库。Listen to vocabulary while you code.",
   "version": "0.1.0",
-  "publisher": "your-publisher-id",
+  "publisher": "Miaoo",
   "license": "MIT",
   "icon": "images/icon.png",
   "galleryBanner": {
