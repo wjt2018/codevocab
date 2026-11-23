@@ -4,6 +4,7 @@
 
 - 只想修正某个词的释义或音标？直接看[修改人工整理的词库](#修改人工整理的词库)。
 - 想改插件功能？从[开发环境](#开发环境)开始。
+- 要发布新版本？看[发布流程](#发布流程维护者)。
 
 ## 开发环境
 
@@ -158,18 +159,78 @@ extension.ts（播放进度、状态栏）  ── speak / stop / show ──▶
 - **不要修改 `package.json` 里的版本号**，版本号在发布时统一修改。
 - 不要提交 `out/`、`node_modules/`、`.vsix` 文件和 `ecdict.csv`。
 
+## 持续集成
+
+每个 Pull Request 和每次推送到 main 都会运行 [CI 工作流](.github/workflows/ci.yml)：编译、校验内置词库（每个词条都有单词和释义、`package.json` 里列出的词库文件都存在）、打包。打好的 `.vsix` 会作为构建产物保存 14 天，可以在 Actions 页面下载后安装测试。
+
 ## 发布流程（维护者）
 
-1. 把 `CHANGELOG.md` 中 `[Unreleased]` 下的内容移到新的版本号下面，提交。
-2. 发布并自动升级版本号：
+发布由 [Release 工作流](.github/workflows/release.yml) 自动完成：推送 `v*` 版本标签后，它会检查版本号、打包，并发布到 VS Code 插件商店、Open VSX 和 GitHub Release。
+
+### 一次性配置
+
+**VS Code 插件商店：Trusted Publishing（推荐，不需要令牌）**
+
+插件商店信任来自本仓库 Release 工作流的发布请求，不需要保存任何令牌：
+
+1. 打开 [插件管理页面](https://marketplace.visualstudio.com/manage)，进入发布者 **Miaoo**，选择 **Trusted Publishing**，展开 **Create**。
+2. 填写策略：
+
+   | 字段 | 值 |
+   |---|---|
+   | Policy name | 任意，例如 `github-release` |
+   | Repository owner | `wjt2018` |
+   | Repository | `codevocab` |
+   | Workflow | `release.yml` |
+   | Environment | 留空 |
+
+3. 点 **Create**。
+
+> 旧的做法是在 Azure DevOps 生成“All accessible organizations”范围的令牌，保存为仓库密钥 `VSCE_PAT`。这种全局令牌正在被微软淘汰，不建议再用。工作流仍然兼容：配置了 `VSCE_PAT` 时会优先用它。
+
+**Open VSX：仓库密钥 `OVSX_PAT`**
+
+1. 注册 [Eclipse 账号](https://accounts.eclipse.org/user/register)（填写 GitHub 用户名），用 GitHub 登录 [open-vsx.org](https://open-vsx.org)，在 [个人设置](https://open-vsx.org/user-settings/profile) 里点 **Log in with Eclipse** 并签署 Publisher Agreement。
+2. 创建命名空间（只需一次）：`npx ovsx create-namespace Miaoo -p <令牌>`。
+3. 在 [Access Tokens](https://open-vsx.org/user-settings/tokens) 生成令牌，添加到 GitHub 仓库的 **Settings → Secrets and variables → Actions**，名称为 `OVSX_PAT`。
+
+没有配置 `OVSX_PAT` 时会跳过 Open VSX，并给出提示。
+
+### 每次发版
+
+1. **准备发版 PR**：从 main 拉一个分支，完成下面两件事后提交 PR：
+   - 把 `CHANGELOG.md` 中 `[Unreleased]` 下的内容移到新版本号下面，例如 `## [0.3.0] - 2026-12-01`，并更新文件底部的版本对比链接。
+   - 修改版本号，不打标签：
+
+     ```bash
+     npm version minor --no-git-tag-version   # 新增功能：0.2.0 → 0.3.0
+     npm version patch --no-git-tag-version   # 修复问题：0.2.0 → 0.2.1
+     ```
+
+2. **合并 PR**，等 main 上的 CI 通过。
+3. **打标签并推送**，触发自动发布：
 
    ```bash
-   npx vsce publish patch   # 修复问题：0.1.0 → 0.1.1
-   npx vsce publish minor   # 新增功能：0.1.0 → 0.2.0
+   git checkout main && git pull
+   git tag -a v0.3.0 -m "CodeVocab 0.3.0"
+   git push origin v0.3.0
    ```
 
-   `vsce` 会修改 `package.json` 中的版本号，并自动提交、打上版本标签。
-   如果用网页上传：先运行 `npm version patch` 或 `npm version minor`，再运行 `npx vsce package`，然后到 [插件管理页面](https://marketplace.visualstudio.com/manage) 上传生成的 `.vsix`。
+4. 在仓库的 **Actions** 页面查看 Release 工作流的运行结果，然后确认插件商店、Open VSX 和 GitHub Release 都已更新。
 
-3. 推送提交和标签：`git push --follow-tags`。
-4. （可选）发布到 [Open VSX](https://open-vsx.org/)，方便 Cursor、VSCodium 等编辑器的用户安装：`npx ovsx publish -p <token>`。
+工作流会在这些情况下中止发布：标签和 `package.json` 的版本号不一致，或者 CHANGELOG 里找不到这个版本的说明。
+
+### 测试发布流程
+
+在 Actions 页面选择 **Release** 工作流 → **Run workflow**，保持勾选“只打包、不发布”。工作流会走一遍检查和打包流程，但不会发布到任何平台，打好的 `.vsix` 可以在运行结果里下载。
+
+### 手动发布（备用）
+
+如果工作流出了问题，也可以在本地手动发布：
+
+```bash
+npx vsce package
+# VS Code 插件商店：到插件管理页面网页上传 .vsix
+npx ovsx publish codevocab-x.y.z.vsix --pat <OVSX_PAT>
+gh release create vx.y.z codevocab-x.y.z.vsix --notes-file <发布说明>
+```
