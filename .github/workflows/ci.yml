@@ -1,0 +1,68 @@
+# 每次提 PR 或推送到 main 时运行：编译、校验词库、打包。
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 编译
+        run: npm run compile
+
+      - name: 校验内置词库
+        # 每本词库都要能被解析，每个词条都要有 word 和 meaning，
+        # 并且 package.json 里列出的内置词库都有对应的文件
+        run: |
+          node <<'EOF'
+          const fs = require('fs');
+          const pkg = require('./package.json');
+          const books = pkg.contributes.configuration.properties['codevocab.builtinWordbook'].enum;
+          let failed = false;
+          for (const book of books) {
+            const file = `wordbooks/${book}.json`;
+            if (!fs.existsSync(file)) {
+              console.error(`::error file=${file}::缺少内置词库文件`);
+              failed = true;
+              continue;
+            }
+            const words = JSON.parse(fs.readFileSync(file, 'utf8'));
+            const bad = words.filter((w) => !w.word || !w.meaning);
+            const noPhonetic = words.filter((w) => !w.phonetic).length;
+            if (bad.length) {
+              console.error(`::error file=${file}::${bad.length} 个词条缺少 word 或 meaning，例如 ${JSON.stringify(bad[0])}`);
+              failed = true;
+            }
+            if (noPhonetic) {
+              console.log(`::warning file=${file}::${noPhonetic} 个词条没有音标`);
+            }
+            console.log(`${book}: ${words.length} 词`);
+          }
+          process.exit(failed ? 1 : 0);
+          EOF
+
+      - name: 打包
+        run: npx vsce package --out codevocab.vsix
+
+      - name: 上传安装包
+        uses: actions/upload-artifact@v4
+        with:
+          name: codevocab-vsix
+          path: codevocab.vsix
+          retention-days: 14

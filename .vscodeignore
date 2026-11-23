@@ -10,3 +10,4 @@ CONTRIBUTING.md
 images/**
 !images/icon.png
 cspell.json
+.github/**

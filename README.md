@@ -12,6 +12,7 @@
 <p align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=Miaoo.codevocab"><img src="https://img.shields.io/visual-studio-marketplace/v/Miaoo.codevocab?label=VS%20Code%20%E5%95%86%E5%BA%97" alt="版本"></a>
   <a href="https://marketplace.visualstudio.com/items?itemName=Miaoo.codevocab"><img src="https://img.shields.io/visual-studio-marketplace/i/Miaoo.codevocab?label=%E5%AE%89%E8%A3%85%E9%87%8F" alt="安装量"></a>
+  <a href="https://github.com/wjt2018/codevocab/actions/workflows/ci.yml"><img src="https://github.com/wjt2018/codevocab/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/wjt2018/codevocab/blob/main/LICENSE"><img src="https://img.shields.io/github/license/wjt2018/codevocab" alt="License"></a>
 </p>
 

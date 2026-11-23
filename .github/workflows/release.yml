@@ -1,0 +1,133 @@
+# 推送版本标签（如 v0.3.0）时自动发布：
+#   1. 检查标签和 package.json 的版本号一致，CHANGELOG 里有这个版本的说明
+#   2. 打包 .vsix
+#   3. 发布到 VS Code 插件商店（需要仓库密钥 VSCE_PAT）
+#   4. 发布到 Open VSX（需要仓库密钥 OVSX_PAT）
+#   5. 创建 GitHub Release，发布说明取自 CHANGELOG
+#
+# 没有配置某个密钥时，对应的发布步骤会跳过并给出提示。
+# 也可以在 Actions 页面手动运行，默认只打包不发布，用来测试流程。
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 只打包、不发布（用来测试流程）
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      OVSX_PAT: ${{ secrets.OVSX_PAT }}
+      # 推送标签时为 false；手动运行时取决于“只打包”选项
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 需要完整历史来找上一个版本标签
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 读取版本号
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "vsix=codevocab-$VERSION.vsix" >> "$GITHUB_OUTPUT"
+          echo "版本号：$VERSION"
+
+      - name: 检查标签与版本号一致
+        if: github.ref_type == 'tag'
+        run: |
+          if [ "$GITHUB_REF_NAME" != "v${{ steps.version.outputs.version }}" ]; then
+            echo "::error::标签 $GITHUB_REF_NAME 与 package.json 中的版本号 ${{ steps.version.outputs.version }} 不一致。请先修改版本号再打标签。"
+            exit 1
+          fi
+
+      - name: 从 CHANGELOG 提取发布说明
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          # 取 "## [版本号]" 到下一个 "## [" 之间的内容
+          awk -v v="$VERSION" '
+            index($0, "## [" v "]") == 1 { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          if ! grep -q '[^[:space:]]' release-notes.md; then
+            echo "::error::CHANGELOG.md 中没有找到 [$VERSION] 的更新说明。"
+            exit 1
+          fi
+          {
+            echo
+            echo "### 安装"
+            echo
+            echo "- 在 VS Code 扩展面板搜索 **CodeVocab** 安装或更新"
+            echo "- 或下载下方的 \`${{ steps.version.outputs.vsix }}\`，在扩展面板「…」→「从 VSIX 安装…」"
+          } >> release-notes.md
+          PREVIOUS=$(git tag --list 'v*' --sort=-v:refname | grep -vx "v$VERSION" | head -n 1)
+          if [ -n "$PREVIOUS" ]; then
+            echo >> release-notes.md
+            echo "**完整变更**：https://github.com/${{ github.repository }}/compare/$PREVIOUS...v$VERSION" >> release-notes.md
+          fi
+          cat release-notes.md
+
+      - name: 打包
+        run: npx vsce package --out "${{ steps.version.outputs.vsix }}"
+
+      - name: 上传安装包
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.version.outputs.vsix }}
+          path: ${{ steps.version.outputs.vsix }}
+
+      - name: 发布到 VS Code 插件商店
+        if: env.DRY_RUN != 'true' && env.VSCE_PAT != ''
+        run: npx vsce publish --packagePath "${{ steps.version.outputs.vsix }}" --pat "$VSCE_PAT"
+
+      - name: 发布到 Open VSX
+        if: env.DRY_RUN != 'true' && env.OVSX_PAT != ''
+        run: npx ovsx publish "${{ steps.version.outputs.vsix }}" --pat "$OVSX_PAT"
+
+      - name: 创建 GitHub Release
+        if: env.DRY_RUN != 'true' && github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            echo "Release $GITHUB_REF_NAME 已存在，只更新安装包"
+            gh release upload "$GITHUB_REF_NAME" "${{ steps.version.outputs.vsix }}" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "${{ steps.version.outputs.vsix }}" \
+              --title "CodeVocab ${{ steps.version.outputs.version }}" \
+              --notes-file release-notes.md \
+              --verify-tag
+          fi
+
+      - name: 提示未配置的密钥
+        if: env.DRY_RUN != 'true' && (env.VSCE_PAT == '' || env.OVSX_PAT == '')
+        run: |
+          if [ -z "$VSCE_PAT" ]; then
+            echo "::warning::没有配置仓库密钥 VSCE_PAT，已跳过发布到 VS Code 插件商店。可以手动上传本次构建产物中的 .vsix。"
+          fi
+          if [ -z "$OVSX_PAT" ]; then
+            echo "::warning::没有配置仓库密钥 OVSX_PAT，已跳过发布到 Open VSX。"
+          fi
