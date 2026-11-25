@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-25
+
 ### 文档
 
 - README 新增演示动图：状态栏轮播、悬停释义、一键隐藏和发音面板操作。
@@ -44,6 +46,7 @@
 - 发音面板：显示完整释义和语音检测结果，提供播放控制按钮、进度条和跳转输入框。
 - 自动记住每本单词本的播放进度。
 
-[Unreleased]: https://github.com/wjt2018/codevocab/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/wjt2018/codevocab/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/wjt2018/codevocab/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/wjt2018/codevocab/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/wjt2018/codevocab/releases/tag/v0.1.0
