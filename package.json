@@ -232,7 +232,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "package": "vsce package"
+    "package": "node scripts/marketplace-readme.js && vsce package --readme-path build/README.md"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

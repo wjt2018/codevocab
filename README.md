@@ -244,6 +244,10 @@ CodeVocab 使用的是操作系统自带的语音，音质取决于系统。Wind
 
 程序员词汇、商务英语和程序员易读错词的词条、释义和读音说明由本项目人工整理，与项目代码一样采用 MIT 协议。
 
+<!-- github-only:start（打包时由 scripts/marketplace-readme.js 去掉，不出现在插件商店） -->
+感谢 [LINUX DO](https://linux.do) 社区。
+<!-- github-only:end -->
+
 ## 📄 License
 
 [MIT](LICENSE)

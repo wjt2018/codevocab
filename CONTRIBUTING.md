@@ -28,7 +28,7 @@ npm install
 |---|---|
 | `npm run compile` | 编译 TypeScript 到 `out/` |
 | `npm run watch` | 监听文件变化并自动编译（F5 会自动运行） |
-| `npm run package` | 打包成 `.vsix`，可以在本地安装测试 |
+| `npm run package` | 打包成 `.vsix`，可以在本地安装测试。插件商店显示的 README 会去掉 `<!-- github-only:start -->` 和 `<!-- github-only:end -->` 之间的内容（见 `scripts/marketplace-readme.js`），所以要用这个命令打包，不要直接运行 `npx vsce package` |
 
 ## 项目结构
 
@@ -229,7 +229,7 @@ extension.ts（播放进度、状态栏）  ── speak / stop / show ──▶
 如果工作流出了问题，也可以在本地手动发布：
 
 ```bash
-npx vsce package
+npm run package
 # VS Code 插件商店：到插件管理页面网页上传 .vsix
 npx ovsx publish codevocab-x.y.z.vsix --pat <OVSX_PAT>
 gh release create vx.y.z codevocab-x.y.z.vsix --notes-file <发布说明>

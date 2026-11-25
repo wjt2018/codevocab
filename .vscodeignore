@@ -11,3 +11,5 @@ images/**
 !images/icon.png
 cspell.json
 .github/**
+build/**
+README.md
