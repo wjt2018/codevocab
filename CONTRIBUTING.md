@@ -47,7 +47,7 @@ codevocab/
 │   ├── business_words.tsv        # 商务英语词表（人工整理）
 │   ├── phonetic_overrides.tsv    # 人工补充的音标
 │   └── make_icon.py              # 生成商店图标 images/icon.png
-├── images/                       # 商店图标和 README 截图
+├── images/                       # 商店图标和 README 演示动图（demo.gif）
 ├── media/icon.svg                # 底部面板标签的图标
 └── package.json                  # 插件清单：命令、快捷键、设置项、商店信息
 ```

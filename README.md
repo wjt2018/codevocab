@@ -16,12 +16,9 @@
   <a href="https://github.com/wjt2018/codevocab/blob/main/LICENSE"><img src="https://img.shields.io/github/license/wjt2018/codevocab" alt="License"></a>
 </p>
 
-<!--
-  截图：在 VS Code 里截好图后放到 images/ 目录，再去掉这段注释。
-  插件商店不支持 SVG 图片，请用 PNG 或 GIF。
-  ![状态栏](images/statusbar.png)
-  ![发音面板](images/panel.png)
--->
+<p align="center">
+  <img src="images/demo.gif" alt="状态栏轮播单词，悬停查看释义，一键隐藏；底部发音面板可切换词库、跳转和播放">
+</p>
 
 ## ✨ 功能
 
