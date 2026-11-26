@@ -7,7 +7,10 @@ import { getWebviewHtml } from './webview';
 
 interface Word {
   word: string;
+  /** 英式音标（内置词库来自 ECDICT）；自定义单词本里不区分英美时也写在这里 */
   phonetic?: string;
+  /** 美式音标（内置词库来自 CMUdict） */
+  phonetic_us?: string;
   pos?: string;
   /** 简短释义：显示在状态栏，也用于朗读 */
   meaning: string;
@@ -46,7 +49,7 @@ type FromWebview =
   /** 面板「搜索…」按钮 */
   | { type: 'goTo' }
   /** 面板控制按钮 */
-  | { type: 'control'; action: 'togglePlay' | 'toggleVisible' | 'toggleMute' | 'next' | 'previous' }
+  | { type: 'control'; action: 'togglePlay' | 'toggleVisible' | 'toggleMute' | 'toggleAccent' | 'next' | 'previous' }
   /** 面板单词本下拉框：切换内置单词本 */
   | { type: 'selectBook'; book: string }
   /** 面板单词本下拉框：从文件导入 */
@@ -167,6 +170,9 @@ class Player implements vscode.Disposable {
         if (e.affectsConfiguration('codevocab.wordbookPath') || e.affectsConfiguration('codevocab.builtinWordbook')) {
           this.pause();
           this.load();
+        } else if (e.affectsConfiguration('codevocab.accent') && this.playing && !this.muted) {
+          // 换了口音：用新口音重读当前单词，马上就能听出区别
+          this.speakCurrent();
         } else if (e.affectsConfiguration('codevocab')) {
           this.render();
         }
@@ -218,6 +224,23 @@ class Player implements vscode.Disposable {
     if (this.playing && !this.muted) {
       this.speakCurrent();
     }
+  }
+
+  /**
+   * 切换朗读口音（美音 / 英音），写回设置 codevocab.accent。
+   * 写到当前生效的那一层（工作区设置优先），否则工作区里的设置会盖住用户设置，点了没反应。
+   */
+  async toggleAccent() {
+    const cfg = this.cfg();
+    const next = accent(cfg) === 'en-GB' ? 'en-US' : 'en-GB';
+    const info = cfg.inspect<string>('accent');
+    const target =
+      info?.workspaceFolderValue !== undefined
+        ? vscode.ConfigurationTarget.WorkspaceFolder
+        : info?.workspaceValue !== undefined
+          ? vscode.ConfigurationTarget.Workspace
+          : vscode.ConfigurationTarget.Global;
+    await cfg.update('accent', next, target);
   }
 
   move(step: number) {
@@ -439,6 +462,7 @@ class Player implements vscode.Disposable {
       id,
       word: w.speak || w.word,
       meaning: w.meaning,
+      lang: accent(cfg),
       speakMeaning: cfg.get<boolean>('speakMeaning', true),
       rate: cfg.get<number>('rate', 0.9),
     });
@@ -507,6 +531,9 @@ class Player implements vscode.Disposable {
           case 'toggleMute':
             void this.toggleMute();
             break;
+          case 'toggleAccent':
+            void this.toggleAccent();
+            break;
           case 'next':
             this.move(1);
             break;
@@ -567,7 +594,8 @@ class Player implements vscode.Disposable {
       const max = this.cfg().get<number>('maxMeaningLength', 30);
       const icon = (this.playing ? '$(debug-pause)' : '$(play)') + (this.muted ? ' $(mute)' : '');
       const meaning = w.meaning.length > max ? w.meaning.slice(0, max) + '…' : w.meaning;
-      const phonetic = this.cfg().get<boolean>('showPhonetic', false) && w.phonetic ? ` ${w.phonetic}` : '';
+      const phoneticText = formatPhonetic(w);
+      const phonetic = this.cfg().get<boolean>('showPhonetic', false) && phoneticText ? ` ${phoneticText}` : '';
       this.status.text = `${icon} ${w.word}${phonetic}  ${[w.pos, meaning].filter(Boolean).join(' ')}`;
       this.status.command = 'codevocab.togglePlay';
 
@@ -575,8 +603,8 @@ class Player implements vscode.Disposable {
       tip.appendMarkdown('**');
       tip.appendText(w.word);
       tip.appendMarkdown('**');
-      if (w.phonetic) {
-        tip.appendText(`  ${w.phonetic}`);
+      if (phoneticText) {
+        tip.appendText(`  ${phoneticText}`);
       }
       for (const line of (w.detail ?? [w.pos, w.meaning].filter(Boolean).join(' ')).split('\n')) {
         tip.appendMarkdown('\n\n');
@@ -593,7 +621,8 @@ class Player implements vscode.Disposable {
     }
     this.view.post({
       type: 'show',
-      word: w ?? null,
+      word: w ? { ...w, phoneticText: formatPhonetic(w) } : null,
+      accent: accent(this.cfg()),
       index: this.index,
       total: this.words.length,
       playing: this.playing,
@@ -608,6 +637,23 @@ class Player implements vscode.Disposable {
 // ---------------------------------------------------------------------------
 // 工具函数
 // ---------------------------------------------------------------------------
+
+/** 朗读口音：codevocab.accent，只接受 en-US / en-GB */
+function accent(cfg: vscode.WorkspaceConfiguration): 'en-US' | 'en-GB' {
+  return cfg.get<string>('accent', 'en-US') === 'en-GB' ? 'en-GB' : 'en-US';
+}
+
+/** 音标显示文本：两种都有时写成「英 /…/ 美 /…/」，只有一种时直接显示（只有美式时标上“美”） */
+function formatPhonetic(w: Word): string {
+  const { phonetic: gb, phonetic_us: us } = w;
+  if (gb && us && gb !== us) {
+    return `英 ${gb} 美 ${us}`;
+  }
+  if (gb) {
+    return gb;
+  }
+  return us ? `美 ${us}` : '';
+}
 
 /** 把 "500"、"#500"、"50%" 解析成单词下标（从 0 开始），不是位置就返回 undefined */
 function parsePosition(value: string, total: number): number | undefined {
@@ -639,7 +685,8 @@ function resolvePath(p: string): string {
 
 /**
  * 支持两种格式：
- * - JSON：[{ "word": "abandon", "phonetic": "/əˈbændən/", "pos": "v.", "meaning": "放弃" }]
+ * - JSON：[{ "word": "abandon", "phonetic": "/əˈbændən/", "phonetic_us": "/əˈbændən/", "pos": "v.", "meaning": "放弃" }]
+ *   phonetic 是英式音标（不区分英美时也写在这里），phonetic_us 是美式音标，都可以省略
  * - CSV / TSV / TXT：每行「单词,词性,释义」或「单词,释义」，# 开头的行是注释
  */
 function parseWordbook(file: string): Word[] {
@@ -667,6 +714,7 @@ function parseWordbook(file: string): Word[] {
     .map((w) => ({
       word: String(w.word).trim(),
       phonetic: w.phonetic ? String(w.phonetic).trim() : undefined,
+      phonetic_us: w.phonetic_us ? String(w.phonetic_us).trim() : undefined,
       pos: w.pos ? String(w.pos).trim() : undefined,
       meaning: String(w.meaning ?? '').trim(),
       detail: w.detail ? String(w.detail).trim() : undefined,

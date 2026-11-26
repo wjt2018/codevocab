@@ -39,13 +39,15 @@ codevocab/
 │   └── webview.ts                # 发音面板：用 Web Speech API 朗读，提供按钮、跳转和词库切换
 ├── wordbooks/                    # 内置词库（由脚本生成，不要手动修改）
 │   ├── programmer.json ...
-│   └── ECDICT-LICENSE.txt
+│   ├── ECDICT-LICENSE.txt
+│   └── CMUDICT-LICENSE.txt
 ├── scripts/
 │   ├── build_wordbooks.py        # 生成全部内置词库
 │   ├── programmer_words.tsv      # 程序员词汇词表（人工整理）
 │   ├── mispronounced_words.tsv   # 程序员易读错词词表（人工整理）
 │   ├── business_words.tsv        # 商务英语词表（人工整理）
-│   ├── phonetic_overrides.tsv    # 人工补充的音标
+│   ├── phonetic_overrides.tsv    # 人工补充的英式音标
+│   ├── phonetic_us_overrides.tsv # 人工补充、修正的美式音标
 │   └── make_icon.py              # 生成商店图标 images/icon.png
 ├── images/                       # 商店图标和 README 演示动图（demo.gif）
 ├── media/icon.svg                # 底部面板标签的图标
@@ -89,17 +91,24 @@ extension.ts（播放进度、状态栏）  ── speak / stop / show ──▶
    2. ECDICT 的音标（转换为标准 IPA 字符；多个读音只取第一个）
    3. `scripts/phonetic_overrides.tsv` 人工补充表
    4. 自动推导：根据 ECDICT 的词形变化找到原形并加上后缀读音（miles ← mile + /z/），或者处理英美拼写差异、合成词和 -ly、-ness、-ment 等常见后缀
-5. **排序并写出**：默认按词频排序（加 `--alpha` 改为字母顺序）；易读错词保持词表中的顺序。
+5. **查找美式音标**（`phonetic_us`），按以下顺序：
+   1. 易读错词词表的第 7 列
+   2. `scripts/phonetic_us_overrides.tsv` 人工补充表（也用来修正 CMUdict 读音不合适的词，比如 lead 取 /liːd/ 而不是 /led/）
+   3. [CMUdict](https://github.com/cmusphinx/cmudict) 的读音（多个读音只取第一个），由 `arpabet_to_ipa()` 转成 IPA：按“最大首音”原则切分音节来确定重音符号的位置，主重音之后和紧挨主重音前面的次重音不标
+   4. 自动推导：英式拼写转美式（colour → color、analyse → analyze），以及 -ly、-ness、-less、-ment、-er、-ed、-ing、复数等词尾变化；人工词库里的词还会尝试拆成合成词（toolkit = tool + kit）。考试词库不拆合成词，因为容易拆错（compaction 会被拆成 comp + action）
+6. **排序并写出**：默认按词频排序（加 `--alpha` 改为字母顺序）；易读错词保持词表中的顺序。
 
-脚本最后会提示没有音标的词、重复的词和 ECDICT 中查不到的词，提交前请确认这些提示都已处理。
+脚本最后会提示没有音标的词、人工词库里没有美式音标的词、重复的词和 ECDICT 中查不到的词，提交前请确认这些提示都已处理。考试词库里查不到美式音标的词（主要是 GRE 生僻词）只显示英式音标。
 
 ### 重新生成
 
-1. 从 [ECDICT](https://github.com/skywind3000/ECDICT) 仓库下载 `ecdict.csv`（约 66 MB，不要提交到本仓库）。
+1. 下载两份数据（都不要提交到本仓库）：
+   - [ECDICT](https://github.com/skywind3000/ECDICT) 仓库的 `ecdict.csv`（约 66 MB）
+   - [CMUdict](https://github.com/cmusphinx/cmudict) 仓库的 `cmudict.dict`（约 3.5 MB）
 2. 运行：
 
    ```bash
-   python scripts/build_wordbooks.py path/to/ecdict.csv
+   python scripts/build_wordbooks.py path/to/ecdict.csv path/to/cmudict.dict
    ```
 
 3. 用 `git diff wordbooks/` 检查变化是否符合预期。
@@ -115,7 +124,7 @@ extension.ts（播放进度、状态栏）  ── speak / stop / show ──▶
 每行一个词，**用 Tab 分隔**（不是空格）：
 
 ```
-单词  词性  释义  [音标]  [常见误读]  [朗读文本]
+单词  词性  释义  [音标]  [常见误读]  [朗读文本]  [美式音标]
 ```
 
 | 列 | 必填 | 说明 |
@@ -123,9 +132,10 @@ extension.ts（播放进度、状态栏）  ── speak / stop / show ──▶
 | 单词 | ✅ | |
 | 词性 | ✅ | 如 `n.`、`v.`、`adj.` |
 | 释义 | ✅ | 会被中文语音朗读，**不要在里面写英文**（中文语音读英文容易读错） |
-| 音标 | | 留空时自动从 ECDICT 查找；易读错词必须填写 |
+| 音标 | | 英式音标。留空时自动从 ECDICT 查找；易读错词必须填写 |
 | 常见误读 | | 显示在悬停提示和面板里，主要用于易读错词 |
 | 朗读文本 | | 系统语音读错单词时填写，例如 Nginx 填 `engine x` |
+| 美式音标 | | 易读错词必须填写（前面的列为空时也要保留 Tab）；其他词库留空，美式音标从 CMUdict 查找，查不到或不准时写进 `scripts/phonetic_us_overrides.tsv` |
 
 写释义时请注意：
 

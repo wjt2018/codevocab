@@ -24,8 +24,8 @@
 
 **听和看**
 
-- 🔊 **边写代码边听**：先读英文单词，再读中文释义。使用系统自带语音，不需要联网，也不需要账号。
-- 📌 **状态栏同步显示**：读到哪个词，底部状态栏就显示哪个词的词性和释义；鼠标悬停可以看到音标和完整释义。
+- 🔊 **边写代码边听**：先读英文单词，再读中文释义。可以选美音或英音，使用系统自带语音，不需要联网，也不需要账号。
+- 📌 **状态栏同步显示**：读到哪个词，底部状态栏就显示哪个词的词性和释义；鼠标悬停可以看到英式、美式两种音标和完整释义。
 - 🔇 **静音模式**：不方便出声的时候，单词照常在状态栏轮播。
 - 🙈 **一键隐藏**：开会、共享屏幕时，一个快捷键把状态栏上的单词藏起来。
 
@@ -58,11 +58,11 @@
 | 区域 | 作用 |
 |---|---|
 | 单词本下拉框 | 切换内置词库，或从文件导入 |
-| 当前单词 | 单词、音标和完整释义 |
-| 控制按钮 | 上一个、播放/暂停、下一个、静音、显示/隐藏状态栏 |
+| 当前单词 | 单词、英式和美式音标、完整释义 |
+| 控制按钮 | 上一个、播放/暂停、下一个、静音、显示/隐藏状态栏、切换口音（美音/英音） |
 | 进度条 | 拖动选择从第几个词开始 |
 | 跳转输入框 | 输入序号、百分比或单词后按回车；「搜索…」按钮可以按单词或中文意思查找 |
-| 语音检测 | 显示系统里找到的英文和中文语音，没有声音时先看这里 |
+| 语音检测 | 显示系统里找到的英文（当前口音）和中文语音，没有声音时先看这里 |
 
 面板收起后，朗读和状态栏轮播会照常进行。
 
@@ -133,6 +133,7 @@ Linux  /ˈlɪnəks/
 
 - 有多种公认读法的词（如 SQL、GIF、sudo）会注明几种都可以。
 - 系统语音直接读 Nginx、C#、Qt 这类词容易读错，所以这些词会改为朗读 `engine x`、`C sharp`、`cute`。
+- 每个词都人工标注了英式和美式两种音标，router（英 /ˈruːtə/，美 /ˈraʊtɚ/）这类英美读法不同的词可以对照着看。
 - 建议打开设置 `codevocab.showPhonetic`，在状态栏直接显示音标。
 
 ### 💼 商务英语
@@ -144,7 +145,8 @@ Linux  /ˈlɪnəks/
 根据 ECDICT 的考试标签生成，并做了这些处理：
 
 - **去掉过于基础的词**：中考词汇中词频最高的约 700 个词（the、in、go、make、good……），以及月份、星期、国名等首字母大写的词。
-- **补全音标**：ECDICT 缺音标的词，从词根推导（如 planning 由 plan 推出），推导不出的人工补充。现在所有词都有音标。
+- **补全音标**：ECDICT 缺音标的词，从词根推导（如 planning 由 plan 推出），推导不出的人工补充。现在所有词都有英式音标。
+- **美式音标**：从 [CMUdict](https://github.com/cmusphinx/cmudict)（卡内基梅隆大学发音词典）转换成国际音标；CMUdict 没有的词，尝试按英美拼写差异（colour → color）和词尾变化推导。约 97% 的词有美式音标，没有的只显示英式音标。
 - **修正数据错误**：如拼写错误的 reservior 改为 reservoir，排除人名等误收录的词条。
 
 ## 📂 导入自己的单词本
@@ -158,6 +160,7 @@ Linux  /ˈlɪnəks/
   {
     "word": "abandon",
     "phonetic": "/əˈbændən/",
+    "phonetic_us": "/əˈbændən/",
     "pos": "v.",
     "meaning": "放弃；抛弃",
     "detail": "vt. 放弃；抛弃；遗弃\nn. 放任；无拘束"
@@ -175,7 +178,8 @@ Linux  /ˈlɪnəks/
 |---|---|---|
 | `word` | ✅ | 单词 |
 | `meaning` | ✅ | 简短释义，显示在状态栏并朗读 |
-| `phonetic` | | 音标 |
+| `phonetic` | | 英式音标；不区分英美时也写在这里 |
+| `phonetic_us` | | 美式音标。两个都填时，显示为「英 /…/ 美 /…/」 |
 | `pos` | | 词性 |
 | `detail` | | 完整释义，可以用 `\n` 换行，显示在悬停提示和发音面板 |
 | `speak` | | 朗读文本：系统语音读错单词时，用这段文本代替单词朗读 |
@@ -199,9 +203,10 @@ hello,你好
 | `codevocab.interval` | `2000` | 读完一个词后，间隔多少毫秒播下一个 |
 | `codevocab.mutedDuration` | `5000` | 静音时每个词停留多少毫秒 |
 | `codevocab.speakMeaning` | `true` | 是否朗读中文释义 |
+| `codevocab.accent` | `en-US` | 朗读口音：`en-US` 美音，`en-GB` 英音 |
 | `codevocab.rate` | `0.9` | 朗读语速，1 为正常速度 |
 | `codevocab.maxMeaningLength` | `30` | 状态栏里释义最多显示多少个字符 |
-| `codevocab.showPhonetic` | `false` | 在状态栏中显示音标 |
+| `codevocab.showPhonetic` | `false` | 在状态栏中显示音标（英式和美式） |
 
 ## ❓ 常见问题
 
@@ -214,6 +219,9 @@ hello,你好
 
 **提示“发音被拦截”？**
 点击发音面板里的「播放」按钮即可。
+
+**音标是英式还是美式？朗读是什么口音？**
+音标两种都显示：「英 /…/」来自 ECDICT，「美 /…/」来自 CMUdict。朗读默认用美音，点发音面板里的「口音」按钮可以在美音和英音之间切换（对应设置 `codevocab.accent`）。改成英音需要系统里装有英式英语语音（Windows 一般自带 Hazel，没有的话按上一条的方法添加“英语（英国）”语音）；找不到时会用其他英语语音代替，发音面板里会提示。
 
 **声音听起来比较机械？**
 CodeVocab 使用的是操作系统自带的语音，音质取决于系统。Windows 11 和 macOS 上的“自然”或“增强”语音效果会好很多，可以在系统设置里下载。
@@ -242,6 +250,8 @@ CodeVocab 使用的是操作系统自带的语音，音质取决于系统。Wind
 
 考试词库的数据，以及程序员词汇、商务英语的部分音标和通用释义，来自 [ECDICT](https://github.com/skywind3000/ECDICT)（MIT License，许可证见 [wordbooks/ECDICT-LICENSE.txt](wordbooks/ECDICT-LICENSE.txt)），由 [scripts/build_wordbooks.py](scripts/build_wordbooks.py) 转换生成。感谢 ECDICT 的作者和贡献者。
 
+美式音标由 [CMUdict](https://github.com/cmusphinx/cmudict)（卡内基梅隆大学发音词典，BSD 风格许可证，许可证见 [wordbooks/CMUDICT-LICENSE.txt](wordbooks/CMUDICT-LICENSE.txt)）转换生成。感谢 CMUdict 的作者和贡献者。
+
 程序员词汇、商务英语和程序员易读错词的词条、释义和读音说明由本项目人工整理，与项目代码一样采用 MIT 协议。
 
 <!-- github-only:start（打包时由 scripts/marketplace-readme.js 去掉，不出现在插件商店） -->
@@ -260,6 +270,7 @@ CodeVocab 使用的是操作系统自带的语音，音质取决于系统。Wind
 
 - **Built for developers**: a curated programmer vocabulary (~700 words, with meanings in a programming context), plus a list of ~100 tech words Chinese developers commonly mispronounce (Linux, Nginx, cache, Gemini…) with IPA and notes.
 - **More word lists**: business English (~500 words) and exam lists for CET-4, CET-6, Kaoyan, IELTS, TOEFL, GRE, Gaokao and Zhongkao, generated from [ECDICT](https://github.com/skywind3000/ECDICT). Custom JSON / CSV word lists are supported too.
+- **British and American**: every word shows both British (ECDICT) and American ([CMUdict](https://github.com/cmusphinx/cmudict)) IPA; choose a US or UK voice with `codevocab.accent`.
 - **Stays out of your way**: mute mode, one-key hide, jump to any word, and a panel with mouse controls.
 - **Private and offline**: speech uses your operating system's built-in voices; no network access and no data collection.
 

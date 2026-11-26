@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-26
+
+### 新增
+
+- 内置词库同时显示英式和美式音标（状态栏、悬停提示和发音面板），显示为「英 /…/ 美 /…/」。美式音标由 CMUdict 转换生成，约 97% 的词都有；程序员易读错词的美式音标为人工标注。
+- 新增设置 `codevocab.accent`：朗读英文时用美音（`en-US`，默认）还是英音（`en-GB`）。发音面板新增「口音」按钮，点击即可切换；正在播放时会用新口音重读当前单词。系统里没有对应口音的语音时，用其他英语语音代替，发音面板会提示。
+- 自定义单词本（JSON）支持可选的 `phonetic_us` 字段。
+
 ## [0.2.1] - 2026-11-25
 
 ### 文档
@@ -46,7 +54,8 @@
 - 发音面板：显示完整释义和语音检测结果，提供播放控制按钮、进度条和跳转输入框。
 - 自动记住每本单词本的播放进度。
 
-[Unreleased]: https://github.com/wjt2018/codevocab/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/wjt2018/codevocab/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/wjt2018/codevocab/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/wjt2018/codevocab/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/wjt2018/codevocab/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/wjt2018/codevocab/releases/tag/v0.1.0

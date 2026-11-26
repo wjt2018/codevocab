@@ -2,7 +2,7 @@
   "name": "codevocab",
   "displayName": "CodeVocab · 码上背单词",
   "description": "写代码时在后台朗读单词和中文释义，状态栏同步显示词性和意思。内置程序员词汇、程序员易读错词、商务英语，以及四六级、考研、雅思、托福、GRE 词库。Listen to vocabulary while you code.",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "publisher": "Miaoo",
   "license": "MIT",
   "icon": "images/icon.png",
@@ -189,6 +189,23 @@
           "default": true,
           "description": "读完英文后是否再朗读中文释义。"
         },
+        "codevocab.accent": {
+          "type": "string",
+          "default": "en-US",
+          "enum": [
+            "en-US",
+            "en-GB"
+          ],
+          "enumItemLabels": [
+            "美音",
+            "英音"
+          ],
+          "enumDescriptions": [
+            "使用美式英语语音朗读",
+            "使用英式英语语音朗读（需要系统装有英式英语语音，没有时会用其他英语语音代替）"
+          ],
+          "description": "朗读英文单词时用美音还是英音。音标始终同时显示英式和美式两种。"
+        },
         "codevocab.rate": {
           "type": "number",
           "default": 0.9,
@@ -205,7 +222,7 @@
         "codevocab.showPhonetic": {
           "type": "boolean",
           "default": false,
-          "description": "在状态栏中显示音标（使用「程序员易读错词」时建议开启）。"
+          "description": "在状态栏中显示音标（英式和美式两种，使用「程序员易读错词」时建议开启）。"
         }
       }
     },
