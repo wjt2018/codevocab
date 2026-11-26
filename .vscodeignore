@@ -12,4 +12,5 @@ images/**
 cspell.json
 .github/**
 build/**
+docs/**
 README.md
