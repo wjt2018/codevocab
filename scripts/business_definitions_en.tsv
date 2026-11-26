@@ -1,0 +1,500 @@
+# CodeVocab 商务英语：商务语境下的英文释义
+#
+# 格式：单词<Tab>英文释义。单词必须和 business_words.tsv 中的写法一致。
+# 以 # 开头的行是注释。build_wordbooks.py 会把这里的释义作为英文释义的第一条（标为 [business]），
+# 再附上 ECDICT（WordNet）的通用英文释义。
+corporation	a large company, legally treated as a single organization
+enterprise	a company or business, especially a large one
+firm	a business company, especially a small or professional one
+subsidiary	a company that is owned and controlled by a larger company
+headquarters	the main office from which a company is run
+branch	a local office or shop that is part of a larger company
+division	a large section of a company that handles one area of business
+department	a section of an organization that deals with a particular area of work
+startup	a new, small company, often in technology, trying to grow quickly
+conglomerate	a large company made up of many different businesses
+partnership	a business owned and run by two or more people together
+venture	a new business or project, often one that involves risk
+franchise	the right to sell a company's products or run a business under its name
+affiliate	a company that is linked to or partly owned by another company
+stakeholder	a person or group affected by or interested in a business
+shareholder	a person who owns shares in a company
+board	the group of people who control and direct a company
+chairman	the person who leads a company's board of directors
+executive	a senior manager who makes important decisions in a company
+founder	a person who starts a company or organization
+entrepreneur	a person who starts their own business, often taking financial risks
+proprietor	the owner of a business, such as a shop or hotel
+incorporate	to officially form a company that is legally recognized
+merger	the joining of two or more companies into one
+acquisition	the act of buying another company
+acquire	to buy or take control of another company
+restructure	to change the way a company is organized to make it work better
+restructuring	changes to the way a company is organized, often to save money
+downsize	to reduce the number of workers in a company
+outsource	to pay an outside company to do work instead of doing it yourself
+outsourcing	paying outside companies to do work that was done inside the company
+headcount	the total number of people employed by an organization
+corporate	relating to a large company or companies in general
+organizational	relating to the way a group or company is organized
+hierarchy	a system in which people are ranked by level of authority
+bureaucracy	too many complicated official rules and procedures that slow things down
+mission	the main purpose or goal of an organization
+vision	a long-term idea of what an organization wants to become
+culture	the shared values, beliefs and ways of working in a company
+sector	a particular area of business or the economy
+industry	all the companies that make a particular kind of product or service
+employer	a person or company that pays people to work for them
+employee	a person who is paid to work for a person or company
+recruit	to find and hire new people to work for an organization
+recruitment	the process of finding and hiring new staff
+recruiter	a person whose job is to find new staff for companies
+candidate	a person who is being considered for a job
+applicant	a person who formally asks for a job or position
+résumé	a short document describing your education and work experience
+vacancy	a job that is available for someone to fill
+position	a job in a company or organization
+interview	a formal meeting where someone is asked questions to see if they suit a job
+hire	to employ someone to work for you
+onboarding	the process of helping new employees learn about their job and company
+probation	a trial period at the start of a job to test a new worker
+appraisal	a regular meeting to judge how well an employee is doing their job
+evaluation	the act of judging the quality, value or performance of something
+promotion	a move to a higher job with more responsibility; activity to increase sales
+resign	to officially leave your job
+resignation	the act of officially leaving your job
+dismiss	to officially remove someone from their job
+layoff	the ending of a worker's job because there is not enough work
+redundancy	the loss of a job because the employer no longer needs the worker
+retire	to stop working, usually because of age
+retirement	the time when you stop working, usually because of age
+pension	money paid regularly to someone after they stop working
+salary	a fixed amount of money paid to an employee, usually every month
+wage	money paid to a worker, usually per hour or per week
+payroll	a list of employees and the amounts they are paid
+bonus	extra money paid to an employee, often for good performance
+commission	money paid to a salesperson based on the value of what they sell
+incentive	something that encourages people to work harder or do something
+compensation	the total pay and benefits an employee receives; money paid for loss or damage
+benefit	something extra besides pay that an employer gives, such as health insurance
+allowance	money given regularly for a particular purpose, such as travel
+overtime	time worked beyond normal working hours, or the extra pay for it
+leave	permitted time away from work
+intern	a student or young person working for a short time to gain experience
+internship	a short period of work to gain practical experience
+colleague	a person you work with
+supervisor	a person who manages and checks the work of others
+subordinate	a person who has a lower position and works under someone else
+personnel	the people who work for an organization; the department that manages staff
+workforce	all the people who work for a company or in a country
+morale	the level of confidence and enthusiasm in a group of workers
+turnover	the total sales of a company in a period; the rate at which staff leave
+qualification	an official record of skill or training, such as a degree
+competence	the ability to do a job well
+expertise	special skill or knowledge in a particular area
+mentor	an experienced person who advises and helps a less experienced one
+delegate	to give part of your work or authority to someone else
+responsibility	a duty or task that you are expected to do as part of your job
+accountability	the fact of being responsible for your actions and having to explain them
+workload	the amount of work a person or team has to do
+deadline	a time or date by which something must be finished
+remote	done from a distance, especially working from home rather than an office
+freelance	working for different companies on separate jobs rather than as an employee
+freelancer	a person who works for different companies on separate jobs
+finance	the management of money, especially by a company or government
+financial	relating to money or how money is managed
+accounting	the work of keeping and checking financial records
+accountant	a person whose job is to keep or check financial records
+audit	an official examination of a company's financial records
+auditor	a person who officially checks a company's financial records
+budget	a plan of how much money can be spent and on what
+forecast	a statement about what is expected to happen, such as future sales
+revenue	the total money a company receives from its business
+income	money received, especially from work or investments
+profit	money made after all costs have been paid
+profitable	making or likely to make money
+profitability	the ability of a business to make money
+loss	money lost when costs are greater than income
+margin	the difference between the cost and the selling price, often as a percentage
+gross	total, before costs or tax are taken away
+net	remaining after costs or tax have been taken away
+expense	money spent on something, especially for work
+expenditure	the total amount of money spent by a person or organization
+cost	the amount of money needed to make or buy something
+overhead	regular business costs such as rent and electricity, not tied to products
+asset	something valuable owned by a company, such as property or cash
+liability	money that a company owes; legal responsibility for something
+equity	the value of a company that belongs to its owners or shareholders
+capital	money or property used to start or run a business
+fund	an amount of money saved or collected for a particular purpose
+funding	money provided for a particular purpose, such as a project or business
+cash	money in the form of coins or notes, or money available to use
+liquidity	the ability to turn assets into cash quickly
+balance	the amount of money in an account; a state where things are equal
+statement	a document showing financial information, such as money paid in and out
+invoice	a document listing goods or services and the amount owed
+receipt	a document showing that money has been paid
+reimburse	to pay back money that someone has spent for work
+reimbursement	the act of paying back money someone has spent for work
+deficit	the amount by which spending is more than income
+surplus	the amount by which income is more than spending
+depreciation	a fall in the value of an asset over time
+amortization	gradually paying off a debt or spreading a cost over time
+dividend	a part of a company's profit paid to shareholders
+earnings	the profit a company makes, or the money a person earns
+fiscal	relating to government or company money, especially taxes and spending
+quarter	a period of three months, used in financial reporting
+quarterly	happening or produced every three months
+annual	happening once a year or covering a period of one year
+valuation	an estimate of how much a company or asset is worth
+tax	money that people and businesses must pay to the government
+taxation	the system of collecting taxes
+deduction	an amount taken away from a total, such as from pay or taxable income
+deductible	able to be taken away from income before tax is calculated
+payable	that must be paid, often by a certain date
+receivable	that is owed to a company and still to be received
+ledger	a book or record in which a company's financial accounts are kept
+bookkeeping	the work of recording a company's financial transactions
+insolvent	not having enough money to pay debts
+bankruptcy	the state of being legally unable to pay your debts
+bankrupt	legally declared unable to pay debts
+debt	money that is owed to someone else
+creditor	a person or company that is owed money
+debtor	a person or company that owes money
+default	a failure to pay back a debt on time
+bank	an organization that keeps money for customers and lends money
+banking	the business of running a bank
+account	an arrangement to keep money in a bank
+deposit	money put into a bank account; an advance payment to secure something
+withdraw	to take money out of a bank account; to take back an offer
+withdrawal	the act of taking money out of a bank account
+transfer	the act of moving money from one account to another
+loan	money borrowed that must be paid back, usually with interest
+mortgage	a loan used to buy property, which is paid back over many years
+interest	extra money paid for borrowing money, or earned on savings
+rate	a level of interest or a fixed price for a service
+credit	an arrangement to buy now and pay later; trust in someone's ability to pay
+installment	one of a series of regular payments made over time
+collateral	property promised to a lender if a loan is not paid back
+investment	money put into a business or asset to make a profit
+investor	a person or organization that puts money into something to make a profit
+portfolio	a collection of investments owned by a person or organization
+stock	shares in a company; goods kept available for sale
+share	one of the equal parts into which a company's ownership is divided
+bond	a document promising to repay borrowed money with interest
+securities	investments such as stocks and bonds that can be traded
+exchange	a place where shares or goods are traded; changing one currency for another
+currency	the system of money used in a particular country
+inflation	a general rise in prices over time
+recession	a period when a country's economic activity falls sharply
+volatility	the tendency of prices to change quickly and unpredictably
+yield	the profit from an investment, shown as a percentage
+return	the profit made from an investment
+risk	the possibility of losing money or something bad happening
+hedge	to protect yourself against financial loss by making a balancing investment
+speculate	to buy and sell assets hoping to profit from price changes
+stake	a share in a business; an interest in its success
+IPO	Initial Public Offering: the first time a company sells its shares to the public
+listed	having shares traded on a stock exchange
+commodity	a raw material or product, such as oil or wheat, that is traded
+benchmark	a standard used to measure or compare performance
+economy	the system of trade, industry and money in a country or region
+economic	relating to trade, industry and money
+economical	using money or resources carefully without waste
+market	the people who buy a product, or the trade in a particular product
+demand	the desire of customers to buy goods or services
+supply	the amount of goods or services available for sale
+growth	an increase in size, value or activity
+downturn	a fall in business or economic activity
+boom	a period of fast economic growth and success
+slump	a sudden fall in prices or sales; a period of poor economic activity
+fluctuate	to rise and fall often and irregularly
+fluctuation	a frequent change in amount, level or value
+indicator	a figure that shows the state or trend of something
+GDP	Gross Domestic Product: the total value of goods and services a country produces in a year
+monopoly	complete control of a market by one company
+competition	the effort of companies to win more customers than each other
+competitor	a company that sells similar products to yours
+competitive	able to compete successfully with others, such as on price
+globalization	the process of businesses and economies becoming connected worldwide
+tariff	a tax on goods coming into or leaving a country
+subsidy	money given by a government to help a business or reduce prices
+regulation	an official rule, or the control of an activity by rules
+deregulation	the removal of government rules controlling a business activity
+sustainable	able to continue for a long time without harming the environment
+sustainability	the ability to continue for a long time without harming the environment
+marketing	the activity of promoting and selling products or services
+brand	a name or design that identifies a company's products
+branding	the process of creating and promoting a recognizable product image
+campaign	a planned series of activities to promote a product or idea
+advertise	to tell the public about a product or service to sell it
+advertisement	a notice, picture or video that tries to sell something
+advertising	the business of creating notices and videos to sell products
+promote	to help sell a product by advertising or special offers
+promotional	designed to help sell a product or service
+consumer	a person who buys goods or services for their own use
+customer	a person or company that buys goods or services
+client	a person or company that pays for professional services
+target	a group of people a product is aimed at; a goal to reach
+segment	a part of a market made up of a particular type of customer
+positioning	the way a product is presented to make it stand out in the market
+survey	a set of questions asked to many people to learn their opinions
+research	the study of a subject to find facts, such as customer needs
+trend	a general direction in which something is changing
+niche	a small, specialized part of a market
+launch	to introduce a new product or service to the public
+endorse	to publicly support a product, often in advertising
+sponsor	a company that pays for an event in return for advertising
+sponsorship	financial support for an event in return for advertising
+publicity	public attention or information given to attract attention
+exposure	the amount of attention something gets from the public or media
+awareness	how much people know about something, such as a brand
+loyalty	the tendency of customers to keep buying from the same company
+engagement	how much people interact with a brand, product or content
+conversion	when a potential customer takes a desired action, such as buying
+retention	the ability to keep customers or employees over time
+outreach	the effort to reach and connect with new customers, partners or groups
+influencer	a person with many online followers who can affect what people buy
+slogan	a short, memorable phrase used in advertising a product or company
+logo	a design or symbol that represents a company or brand
+packaging	the boxes, wrappers and materials in which a product is sold
+feedback	comments or opinions about how well something works or was done
+testimonial	a statement from a customer praising a product or service
+demographic	a group of customers defined by age, income, gender, etc.
+sales	the activity of selling goods; the total amount sold
+salesperson	a person whose job is to sell goods or services
+retail	the sale of goods directly to the public in small amounts
+retailer	a business or person that sells goods directly to the public
+wholesale	the sale of goods in large amounts to shops or businesses
+wholesaler	a business that sells goods in large amounts to other businesses
+distributor	a company that supplies goods from producers to shops or businesses
+dealer	a person or business that buys and sells a particular product
+vendor	a company or person that sells goods or services to others
+supplier	a company that provides goods or materials to another business
+purchase	to buy goods or services, especially for a company
+procurement	the process of buying goods and services for an organization
+quotation	a written statement of the price for a job or goods
+quote	to tell a customer how much a job or product will cost
+discount	a reduction in the usual price of something
+rebate	an amount of money paid back to a buyer after a purchase
+pricing	the process of deciding how much to charge for products
+estimate	an approximate calculation of what a job will cost
+bargain	to discuss the price of something to get a better deal
+inquiry	a request for information, especially about prices or products
+prospect	a person or company that might become a customer
+lead	information about a possible new customer
+pitch	a speech or proposal meant to persuade someone to buy or agree
+deal	a business agreement, especially one to buy or sell something
+transaction	a single act of buying, selling or exchanging money
+quota	a fixed amount that a salesperson is expected to sell
+upsell	to persuade a customer to buy something more expensive or extra
+refund	money paid back to a customer who returns goods
+warranty	a written promise to repair or replace a product if it fails
+guarantee	a formal promise that something will be done or will work
+complaint	a statement that a customer is unhappy with a product or service
+satisfaction	how pleased customers are with a product or service
+subscription	an arrangement to pay regularly for a product or service
+renewal	the act of extending a contract or subscription for another period
+trade	the buying and selling of goods, especially between countries
+import	to bring goods into a country from abroad for sale
+export	to send goods to another country for sale
+logistics	the planning and management of moving and storing goods
+shipment	a load of goods sent together; the act of sending goods
+shipping	the business of sending goods from one place to another
+freight	goods carried by truck, ship or plane; the cost of carrying them
+cargo	the goods carried by a ship, plane or truck
+consignment	a quantity of goods sent to a buyer or agent
+inventory	the goods a business has in stock
+warehouse	a large building where goods are stored before being sold
+storage	the keeping of goods in a place until they are needed
+delivery	the act of bringing goods to the person who ordered them
+dispatch	to send goods or messages to a place or customer
+courier	a person or company that delivers packages and documents
+customs	the government department that checks and taxes imported goods
+clearance	official permission for goods to pass through customs
+declaration	an official statement of goods or income, e.g. for customs or tax
+manufacturer	a company that makes goods in large quantities
+manufacturing	the industry of making goods in factories
+production	the process of making goods; the amount made
+capacity	the amount a factory or company is able to produce
+assembly	the process of putting the parts of a product together
+sourcing	the process of finding suppliers for goods or materials
+backlog	a number of orders or tasks waiting to be dealt with
+shortage	a situation where there is not enough of something
+bulk	large quantities, especially of goods bought or sold at once
+packing	the act of putting goods into boxes for transport
+label	a piece of paper on a product giving information about it
+tracking	following the location of a package while it is being delivered
+insurance	an agreement to pay for loss or damage in return for regular payments
+premium	the amount paid for insurance; an extra amount above the usual price
+contract	a formal legal agreement between two or more parties
+agreement	an arrangement or deal accepted by two or more parties
+clause	a separate section of a legal document or contract
+term	a condition in a contract; a fixed period of time
+condition	something that must be done or exist before an agreement is valid
+provision	a part of a contract or law that states a specific rule
+party	one of the people or companies involved in a contract
+sign	to write your name on a document to show you agree to it
+signature	your name written by yourself, used to approve a document
+negotiate	to discuss something formally to reach an agreement
+negotiation	formal discussion aimed at reaching an agreement
+breach	a failure to do what a contract or law requires
+violate	to break a rule, law or agreement
+terminate	to officially end a contract or employment
+termination	the official ending of a contract or employment
+renew	to extend a contract or agreement for a further period
+amendment	a change made to a contract, law or document
+draft	an early version of a document that will be changed later
+binding	legally requiring someone to do what has been agreed
+legal	relating to the law; allowed by law
+lawsuit	a claim brought to a court of law by one party against another
+litigation	the process of taking legal action in court
+dispute	a disagreement between people or companies, often over a contract
+settlement	an official agreement ending a dispute; the payment of an account
+arbitration	settling a dispute through a neutral person chosen by both sides
+indemnity	protection against loss or damage; payment for such loss
+confidential	meant to be kept secret within a company or group
+confidentiality	the duty to keep certain information secret
+disclosure	the act of making information known to others
+compliance	the practice of following laws, rules and standards
+regulatory	relating to official rules and the bodies that enforce them
+license	an official document that gives permission to do or use something
+patent	an official right to be the only one to make or sell an invention
+trademark	a registered name or symbol that identifies a company's products
+copyright	the legal right to control the copying of original work
+intellectual	relating to the mind; used in "intellectual property", ideas owned by law
+jurisdiction	the official power to make legal decisions in an area
+authorize	to give official permission for something
+authorization	official permission to do something
+consent	permission or agreement to do something
+obligation	something you must do because of a law, rule or contract
+entitle	to give someone the right to have or do something
+valid	legally acceptable or in effect
+void	having no legal force
+penalty	a fine or payment for breaking a rule or contract
+meeting	an occasion when people come together to discuss work matters
+conference	a large formal meeting, often lasting several days
+agenda	a list of topics to be discussed at a meeting
+minutes	an official written record of what was said at a meeting
+attendee	a person who is present at a meeting or event
+participant	a person who takes part in an activity or event
+chair	to be in charge of a meeting
+host	to organize and provide a place for an event or meeting
+facilitate	to make a process easier; to guide a discussion
+presentation	a talk showing and explaining information to an audience
+proposal	a formal plan or suggestion offered for consideration
+brainstorm	to share many ideas quickly in a group to solve a problem
+consensus	general agreement among all members of a group
+compromise	an agreement in which each side gives up something it wanted
+concession	something you give up or allow to help reach an agreement
+counteroffer	a new offer made in reply to an offer you do not accept
+leverage	power or advantage used to influence a negotiation
+objective	something you plan to achieve; a goal
+priority	something that is more important and must be dealt with first
+postpone	to move an event to a later time
+reschedule	to change the time or date of a planned event
+cancel	to decide that a planned event will not happen
+adjourn	to stop a meeting for a period of time
+summarize	to give a short statement of the main points
+clarify	to make something easier to understand by explaining it more
+elaborate	to give more details about something
+overview	a short general description of a situation or plan
+briefing	a meeting where people receive information or instructions
+workshop	a meeting where people discuss and practise a particular skill
+seminar	a class or meeting for discussing a topic in detail
+webinar	an online seminar or presentation people join over the internet
+teleconference	a meeting held by phone or video between people in different places
+venue	the place where a meeting or event happens
+itinerary	a detailed plan of a journey, including times and places
+networking	meeting people to build useful professional relationships
+management	the control and organization of a business; the people who run it
+manager	a person in charge of a team, department or business
+administration	the work of organizing and running an organization's daily tasks
+strategy	a long-term plan for achieving a business goal
+strategic	relating to long-term plans for achieving goals
+initiative	a new plan or action designed to achieve something
+milestone	an important stage or event in a project
+timeline	a plan showing when each part of a project will happen
+schedule	a plan listing tasks or events and when they will happen
+scope	the range of work or issues a project covers
+deliverable	a product or result that must be completed and handed over
+resource	money, people or materials available for use
+allocate	to give a share of money, time or people for a purpose
+allocation	an amount of money, time or people given for a purpose
+coordinate	to organize people or tasks so they work well together
+coordination	organizing people or tasks so they work well together
+implement	to put a plan or decision into action
+implementation	the process of putting a plan into action
+execute	to carry out a plan or task
+monitor	to watch and check something regularly over time
+assess	to judge the quality, value or importance of something
+assessment	a judgment about the quality or value of something
+metric	a measure used to track or judge performance
+KPI	Key Performance Indicator: a number used to measure how well a goal is met
+performance	how well a person or company does its work; business results
+efficiency	doing work well without wasting time, money or effort
+productivity	the amount of work done compared to the time or resources used
+optimize	to make something work as well as possible
+streamline	to make a process simpler and more efficient
+workflow	the series of steps through which a piece of work passes
+procedure	an official or accepted way of doing something
+policy	a set of rules or plans an organization follows
+guideline	a piece of advice on how something should be done
+framework	a basic structure of ideas or rules for planning work
+roadmap	a plan showing the main steps toward a goal over time
+feasibility	how possible or practical a plan is
+contingency	a possible future problem; used in "contingency plan", a backup plan
+bottleneck	a point where work is slowed down, delaying the whole process
+mitigate	to reduce the harm or risk of something
+escalate	to pass a problem to someone more senior to deal with
+oversee	to watch over work to make sure it is done properly
+supervise	to be in charge of people or work and check it
+approve	to officially agree to a plan or request
+approval	official agreement or permission
+sign-off	formal approval that work is complete or acceptable
+outcome	the final result of an action or process
+synergy	extra benefit gained when two groups work together
+scalable	able to grow or handle more work easily
+agile	able to change quickly; using short, flexible work cycles
+regarding	about; on the subject of
+attached	added to an email or document
+attachment	a file sent together with an email
+enclose	to put something in an envelope or package with a letter
+correspondence	letters or emails exchanged between people
+memo	a short written message sent within an organization
+reminder	a message that helps someone remember something
+confirm	to say that something is definitely true or arranged
+confirmation	a statement that something is definitely true or arranged
+acknowledge	to tell someone that you have received their message
+appreciate	to be grateful for something
+apologize	to say that you are sorry for something
+inconvenience	trouble or problems caused to someone
+convenience	being easy or suitable; "at your earliest convenience" means as soon as possible
+urgent	needing to be dealt with immediately
+prompt	done quickly and without delay
+promptly	quickly and without delay
+pending	waiting to be decided or dealt with
+follow-up	further action taken to continue something already started
+update	the latest information about a situation
+notify	to formally tell someone about something
+notification	a formal message telling someone about something
+recipient	the person who receives a message or email
+forward	to send an email you received on to another person
+CC	to send a copy of an email to another person
+reply	to answer a message or email
+respond	to answer or react to something
+availability	the times when someone is free to meet or work
+appointment	an arranged time to meet someone
+arrange	to plan or organize something
+accommodate	to provide what someone needs; to have space for people
+assistance	help or support
+sincerely	honestly; used in "Yours sincerely" to end a formal letter
+cordially	in a warm and friendly way, used in formal invitations
+behalf	used in "on behalf of", meaning representing someone
+accordingly	in a way that suits the situation; therefore
+hereby	by means of this document or statement
+aforementioned	mentioned earlier in the document
+respectively	in the same order as the things already mentioned
+in-house	done within a company rather than by outside workers
+ASAP	As Soon As Possible: without delay
+FYI	For Your Information: shared so you know about it

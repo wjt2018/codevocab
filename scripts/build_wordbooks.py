@@ -1,8 +1,11 @@
 """
-从 ECDICT (https://github.com/skywind3000/ECDICT, MIT License) 生成 CodeVocab 内置单词本。
+从 ECDICT (https://github.com/skywind3000/ECDICT, MIT License) 生成 CodeVocab 内置单词本，
+美式音标来自 CMUdict (https://github.com/cmusphinx/cmudict, BSD 风格许可证)。
 
 用法：
-    python scripts/build_wordbooks.py <ecdict.csv 路径> [输出目录，默认 wordbooks] [--alpha]
+    python scripts/build_wordbooks.py <ecdict.csv 路径> <cmudict.dict 路径> [输出目录，默认 wordbooks] [--alpha]
+
+每个词条的 phonetic 是英式音标（ECDICT），phonetic_us 是美式音标（CMUdict 转换成 IPA）。
 
 默认按词频排序（常用词在前），加 --alpha 改为按字母顺序。
 过于基础的词（中考词汇中词频最高的部分，以及月份、国名等首字母大写的词）不会放进考试词库，规则见 is_basic()。
@@ -211,6 +214,174 @@ class PhoneticIndex:
         return ""
 
 
+# ---------------------------------------------------------------------------
+# 美式音标：CMUdict 的 ARPAbet 转成 IPA
+# ---------------------------------------------------------------------------
+
+US_OVERRIDES_TSV = Path(__file__).resolve().parent / "phonetic_us_overrides.tsv"
+
+# 元音后面的数字是重音：1 主重音，2 次重音，0 不重读
+ARPABET_VOWELS = {
+    "AA": "ɑː", "AE": "æ", "AH": "ʌ", "AO": "ɔː", "AW": "aʊ", "AY": "aɪ", "EH": "e", "ER": "ɝː",
+    "EY": "eɪ", "IH": "ɪ", "IY": "iː", "OW": "oʊ", "OY": "ɔɪ", "UH": "ʊ", "UW": "uː",
+}
+# 不重读时的写法：AH0 是 /ə/，ER0 是 /ɚ/，happy 结尾的 IY0 是 /i/
+ARPABET_UNSTRESSED = {"AH": "ə", "ER": "ɚ", "IY": "i", "UW": "u"}
+ARPABET_CONSONANTS = {
+    "B": "b", "CH": "tʃ", "D": "d", "DH": "ð", "F": "f", "G": "g", "HH": "h", "JH": "dʒ", "K": "k",
+    "L": "l", "M": "m", "N": "n", "NG": "ŋ", "P": "p", "R": "r", "S": "s", "SH": "ʃ", "T": "t",
+    "TH": "θ", "V": "v", "W": "w", "Y": "j", "Z": "z", "ZH": "ʒ",
+}
+# 英语里能放在音节开头的辅音组合，用来切分音节、确定重音符号的位置
+ONSETS = {
+    *[(c,) for c in ARPABET_CONSONANTS if c != "NG"],
+    *[(c, "R") for c in ("P", "B", "T", "D", "K", "G", "F", "TH", "SH")],
+    *[(c, "L") for c in ("P", "B", "K", "G", "F", "S")],
+    *[(c, "W") for c in ("T", "D", "K", "G", "S", "TH")],
+    *[("S", c) for c in ("P", "T", "K", "M", "N")],  # 不含 sf：transfer 是 /trænsˈfɝː/，不是 /trænˈsfɝː/
+    *[(c, "Y") for c in ("P", "B", "K", "G", "F", "V", "M", "HH")],
+    ("S", "P", "R"), ("S", "T", "R"), ("S", "K", "R"), ("S", "P", "L"), ("S", "K", "W"), ("S", "K", "Y"),
+}
+
+
+def arpabet_to_ipa(phones) -> str:
+    """
+    把 ["K", "AH0", "M", "P", "Y", "UW1", "T", "ER0"] 转成 /kəmˈpjuːtɚ/。
+    - 元音之间的辅音按“最大首音”原则分给后一个音节，重音符号标在音节开头
+    - 单音节词不标重音；有多个主重音时，以最后一个为主重音，前面的改为次重音
+    - 主重音之后、以及紧挨在主重音前面的次重音不标（与常见词典一致：ignore 写作 /ɪgˈnɔːr/）
+    - 不重读的 ER 后面紧跟元音时拆成 /ə/ + /r/，r 归下一个音节（array /əˈreɪ/，而不是 /ɚˈeɪ/）
+    - 词尾的 IY 写作 /i/（library /ˈlaɪbreri/）
+    """
+    split_er = []
+    for i, p in enumerate(phones):
+        if p == "ER0" and i + 1 < len(phones) and phones[i + 1][:2] in ARPABET_VOWELS:
+            split_er += ["AH0", "R"]
+        else:
+            split_er.append(p)
+    phones = split_er
+    vowels = [i for i, p in enumerate(phones) if p[:2] in ARPABET_VOWELS]
+    if not vowels:
+        return ""
+    starts = [0]
+    for a, b in zip(vowels, vowels[1:]):
+        cluster = phones[a + 1:b]
+        split = next(k for k in range(len(cluster) + 1) if k == len(cluster) or tuple(cluster[k:]) in ONSETS)
+        starts.append(a + 1 + split)
+    stresses = [phones[i][2:] or "0" for i in vowels]
+    primary = max((i for i, s in enumerate(stresses) if s == "1"), default=None)
+    out = []
+    for n, start in enumerate(starts):
+        end = starts[n + 1] if n + 1 < len(starts) else len(phones)
+        mark = ""
+        if len(vowels) > 1 and primary is not None:
+            if n == primary:
+                mark = "ˈ"
+            elif n < primary - 1 and stresses[n] in "12":
+                mark = "ˌ"
+        sounds = []
+        for p in phones[start:end]:
+            base, stress = (p[:2], p[2:]) if p[:2] in ARPABET_VOWELS else (p, "")
+            if base in ARPABET_VOWELS:
+                unstressed = stress == "0" or (stress == "2" and base == "IY" and p is phones[-1])
+                sounds.append(ARPABET_UNSTRESSED.get(base, ARPABET_VOWELS[base]) if unstressed else ARPABET_VOWELS[base])
+            else:
+                sounds.append(ARPABET_CONSONANTS[base])
+        out.append(mark + "".join(sounds))
+    return "/" + "".join(out) + "/"
+
+
+# 英式拼写 -> 美式拼写（CMUdict 只收美式拼写）：(英式, 美式)
+US_SPELLINGS = [
+    ("our", "or"), ("ise", "ize"), ("isa", "iza"), ("yse", "yze"), ("tre", "ter"), ("bre", "ber"),
+    ("lment", "llment"), ("lled", "led"), ("lling", "ling"), ("ller", "ler"), ("gramme", "gram"), ("ogue", "og"), ("ae", "e"), ("oe", "e"), ("ence", "ense"),
+]
+ARPABET_SIBILANTS = ("S", "Z", "SH", "ZH", "CH", "JH")
+ARPABET_VOICELESS = ("P", "T", "K", "F", "TH", "S", "SH", "CH")
+
+
+class UsPhoneticIndex:
+    """
+    查询美式音标：人工补充表 → CMUdict → 推导（英美拼写差异、词尾变化，人工词表里的词还会尝试拆成合成词）。
+    合成词拆分容易出错（compaction 会被拆成 comp + action），所以只用于人工整理、会逐个检查的词表。
+    """
+
+    def __init__(self, cmudict_path: Path, overrides):
+        self.overrides = overrides
+        self.cmu = {}  # 小写单词 -> ARPAbet 音素列表（多个读音只取第一个）
+        self.derived = 0
+        for line in cmudict_path.read_text(encoding="utf-8").splitlines():
+            line = line.split("#")[0].strip()
+            if line:
+                word, *phones = line.split()
+                if "(" not in word:  # word(2) 是第二种读音
+                    self.cmu.setdefault(word, phones)
+
+    def lookup(self, word: str, compounds: bool = False) -> str:
+        w = word.lower()
+        if w in self.overrides:
+            return self.overrides[w]
+        if re.search(r"[- ]", w) and w not in self.cmu:
+            parts = [p for p in re.split(r"[- ]", w) if p]
+            found = [self.lookup(p, compounds) for p in parts]
+            return "/" + " ".join(p.strip("/") for p in found) + "/" if all(found) else ""
+        phones = self.cmu.get(w)
+        if not phones:
+            phones = self._derive(w, compounds)
+            self.derived += bool(phones)
+        return arpabet_to_ipa(phones) if phones else ""
+
+    def _derive(self, w: str, compounds: bool):
+        # 1. 英式拼写：colour -> color、analyse -> analyze、litre -> liter
+        for gb, us in US_SPELLINGS:
+            if gb in w:
+                found = self.cmu.get(w.replace(gb, us))
+                if found:
+                    return found
+        # 2. 词尾变化：(后缀, 可能的词根, 后缀读音)
+        doubled = w[:-4] if len(w) > 5 and w[-4] == w[-5] else None  # planning -> plan
+        rules = [
+            ("ily", [w[:-3] + "y"], ["L", "IY0"]),
+            ("ly", [w[:-2], w[:-1]], ["L", "IY0"]),  # dully -> dull + y
+            ("iness", [w[:-5] + "y"], ["N", "AH0", "S"]),
+            ("ness", [w[:-4]], ["N", "AH0", "S"]),
+            ("less", [w[:-4]], ["L", "AH0", "S"]),
+            ("ment", [w[:-4]], ["M", "AH0", "N", "T"]),
+            ("wards", [w[:-5] + "ward"], ["Z"]),
+            ("ing", [w[:-3] + "e", w[:-3], doubled], ["IH0", "NG"]),
+            ("ed", [w[:-1], w[:-2], w[:-3] if len(w) > 4 and w[-3] == w[-4] else None], None),
+            ("er", [w[:-1], w[:-2]], ["ER0"]),
+            ("s", [w[:-1]], None),
+            ("es", [w[:-2]], None),
+        ]
+        for suffix, stems, sound in rules:
+            # leer、gazetteer 不是 -er 结尾的派生词；stasis、campus 不是复数
+            if not w.endswith(suffix) or (suffix == "er" and w.endswith("eer")) or (suffix == "s" and w.endswith(("is", "us", "ss"))):
+                continue
+            for stem in stems:
+                # 词根太短容易匹配到无关的词（biped 不是 bip + ed），双写辅音的词根除外（fogged -> fog）
+                base = self.cmu.get(stem) if stem and (len(stem) >= 4 or w[len(stem)] == stem[-1]) else None
+                if base:
+                    if suffix == "ly" and base[-1] == "L":
+                        return base + ["IY0"]  # dully、proverbially：词根已经以 /l/ 结尾
+                    if sound is None:
+                        last = base[-1]
+                        if suffix == "ed":
+                            sound = ["IH0", "D"] if last in ("T", "D") else ["T" if last in ARPABET_VOICELESS else "D"]
+                        else:
+                            sound = ["IH0", "Z"] if last in ARPABET_SIBILANTS else ["S" if last in ARPABET_VOICELESS else "Z"]
+                    return base + sound
+        # 3. 不带连字符的合成词：toolkit = tool + kit
+        if not compounds:
+            return None
+        for i in range(3, len(w) - 2):
+            first, second = self.cmu.get(w[:i]), self.cmu.get(w[i:])
+            if first and second:
+                # 合成词的主重音在第一部分，第二部分的主重音降为次重音
+                return first + [p.replace("1", "2") for p in second]
+        return None
+
+
 def parse_translation(raw: str):
     """
     把 "vt. 放弃, 抛弃\\nn. 放任\\n[计] 放弃" 解析成 [(pos, [义项...]), ...]。
@@ -241,7 +412,64 @@ def parse_translation(raw: str):
     return general or domain
 
 
-def build_entry(row, phonetics: PhoneticIndex):
+# ---------------------------------------------------------------------------
+# 英文释义：ECDICT 的 definition 列（来自 WordNet）
+# ---------------------------------------------------------------------------
+
+MAX_DEFINITIONS = 3          # 考试词库最多保留几条英文释义
+MAX_GENERAL_DEFINITIONS = 2  # 专业词库在语境释义之后附几条通用释义
+MAX_DEFINITION_LENGTH = 150  # 过长的释义在分号处截断
+# WordNet 的词性写法：n / v / a（形容词）/ s（附属形容词）/ r（副词），有的带点有的不带
+WORDNET_POS = {"n": "n.", "v": "v.", "a": "adj.", "s": "adj.", "adj": "adj.", "r": "adv.", "adv": "adv."}
+DEFINITION_POS_RE = re.compile(r"^([a-z]+)\.?\s+")
+
+
+def normalize_pos(pos: str) -> str:
+    """把 vt. / vi. 等词性归并成 v.，用来和英文释义的词性比较。"""
+    pos = (pos or "").strip().rstrip(".")
+    return "v." if pos in ("v", "vt", "vi") else WORDNET_POS.get(pos, pos + "." if pos else "")
+
+
+def shorten_definition(text: str) -> str:
+    if len(text) <= MAX_DEFINITION_LENGTH:
+        return text
+    cut = text.rfind("; ", 0, MAX_DEFINITION_LENGTH)
+    return text[:cut] if cut > 0 else text
+
+
+def parse_definition(raw: str, main_pos: str = "", limit: int = MAX_DEFINITIONS):
+    """
+    把 ECDICT 的 "n. a telephone connection\\nv. ..." 解析成若干行 "n. ..."，最多 limit 行。
+    WordNet 总是名词在前，按词条的主要词性重新排序：主要词性最多取 2 条，再从其他词性各取 1 条。
+    """
+    groups = {}
+    for line in re.split(r"(?:\\n|\n)+", raw or ""):
+        line = line.strip()
+        if not line:
+            continue
+        m = DEFINITION_POS_RE.match(line)
+        pos = ""
+        if m and m.group(1) in WORDNET_POS:
+            pos = WORDNET_POS[m.group(1)]
+            line = line[m.end():]
+        line = shorten_definition(line.strip())
+        if line and line not in groups.get(pos, []):
+            groups.setdefault(pos, []).append(line)
+    if not groups:
+        return []
+
+    main = normalize_pos(main_pos)
+    order = sorted(groups, key=lambda p: p != main)  # 主要词性排最前，其余保持原顺序
+    picked, rest = [], []
+    for i, pos in enumerate(order):
+        take = 2 if i == 0 and len(order) > 1 else (limit if len(order) == 1 else 1)
+        picked += [(pos, d) for d in groups[pos][:take]]
+        rest += [(pos, d) for d in groups[pos][take:]]
+    picked = (picked + rest)[:limit]
+    return [f"{p} {d}" if p else d for p, d in picked]
+
+
+def build_entry(row, phonetics: PhoneticIndex, us_phonetics: UsPhoneticIndex):
     parsed = parse_translation(row["translation"])
     if not parsed:
         return None
@@ -253,11 +481,17 @@ def build_entry(row, phonetics: PhoneticIndex):
     phonetic = phonetics.lookup(entry["word"])
     if phonetic:
         entry["phonetic"] = phonetic
+    phonetic_us = us_phonetics.lookup(entry["word"])
+    if phonetic_us:
+        entry["phonetic_us"] = phonetic_us
     if pos:
         entry["pos"] = pos
     entry["meaning"] = "；".join(senses[:MAX_SENSES])
     if len(parsed) > 1 or len(senses) > MAX_SENSES:
         entry["detail"] = "\n".join(f"{p} {'；'.join(s)}" if p else "；".join(s) for p, s in parsed)
+    definitions = parse_definition(row["definition"], pos or "")
+    if definitions:
+        entry["definition_en"] = "\n".join(definitions)
     return entry
 
 
@@ -278,8 +512,11 @@ def main():
     if not args:
         sys.exit(__doc__)
     sort_mode = "alpha" if "--alpha" in sys.argv else "freq"
+    if len(args) < 2:
+        sys.exit(__doc__)
     src = Path(args[0])
-    out_dir = Path(args[1]) if len(args) > 1 else Path(__file__).resolve().parent.parent / "wordbooks"
+    us_phonetics = UsPhoneticIndex(Path(args[1]), load_overrides(US_OVERRIDES_TSV))
+    out_dir = Path(args[2]) if len(args) > 2 else Path(__file__).resolve().parent.parent / "wordbooks"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     curated = {name: load_curated_words(config["tsv"]) for name, config in CURATED_BOOKS.items()}
@@ -315,15 +552,16 @@ def main():
             book_rows.sort(key=lambda r: (freq_rank(r), r["word"].lower()))
         entries, seen = [], set()
         for row in book_rows:
-            entry = build_entry(row, phonetics)
+            entry = build_entry(row, phonetics, us_phonetics)
             if entry and entry["word"].lower() not in seen:
                 seen.add(entry["word"].lower())
                 entries.append(entry)
         write_book(out_dir / f"{name}.json", title, entries)
 
     for name, config in CURATED_BOOKS.items():
-        build_curated_book(name, config, curated[name], curated_rows, phonetics, out_dir, sort_mode)
-    print(f"音标：{len(phonetics.overrides)} 个词使用人工补充表，{phonetics.derived} 个词由词根推导")
+        build_curated_book(name, config, curated[name], curated_rows, phonetics, us_phonetics, out_dir, sort_mode)
+    print(f"英式音标：{len(phonetics.overrides)} 个词使用人工补充表，{phonetics.derived} 个词由词根推导")
+    print(f"美式音标：{len(us_phonetics.overrides)} 个词使用人工补充表，{us_phonetics.derived} 个词由拼写差异、词尾变化或合成词推导")
 
 
 def write_book(path: Path, title: str, entries):
@@ -345,17 +583,21 @@ CURATED_BOOKS = {
     #   label: 完整释义第一行的标签，如【编程】
     #   order: "freq" 按词频排序 / "file" 按词表中的顺序
     #   general: 是否在完整释义里附上 ECDICT 的通用释义
-    "programmer": {"tsv": SCRIPTS_DIR / "programmer_words.tsv", "title": "程序员词汇", "label": "编程", "order": "freq", "general": True},
-    "business": {"tsv": SCRIPTS_DIR / "business_words.tsv", "title": "商务英语", "label": "商务", "order": "freq", "general": True},
-    # 易读错词：音标、常见误读和朗读文本都在词表里，不附加 ECDICT 的通用释义
+    #   definitions: 语境英文释义表（单词<Tab>英文释义），没有则不生成英文释义
+    #   label_en: 英文释义第一行的标签，如 [programming]
+    "programmer": {"tsv": SCRIPTS_DIR / "programmer_words.tsv", "title": "程序员词汇", "label": "编程", "order": "freq", "general": True,
+                   "definitions": SCRIPTS_DIR / "programmer_definitions_en.tsv", "label_en": "programming"},
+    "business": {"tsv": SCRIPTS_DIR / "business_words.tsv", "title": "商务英语", "label": "商务", "order": "freq", "general": True,
+                 "definitions": SCRIPTS_DIR / "business_definitions_en.tsv", "label_en": "business"},
+    # 易读错词：音标、常见误读和朗读文本都在词表里，不附加 ECDICT 的通用释义，也没有英文释义
     "mispronounced": {"tsv": SCRIPTS_DIR / "mispronounced_words.tsv", "title": "程序员易读错词", "label": "读音", "order": "file", "general": False},
 }
 
 
 def load_curated_words(path: Path):
     """
-    读取人工词表（Tab 分隔）：单词 词性 释义 [音标] [常见误读] [朗读文本]
-    返回 {单词: (词性, 释义, 音标, 常见误读, 朗读文本)}，可选列为空字符串。重复的词只保留第一次出现的。
+    读取人工词表（Tab 分隔）：单词 词性 释义 [音标] [常见误读] [朗读文本] [美式音标]
+    返回 {单词: (词性, 释义, 音标, 常见误读, 朗读文本, 美式音标)}，可选列为空字符串。重复的词只保留第一次出现的。
     """
     words, duplicates = {}, []
     for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
@@ -364,25 +606,42 @@ def load_curated_words(path: Path):
         parts = [p.strip() for p in line.split("\t")]
         if len(parts) < 3 or not all(parts[:3]):
             sys.exit(f"{path.name} 第 {lineno} 行格式错误（需要 单词<Tab>词性<Tab>释义）：{line}")
-        word, pos, meaning, phonetic, note, speak = (parts + [""] * 6)[:6]
+        word, pos, meaning, phonetic, note, speak, phonetic_us = (parts + [""] * 7)[:7]
         if word in words:
             duplicates.append(word)
             continue
-        words[word] = (pos, meaning, phonetic, note, speak)
+        words[word] = (pos, meaning, phonetic, note, speak, phonetic_us)
     if duplicates:
         print(f"提示：{path.name} 中有重复的词，已保留第一次出现的释义：{', '.join(duplicates)}")
     return words
 
 
-def build_curated_book(name, config, words, ecdict_rows, phonetics: PhoneticIndex, out_dir: Path, sort_mode: str):
+def load_definitions(path: Path):
+    """读取语境英文释义表（Tab 分隔）：单词 英文释义。返回 {单词: 英文释义}。"""
+    definitions = {}
+    for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        parts = [p.strip() for p in line.split("\t")]
+        if len(parts) != 2 or not all(parts):
+            sys.exit(f"{path.name} 第 {lineno} 行格式错误（需要 单词<Tab>英文释义）：{line}")
+        definitions.setdefault(parts[0], parts[1])
+    return definitions
+
+
+def build_curated_book(name, config, words, ecdict_rows, phonetics: PhoneticIndex, us_phonetics: UsPhoneticIndex, out_dir: Path, sort_mode: str):
     label = config["label"]
-    entries, missing = [], []
-    for order, (word, (pos, meaning, phonetic, note, speak)) in enumerate(words.items()):
+    definitions = load_definitions(config["definitions"]) if config.get("definitions") else None
+    entries, missing, no_definition = [], [], []
+    for order, (word, (pos, meaning, phonetic, note, speak, phonetic_us)) in enumerate(words.items()):
         row = ecdict_rows.get(word) or ecdict_rows.get(word.lower())
         entry = {"word": word}
         phonetic = phonetic or phonetics.lookup(word)
         if phonetic:
             entry["phonetic"] = phonetic
+        phonetic_us = phonetic_us or us_phonetics.lookup(word, compounds=True)
+        if phonetic_us:
+            entry["phonetic_us"] = phonetic_us
         entry["pos"] = pos
         entry["meaning"] = meaning
         if speak:
@@ -397,6 +656,17 @@ def build_curated_book(name, config, words, ecdict_rows, phonetics: PhoneticInde
             else:
                 missing.append(word)
         entry["detail"] = "\n".join(detail)
+        if definitions is not None:
+            # 英文释义：语境释义在前，再附几条 ECDICT 的通用释义
+            lines = []
+            if word in definitions:
+                lines.append(f"[{config['label_en']}] {pos} {definitions[word]}")
+            else:
+                no_definition.append(word)
+            if row:
+                lines += parse_definition(row["definition"], pos, MAX_GENERAL_DEFINITIONS)
+            if lines:
+                entry["definition_en"] = "\n".join(lines)
         if config["order"] == "file":
             key = (order, "")
         elif sort_mode == "alpha":
@@ -409,9 +679,18 @@ def build_curated_book(name, config, words, ecdict_rows, phonetics: PhoneticInde
     write_book(out_dir / f"{name}.json", config["title"], [e for _, e in entries])
     if missing:
         print(f"提示：ECDICT 中没有以下词，只使用词表里的释义：{', '.join(missing)}")
+    if no_definition:
+        print(f"提示：以下词没有语境英文释义，建议在 {config['definitions'].name} 中补上：{', '.join(no_definition)}")
+    if definitions is not None:
+        extra = sorted(set(definitions) - set(words))
+        if extra:
+            print(f"提示：{config['definitions'].name} 中以下词不在词表里，已忽略：{', '.join(extra)}")
     no_phonetic = [e["word"] for _, e in entries if "phonetic" not in e]
     if no_phonetic:
         print(f"提示：以下词没有音标，建议在词表第 4 列补上：{', '.join(no_phonetic)}")
+    no_us = [e["word"] for _, e in entries if "phonetic_us" not in e]
+    if no_us:
+        print(f"提示：以下词没有美式音标，建议在 {US_OVERRIDES_TSV.name} 中补上：{', '.join(no_us)}")
 
 
 if __name__ == "__main__":

@@ -17,6 +17,8 @@ export function getWebviewHtml(nonce: string): string {
   .word { font-size: 1.8em; font-weight: 600; }
   .phonetic { opacity: .7; margin-left: .5em; font-size: .6em; font-weight: normal; }
   .meaning { margin-top: 4px; font-size: 1.1em; white-space: pre-line; line-height: 1.5; }
+  .definition { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--vscode-panel-border, rgba(128,128,128,.35)); white-space: pre-line; line-height: 1.5; opacity: .85; }
+  .definition[hidden] { display: none; }
   .muted { opacity: .65; font-size: .9em; }
   .warn { color: var(--vscode-errorForeground); }
   button {
@@ -56,6 +58,7 @@ export function getWebviewHtml(nonce: string): string {
   </div>
   <div class="word"><span id="word">—</span><span class="phonetic" id="phonetic"></span></div>
   <div class="meaning" id="meaning"></div>
+  <div class="definition" id="definition" lang="en" hidden></div>
   <p class="muted" id="progress"></p>
   <div class="controls">
     <button id="prev" class="secondary" title="上一个（Ctrl+Alt+[）">⏮ 上一个</button>
@@ -63,6 +66,7 @@ export function getWebviewHtml(nonce: string): string {
     <button id="next" class="secondary" title="下一个（Ctrl+Alt+]）">下一个 ⏭</button>
     <button id="mute" class="secondary" title="静音时单词照常轮播，只是不发声（Ctrl+Alt+M）">🔇 静音</button>
     <button id="visible" class="secondary" title="显示 / 隐藏状态栏单词（Ctrl+Alt+H）">隐藏状态栏</button>
+    <button id="accent" class="secondary" title="切换朗读口音（美音 / 英音）">口音：美音</button>
   </div>
   <div class="jump">
     <input type="range" id="slider" min="1" max="1" value="1" title="拖动选择从第几个单词开始">
@@ -82,23 +86,35 @@ export function getWebviewHtml(nonce: string): string {
   const $ = (id) => document.getElementById(id);
 
   let voices = [];
+  let accent = 'en-US';   // 朗读口音，由插件在 show 消息里发来（设置项 codevocab.accent）
   let token = 0;          // 每次 speak/stop 自增，用来作废旧的朗读
   const alive = new Set(); // 保留 utterance 引用，避免被回收后 onend 不触发（Chromium 的老问题）
+  const ACCENT_NAMES = { 'en-US': '美式', 'en-GB': '英式' };
+
+  const normLang = (v) => v.lang.toLowerCase().replace('_', '-');
+  function exact(lang) {
+    return voices.find(v => normLang(v) === lang.toLowerCase());
+  }
+  function pick(lang) {
+    const prefix = lang.toLowerCase().split('-')[0];
+    return exact(lang) || voices.find(v => normLang(v).startsWith(prefix));
+  }
+  function escapeHtml(s) {
+    return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  }
 
   function loadVoices() {
     voices = synth.getVoices();
-    const en = pick('en-US'), zh = pick('zh-CN');
-    const name = (v) => v ? v.name : '<span class="warn">未找到</span>';
-    $('voices').innerHTML = '英文语音：' + name(en) + '<br>中文语音：' + name(zh);
+    const en = pick(accent), zh = pick('zh-CN');
+    const name = (v) => v ? escapeHtml(v.name) : '<span class="warn">未找到</span>';
+    let enText = name(en);
+    if (en && !exact(accent)) {
+      enText += ' <span class="warn">（系统里没有' + ACCENT_NAMES[accent] + '英语语音，用这个代替）</span>';
+    }
+    $('voices').innerHTML = '英文语音（' + ACCENT_NAMES[accent] + '）：' + enText + '<br>中文语音：' + name(zh);
   }
   synth.onvoiceschanged = loadVoices;
   loadVoices();
-
-  function pick(lang) {
-    const l = lang.toLowerCase(), prefix = l.split('-')[0];
-    return voices.find(v => v.lang.toLowerCase().replace('_', '-') === l)
-        || voices.find(v => v.lang.toLowerCase().startsWith(prefix));
-  }
 
   function say(text, lang, rate) {
     return new Promise((resolve, reject) => {
@@ -120,7 +136,7 @@ export function getWebviewHtml(nonce: string): string {
     const t = ++token;
     synth.cancel();
     try {
-      await say(m.word, 'en-US', m.rate);
+      await say(m.word, m.lang || 'en-US', m.rate);
       if (t !== token) return;
       if (m.speakMeaning && m.meaning) {
         await wait(300);
@@ -179,6 +195,13 @@ export function getWebviewHtml(nonce: string): string {
 
   function show(m) {
     lastShow = m;
+    if (m.accent && m.accent !== accent) {
+      accent = m.accent;
+      loadVoices();
+    }
+    const other = accent === 'en-GB' ? '美音' : '英音';
+    $('accent').textContent = '口音：' + (accent === 'en-GB' ? '英音' : '美音');
+    $('accent').title = '点击切换为' + other + '朗读';
     renderBooks(m.book, m.builtinBooks);
     const w = m.word;
     const slider = $('slider');
@@ -189,8 +212,10 @@ export function getWebviewHtml(nonce: string): string {
     $('visible').textContent = m.visible ? '隐藏状态栏' : '显示状态栏';
     $('mute').textContent = m.muted ? '🔊 取消静音' : '🔇 静音';
     $('word').textContent = w ? w.word : '单词本为空';
-    $('phonetic').textContent = w && w.phonetic ? w.phonetic : '';
+    $('phonetic').textContent = w && w.phoneticText ? w.phoneticText : '';
     $('meaning').textContent = w ? (w.detail || [w.pos, w.meaning].filter(Boolean).join(' ')) : '';
+    $('definition').textContent = w && w.definition_en ? w.definition_en : '';
+    $('definition').hidden = !(w && w.definition_en);
     $('progress').textContent = w ? (m.playing ? '▶ 播放中' : '⏸ 已暂停') + (m.muted ? ' · 🔇 静音' : '') + ' · 第 ' + (m.index + 1) + ' / ' + m.total + ' 个' : '';
   }
 
@@ -212,6 +237,7 @@ export function getWebviewHtml(nonce: string): string {
   $('prev').addEventListener('click', () => control('previous'));
   $('next').addEventListener('click', () => control('next'));
   $('visible').addEventListener('click', () => control('toggleVisible'));
+  $('accent').addEventListener('click', () => control('toggleAccent'));
   $('mute').addEventListener('click', () => {
     if (lastShow && lastShow.muted) synth.speak(new SpeechSynthesisUtterance(''));  // 取消静音时顺便解锁发音
     control('toggleMute');

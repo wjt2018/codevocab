@@ -1,0 +1,74 @@
+# 人工补充的美式音标（所有词库通用）
+#
+# 格式：单词<Tab>美式音标
+# CMUdict 里没有、也无法从拼写差异或词根推导出来的词，在这里补充；CMUdict 的读音不合适时也可以在这里覆盖。
+# 优先级：人工词表第 7 列（易读错词） > 本文件 > CMUdict > 自动推导。
+
+# ---- 程序员词汇：CMUdict 里没有的词 ----
+accessor	/əkˈsesɚ/
+async	/eɪˈsɪŋk/
+caret	/ˈkerət/
+debugger	/diːˈbʌgɚ/
+decrement	/ˈdekrəmənt/
+decrypt	/diːˈkrɪpt/
+deserialize	/ˌdiːˈsɪriəlaɪz/
+destructor	/dɪˈstrʌktɚ/
+encapsulation	/ɪnˌkæpsəˈleɪʃən/
+enum	/ˈiːnʌm/
+executable	/ɪgˈzekjətəbəl/
+granularity	/ˌgrænjəˈlerəti/
+hexadecimal	/ˌheksəˈdesəməl/
+idempotent	/ˌaɪdəmˈpoʊtənt/
+iterate	/ˈɪtəreɪt/
+iterator	/ˈɪtəreɪtɚ/
+minify	/ˈmɪnəfaɪ/
+mixin	/ˈmɪksɪn/
+mutex	/ˈmjuːteks/
+operand	/ˈɑːpərænd/
+readme	/ˈriːdmiː/
+rebase	/ˌriːˈbeɪs/
+recursion	/rɪˈkɝːʒən/
+refactoring	/riːˈfæktərɪŋ/
+regex	/ˈredʒeks/
+struct	/strʌkt/
+tuple	/ˈtuːpəl/
+unhandled	/ʌnˈhændəld/
+
+# ---- 程序员词汇：CMUdict 第一个读音是别的词性、或自动推导不对的词 ----
+abstract	/ˈæbstrækt/
+backend	/ˈbækend/
+boolean	/ˈbuːliən/
+convert	/kənˈvɝːt/
+durability	/ˌdʊrəˈbɪləti/
+invalid	/ɪnˈvælɪd/
+offset	/ˈɔːfset/
+router	/ˈraʊtɚ/
+serialize	/ˈsɪriəlaɪz/
+verbose	/vɚˈboʊs/
+concurrency	/kənˈkɝːənsi/
+debounce	/diːˈbaʊns/
+maintainability	/meɪnˌteɪnəˈbɪləti/
+metadata	/ˈmetədeɪtə/
+nullable	/ˈnʌləbəl/
+prefetch	/ˌpriːˈfetʃ/
+preload	/ˌpriːˈloʊd/
+prepend	/priˈpend/
+refactor	/riːˈfæktɚ/
+selector	/səˈlektɚ/
+transpile	/trænsˈpaɪl/
+traversal	/trəˈvɝːsəl/
+
+# ---- 商务英语 ----
+accountability	/əˌkaʊntəˈbɪləti/
+ASAP	/ˌeɪ es eɪ ˈpiː/
+CC	/ˌsiː ˈsiː/
+discount	/ˈdɪskaʊnt/
+FYI	/ˌef waɪ ˈaɪ/
+GDP	/ˌdʒiː diː ˈpiː/
+lead	/liːd/
+oversee	/ˌoʊvɚˈsiː/
+refund	/ˈriːfʌnd/
+survey	/ˈsɝːveɪ/
+IPO	/ˌaɪ piː ˈoʊ/
+KPI	/ˌkeɪ piː ˈaɪ/
+résumé	/ˈrezəmeɪ/
