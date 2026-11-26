@@ -40,12 +40,15 @@ codevocab/
 ├── wordbooks/                    # 内置词库（由脚本生成，不要手动修改）
 │   ├── programmer.json ...
 │   ├── ECDICT-LICENSE.txt
-│   └── CMUDICT-LICENSE.txt
+│   ├── CMUDICT-LICENSE.txt
+│   └── WORDNET-LICENSE.txt
 ├── scripts/
 │   ├── build_wordbooks.py        # 生成全部内置词库
 │   ├── programmer_words.tsv      # 程序员词汇词表（人工整理）
 │   ├── mispronounced_words.tsv   # 程序员易读错词词表（人工整理）
 │   ├── business_words.tsv        # 商务英语词表（人工整理）
+│   ├── programmer_definitions_en.tsv # 程序员词汇的编程语境英文释义
+│   ├── business_definitions_en.tsv   # 商务英语的商务语境英文释义
 │   ├── phonetic_overrides.tsv    # 人工补充的英式音标
 │   ├── phonetic_us_overrides.tsv # 人工补充、修正的美式音标
 │   └── make_icon.py              # 生成商店图标 images/icon.png
@@ -77,7 +80,7 @@ extension.ts（播放进度、状态栏）  ── speak / stop / show ──▶
 | 类型 | 词库 | 词条来源 | 释义来源 |
 |---|---|---|---|
 | 考试词库 | 四级、六级、考研、雅思、托福、GRE、高考、中考 | ECDICT 的考试标签 | ECDICT |
-| 人工词库 | 程序员词汇、程序员易读错词、商务英语 | `scripts/*_words.tsv` | 词表本身（附 ECDICT 通用释义对照） |
+| 人工词库 | 程序员词汇、程序员易读错词、商务英语 | `scripts/*_words.tsv` | 词表本身（附 ECDICT 通用释义对照）；英文释义来自 `scripts/*_definitions_en.tsv` |
 
 ### 生成流程
 
@@ -96,7 +99,11 @@ extension.ts（播放进度、状态栏）  ── speak / stop / show ──▶
    2. `scripts/phonetic_us_overrides.tsv` 人工补充表（也用来修正 CMUdict 读音不合适的词，比如 lead 取 /liːd/ 而不是 /led/）
    3. [CMUdict](https://github.com/cmusphinx/cmudict) 的读音（多个读音只取第一个），由 `arpabet_to_ipa()` 转成 IPA：按“最大首音”原则切分音节来确定重音符号的位置，主重音之后和紧挨主重音前面的次重音不标
    4. 自动推导：英式拼写转美式（colour → color、analyse → analyze），以及 -ly、-ness、-less、-ment、-er、-ed、-ing、复数等词尾变化；人工词库里的词还会尝试拆成合成词（toolkit = tool + kit）。考试词库不拆合成词，因为容易拆错（compaction 会被拆成 comp + action）
-6. **排序并写出**：默认按词频排序（加 `--alpha` 改为字母顺序）；易读错词保持词表中的顺序。
+6. **整理英文释义**（`definition_en`，只显示在悬停提示和发音面板）：
+   - 考试词库：取 ECDICT 的 `definition` 列（来自 WordNet），由 `parse_definition()` 统一词性写法（`a`/`s` → `adj.`，`r` → `adv.`），把和词条主要词性相同的释义排在前面，最多 3 条，过长的在分号处截断。
+   - 程序员词汇、商务英语：第一条取 `scripts/*_definitions_en.tsv` 里的语境释义（标为 `[programming]` / `[business]`），再附 2 条 WordNet 通用释义。
+   - 程序员易读错词没有英文释义。
+7. **排序并写出**：默认按词频排序（加 `--alpha` 改为字母顺序）；易读错词保持词表中的顺序。
 
 脚本最后会提示没有音标的词、人工词库里没有美式音标的词、重复的词和 ECDICT 中查不到的词，提交前请确认这些提示都已处理。考试词库里查不到美式音标的词（主要是 GRE 生僻词）只显示英式音标。
 
@@ -144,6 +151,16 @@ extension.ts（播放进度、状态栏）  ── speak / stop / show ──▶
 - 有多种公认读法的词，在“常见误读”里说明，不要把常见的另一种读法说成错误。
 
 修改后重新运行 `build_wordbooks.py`，把词表和生成的 `wordbooks/*.json` 一起提交。
+
+### 英文释义
+
+程序员词汇和商务英语的语境英文释义分别在 [scripts/programmer_definitions_en.tsv](scripts/programmer_definitions_en.tsv) 和 [scripts/business_definitions_en.tsv](scripts/business_definitions_en.tsv)，格式是 `单词<Tab>英文释义`，单词写法要和词表一致。新增词时请同时补上英文释义，脚本会提示缺少释义的词。
+
+写英文释义时请注意：
+
+- 用简单的英文（参考学习词典的写法），一般 5～15 个词，开头小写，末尾不加句号。
+- 动词用 `to ...` 开头，不要重复词条本身；缩写先写全称，再用冒号接解释，如 `Application Programming Interface: ...`。
+- 不用写词性和 `[programming]` 标签，脚本会自动加上。
 
 ### 补充音标
 

@@ -412,6 +412,63 @@ def parse_translation(raw: str):
     return general or domain
 
 
+# ---------------------------------------------------------------------------
+# 英文释义：ECDICT 的 definition 列（来自 WordNet）
+# ---------------------------------------------------------------------------
+
+MAX_DEFINITIONS = 3          # 考试词库最多保留几条英文释义
+MAX_GENERAL_DEFINITIONS = 2  # 专业词库在语境释义之后附几条通用释义
+MAX_DEFINITION_LENGTH = 150  # 过长的释义在分号处截断
+# WordNet 的词性写法：n / v / a（形容词）/ s（附属形容词）/ r（副词），有的带点有的不带
+WORDNET_POS = {"n": "n.", "v": "v.", "a": "adj.", "s": "adj.", "adj": "adj.", "r": "adv.", "adv": "adv."}
+DEFINITION_POS_RE = re.compile(r"^([a-z]+)\.?\s+")
+
+
+def normalize_pos(pos: str) -> str:
+    """把 vt. / vi. 等词性归并成 v.，用来和英文释义的词性比较。"""
+    pos = (pos or "").strip().rstrip(".")
+    return "v." if pos in ("v", "vt", "vi") else WORDNET_POS.get(pos, pos + "." if pos else "")
+
+
+def shorten_definition(text: str) -> str:
+    if len(text) <= MAX_DEFINITION_LENGTH:
+        return text
+    cut = text.rfind("; ", 0, MAX_DEFINITION_LENGTH)
+    return text[:cut] if cut > 0 else text
+
+
+def parse_definition(raw: str, main_pos: str = "", limit: int = MAX_DEFINITIONS):
+    """
+    把 ECDICT 的 "n. a telephone connection\\nv. ..." 解析成若干行 "n. ..."，最多 limit 行。
+    WordNet 总是名词在前，按词条的主要词性重新排序：主要词性最多取 2 条，再从其他词性各取 1 条。
+    """
+    groups = {}
+    for line in re.split(r"(?:\\n|\n)+", raw or ""):
+        line = line.strip()
+        if not line:
+            continue
+        m = DEFINITION_POS_RE.match(line)
+        pos = ""
+        if m and m.group(1) in WORDNET_POS:
+            pos = WORDNET_POS[m.group(1)]
+            line = line[m.end():]
+        line = shorten_definition(line.strip())
+        if line and line not in groups.get(pos, []):
+            groups.setdefault(pos, []).append(line)
+    if not groups:
+        return []
+
+    main = normalize_pos(main_pos)
+    order = sorted(groups, key=lambda p: p != main)  # 主要词性排最前，其余保持原顺序
+    picked, rest = [], []
+    for i, pos in enumerate(order):
+        take = 2 if i == 0 and len(order) > 1 else (limit if len(order) == 1 else 1)
+        picked += [(pos, d) for d in groups[pos][:take]]
+        rest += [(pos, d) for d in groups[pos][take:]]
+    picked = (picked + rest)[:limit]
+    return [f"{p} {d}" if p else d for p, d in picked]
+
+
 def build_entry(row, phonetics: PhoneticIndex, us_phonetics: UsPhoneticIndex):
     parsed = parse_translation(row["translation"])
     if not parsed:
@@ -432,6 +489,9 @@ def build_entry(row, phonetics: PhoneticIndex, us_phonetics: UsPhoneticIndex):
     entry["meaning"] = "；".join(senses[:MAX_SENSES])
     if len(parsed) > 1 or len(senses) > MAX_SENSES:
         entry["detail"] = "\n".join(f"{p} {'；'.join(s)}" if p else "；".join(s) for p, s in parsed)
+    definitions = parse_definition(row["definition"], pos or "")
+    if definitions:
+        entry["definition_en"] = "\n".join(definitions)
     return entry
 
 
@@ -523,9 +583,13 @@ CURATED_BOOKS = {
     #   label: 完整释义第一行的标签，如【编程】
     #   order: "freq" 按词频排序 / "file" 按词表中的顺序
     #   general: 是否在完整释义里附上 ECDICT 的通用释义
-    "programmer": {"tsv": SCRIPTS_DIR / "programmer_words.tsv", "title": "程序员词汇", "label": "编程", "order": "freq", "general": True},
-    "business": {"tsv": SCRIPTS_DIR / "business_words.tsv", "title": "商务英语", "label": "商务", "order": "freq", "general": True},
-    # 易读错词：音标、常见误读和朗读文本都在词表里，不附加 ECDICT 的通用释义
+    #   definitions: 语境英文释义表（单词<Tab>英文释义），没有则不生成英文释义
+    #   label_en: 英文释义第一行的标签，如 [programming]
+    "programmer": {"tsv": SCRIPTS_DIR / "programmer_words.tsv", "title": "程序员词汇", "label": "编程", "order": "freq", "general": True,
+                   "definitions": SCRIPTS_DIR / "programmer_definitions_en.tsv", "label_en": "programming"},
+    "business": {"tsv": SCRIPTS_DIR / "business_words.tsv", "title": "商务英语", "label": "商务", "order": "freq", "general": True,
+                 "definitions": SCRIPTS_DIR / "business_definitions_en.tsv", "label_en": "business"},
+    # 易读错词：音标、常见误读和朗读文本都在词表里，不附加 ECDICT 的通用释义，也没有英文释义
     "mispronounced": {"tsv": SCRIPTS_DIR / "mispronounced_words.tsv", "title": "程序员易读错词", "label": "读音", "order": "file", "general": False},
 }
 
@@ -552,9 +616,23 @@ def load_curated_words(path: Path):
     return words
 
 
+def load_definitions(path: Path):
+    """读取语境英文释义表（Tab 分隔）：单词 英文释义。返回 {单词: 英文释义}。"""
+    definitions = {}
+    for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        parts = [p.strip() for p in line.split("\t")]
+        if len(parts) != 2 or not all(parts):
+            sys.exit(f"{path.name} 第 {lineno} 行格式错误（需要 单词<Tab>英文释义）：{line}")
+        definitions.setdefault(parts[0], parts[1])
+    return definitions
+
+
 def build_curated_book(name, config, words, ecdict_rows, phonetics: PhoneticIndex, us_phonetics: UsPhoneticIndex, out_dir: Path, sort_mode: str):
     label = config["label"]
-    entries, missing = [], []
+    definitions = load_definitions(config["definitions"]) if config.get("definitions") else None
+    entries, missing, no_definition = [], [], []
     for order, (word, (pos, meaning, phonetic, note, speak, phonetic_us)) in enumerate(words.items()):
         row = ecdict_rows.get(word) or ecdict_rows.get(word.lower())
         entry = {"word": word}
@@ -578,6 +656,17 @@ def build_curated_book(name, config, words, ecdict_rows, phonetics: PhoneticInde
             else:
                 missing.append(word)
         entry["detail"] = "\n".join(detail)
+        if definitions is not None:
+            # 英文释义：语境释义在前，再附几条 ECDICT 的通用释义
+            lines = []
+            if word in definitions:
+                lines.append(f"[{config['label_en']}] {pos} {definitions[word]}")
+            else:
+                no_definition.append(word)
+            if row:
+                lines += parse_definition(row["definition"], pos, MAX_GENERAL_DEFINITIONS)
+            if lines:
+                entry["definition_en"] = "\n".join(lines)
         if config["order"] == "file":
             key = (order, "")
         elif sort_mode == "alpha":
@@ -590,6 +679,12 @@ def build_curated_book(name, config, words, ecdict_rows, phonetics: PhoneticInde
     write_book(out_dir / f"{name}.json", config["title"], [e for _, e in entries])
     if missing:
         print(f"提示：ECDICT 中没有以下词，只使用词表里的释义：{', '.join(missing)}")
+    if no_definition:
+        print(f"提示：以下词没有语境英文释义，建议在 {config['definitions'].name} 中补上：{', '.join(no_definition)}")
+    if definitions is not None:
+        extra = sorted(set(definitions) - set(words))
+        if extra:
+            print(f"提示：{config['definitions'].name} 中以下词不在词表里，已忽略：{', '.join(extra)}")
     no_phonetic = [e["word"] for _, e in entries if "phonetic" not in e]
     if no_phonetic:
         print(f"提示：以下词没有音标，建议在词表第 4 列补上：{', '.join(no_phonetic)}")

@@ -16,6 +16,8 @@ interface Word {
   meaning: string;
   /** 完整释义（可多行）：显示在悬停提示和发音面板里 */
   detail?: string;
+  /** 英文释义（可多行）：只显示在悬停提示和发音面板里，不显示在状态栏 */
+  definition_en?: string;
   /** 朗读文本：系统语音直接读单词可能读错时（如 Nginx），改为朗读这段文本 */
   speak?: string;
 }
@@ -610,6 +612,13 @@ class Player implements vscode.Disposable {
         tip.appendMarkdown('\n\n');
         tip.appendText(line);
       }
+      if (w.definition_en) {
+        tip.appendMarkdown('\n\n---');
+        for (const line of w.definition_en.split('\n')) {
+          tip.appendMarkdown('\n\n');
+          tip.appendText(line);
+        }
+      }
       tip.appendMarkdown('\n\n---\n\n');
       tip.appendText(`第 ${this.index + 1} / ${this.words.length} 个 · 点击播放/暂停 · Ctrl+Alt+G 跳转${this.muted ? ' · 已静音' : ''}`);
       this.status.tooltip = tip;
@@ -686,7 +695,8 @@ function resolvePath(p: string): string {
 /**
  * 支持两种格式：
  * - JSON：[{ "word": "abandon", "phonetic": "/əˈbændən/", "phonetic_us": "/əˈbændən/", "pos": "v.", "meaning": "放弃" }]
- *   phonetic 是英式音标（不区分英美时也写在这里），phonetic_us 是美式音标，都可以省略
+ *   phonetic 是英式音标（不区分英美时也写在这里），phonetic_us 是美式音标，都可以省略；
+ *   还可以有 detail（完整中文释义）、definition_en（英文释义）、speak（朗读文本），多行用 \n 分隔
  * - CSV / TSV / TXT：每行「单词,词性,释义」或「单词,释义」，# 开头的行是注释
  */
 function parseWordbook(file: string): Word[] {
@@ -718,6 +728,7 @@ function parseWordbook(file: string): Word[] {
       pos: w.pos ? String(w.pos).trim() : undefined,
       meaning: String(w.meaning ?? '').trim(),
       detail: w.detail ? String(w.detail).trim() : undefined,
+      definition_en: w.definition_en ? String(w.definition_en).trim() : undefined,
       speak: w.speak ? String(w.speak).trim() : undefined,
     }));
 }

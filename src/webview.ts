@@ -17,6 +17,8 @@ export function getWebviewHtml(nonce: string): string {
   .word { font-size: 1.8em; font-weight: 600; }
   .phonetic { opacity: .7; margin-left: .5em; font-size: .6em; font-weight: normal; }
   .meaning { margin-top: 4px; font-size: 1.1em; white-space: pre-line; line-height: 1.5; }
+  .definition { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--vscode-panel-border, rgba(128,128,128,.35)); white-space: pre-line; line-height: 1.5; opacity: .85; }
+  .definition[hidden] { display: none; }
   .muted { opacity: .65; font-size: .9em; }
   .warn { color: var(--vscode-errorForeground); }
   button {
@@ -56,6 +58,7 @@ export function getWebviewHtml(nonce: string): string {
   </div>
   <div class="word"><span id="word">—</span><span class="phonetic" id="phonetic"></span></div>
   <div class="meaning" id="meaning"></div>
+  <div class="definition" id="definition" lang="en" hidden></div>
   <p class="muted" id="progress"></p>
   <div class="controls">
     <button id="prev" class="secondary" title="上一个（Ctrl+Alt+[）">⏮ 上一个</button>
@@ -211,6 +214,8 @@ export function getWebviewHtml(nonce: string): string {
     $('word').textContent = w ? w.word : '单词本为空';
     $('phonetic').textContent = w && w.phoneticText ? w.phoneticText : '';
     $('meaning').textContent = w ? (w.detail || [w.pos, w.meaning].filter(Boolean).join(' ')) : '';
+    $('definition').textContent = w && w.definition_en ? w.definition_en : '';
+    $('definition').hidden = !(w && w.definition_en);
     $('progress').textContent = w ? (m.playing ? '▶ 播放中' : '⏸ 已暂停') + (m.muted ? ' · 🔇 静音' : '') + ' · 第 ' + (m.index + 1) + ' / ' + m.total + ' 个' : '';
   }
 

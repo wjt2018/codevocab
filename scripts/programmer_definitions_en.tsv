@@ -1,0 +1,692 @@
+# CodeVocab 程序员词汇：编程语境下的英文释义
+#
+# 格式：单词<Tab>英文释义。单词必须和 programmer_words.tsv 中的写法一致。
+# 以 # 开头的行是注释。build_wordbooks.py 会把这里的释义作为英文释义的第一条（标为 [programming]），
+# 再附上 ECDICT（WordNet）的通用英文释义。
+code	instructions written in a programming language for a computer to follow
+program	a set of instructions that a computer runs to do a task
+programming	the work of writing instructions for computers to follow
+programmer	a person who writes software for computers
+developer	a person who builds and maintains software
+software	programs and applications that run on a computer
+hardware	the physical parts of a computer, such as chips and disks
+computing	the use of computers to process information and solve problems
+algorithm	a set of steps for solving a problem or doing a task
+logic	the reasoning and rules that decide how a program behaves
+syntax	the rules for how code must be written in a language
+semantic	relating to the meaning of code rather than its form
+compile	to turn source code into a program the machine can run
+compiler	a program that turns source code into machine code
+compilation	the process of turning source code into a runnable program
+interpret	to read and run code line by line without compiling it first
+interpreter	a program that reads and runs code directly, line by line
+execute	to carry out the instructions of a program or command
+execution	the process of a computer carrying out instructions
+run	to start a program and make it work
+runtime	the time when a program is running, or the system it runs in
+debug	to find and fix errors in a program
+debugger	a tool that helps you find and fix errors in code
+source	the original code written by programmers; also where something comes from
+binary	using only the digits 0 and 1 to represent data
+byte	a unit of data made up of eight bits
+bit	the smallest unit of data, either 0 or 1
+digit	a single number symbol, such as 0 to 9
+decimal	based on the number ten, using digits 0 to 9
+hexadecimal	based on sixteen, using digits 0 to 9 and letters A to F
+encoding	a system for turning characters or data into a certain format
+encode	to change data into a special format for storage or sending
+decode	to change encoded data back into its original form
+character	a single letter, number, symbol, or space in text
+token	a secret string that proves who you are; also a smallest unit of code
+keyword	a reserved word that has a special meaning in a language
+identifier	a name given to a variable, function, or other item in code
+comment	a note in code that explains it and is ignored when run
+indentation	spaces or tabs at the start of a line to show structure
+whitespace	characters such as spaces, tabs, and newlines that show as blank
+notation	a system of symbols used to write something down
+type	the kind of data a value is, such as number or text
+data	information that a program stores and works with
+value	a piece of data, such as a number or text
+variable	a named place in memory that holds a value that can change
+constant	a named value that cannot change while a program runs
+literal	a fixed value written directly in code, such as 42 or "hi"
+string	a sequence of characters, such as a word or sentence
+integer	a whole number with no fractional part
+float	a number that can have a decimal point
+boolean	a value that is either true or false
+null	a special value that means no value or no object
+undefined	having no value set yet
+array	an ordered collection of items stored under one name
+list	an ordered collection of items that can grow or shrink
+tuple	a fixed, ordered group of values
+dictionary	a collection of key-value pairs for fast lookup
+map	a collection that links keys to values
+set	a collection of unique items with no duplicates
+object	a thing in code that holds data and the functions that use it
+struct	a custom data type that groups several related fields together
+enum	a type made of a fixed list of named values
+pointer	a variable that stores the memory address of another value
+reference	a value that points to an object instead of copying it
+primitive	being a basic built-in data type, such as a number or boolean
+signed	able to hold both positive and negative numbers
+unsigned	able to hold only zero and positive numbers
+generic	working with many data types instead of just one
+subtype	a type that is a more specific form of another type
+nullable	allowed to have a null value
+immutable	not able to be changed after it is created
+mutable	able to be changed after it is created
+infinity	a value larger than any number
+precision	how exact a number is, or how many digits it keeps
+overflow	an error when a value is too large to fit in its storage
+truncate	to cut off part of a value, such as extra characters or digits
+cast	to change a value from one data type to another
+conversion	the act of changing data from one form or type to another
+convert	to change data from one form or type to another
+expression	a piece of code that produces a value
+statement	a single complete instruction in a program
+operator	a symbol such as + or == that performs an operation
+operand	a value that an operator works on
+assignment	the act of giving a value to a variable
+declaration	code that introduces a name, such as a variable or function
+declare	to state that a variable, function, or type exists
+define	to give the full details of a function, variable, or type
+definition	code that gives the full details of a function or type
+condition	a test that is true or false and controls what code runs
+conditional	running only when a certain test is true
+loop	code that repeats a set of instructions
+iteration	one pass through a loop, or the process of repeating
+iterate	to go through items one by one, repeating an action
+iterator	an object that lets you go through a collection one item at a time
+recursion	a technique where a function calls itself
+recursive	calling itself to solve smaller parts of a problem
+nested	placed inside another thing of the same kind
+nesting	putting one structure inside another, such as loops in loops
+branch	one path a program can take; also a separate line of work in version control
+switch	a statement that chooses code to run based on a value
+case	one possible value and its code in a switch statement
+default	a value or choice used when nothing else is given
+return	to send a value back from a function and end it
+yield	to produce a value and pause a function; to give up control
+break	to exit a loop or switch statement early
+continue	to skip the rest of this loop pass and start the next
+increment	an increase in a value, usually by one
+decrement	a decrease in a value, usually by one
+precedence	the order in which operators are worked out
+scope	the part of a program where a name can be used
+global	able to be used from anywhere in a program
+local	able to be used only inside a certain function or block
+namespace	a named area that groups names to avoid conflicts
+alias	another name for the same thing, such as a command or type
+placeholder	a temporary value or symbol that stands in for real content
+wildcard	a symbol such as * that can match any characters
+asterisk	the star symbol *
+bracket	the square bracket symbol [ or ]
+brace	the curly bracket symbol { or }
+parenthesis	the round bracket symbol ( or )
+semicolon	the punctuation mark ;, often used to end a statement
+colon	the punctuation mark :
+quote	a quotation mark, such as ' or ", used around text
+slash	the forward slash symbol /
+backslash	the symbol \, often used to escape characters
+underscore	the symbol _, often used in names
+hyphen	the short dash symbol -
+tilde	the symbol ~, often meaning the home directory
+ampersand	the symbol &, meaning "and"
+caret	the symbol ^; also the text cursor showing where you type
+function	a named block of code that does a task and can be reused
+method	a function that belongs to an object or class
+procedure	a named block of code that performs a task
+routine	a section of code that does a specific job
+parameter	a variable in a function definition that receives a value
+argument	a value you pass to a function when you call it
+callback	a function passed to another function to be called later
+closure	a function that remembers variables from where it was created
+lambda	a short function with no name
+invoke	to call a function or method so it runs
+invocation	the act of calling a function or method
+call	to run a function or method
+signature	a function's name, parameter types, and return type
+overload	to define several functions with the same name but different parameters
+override	to replace a parent class's method with a new version
+class	a template for creating objects with data and behavior
+instance	one object created from a class
+instantiate	to create an object from a class
+constructor	a special method that sets up a new object
+destructor	a special method that cleans up when an object is destroyed
+property	a named value that belongs to an object
+attribute	a piece of data that describes an object or element
+field	a variable that belongs to a class or record
+member	a field or method that belongs to a class or object
+static	belonging to a class itself rather than to its objects
+abstract	describing an idea or class that is not complete on its own
+abstraction	hiding details and showing only the important parts
+interface	a set of methods a class must provide; also the part users see
+implement	to write the code that makes a design or interface work
+implementation	the actual code that makes something work
+inherit	to receive properties and methods from a parent class
+inheritance	a way for a class to get features from a parent class
+derive	to create a new class based on an existing one
+polymorphism	the ability of different types to be used through one interface
+encapsulation	keeping data and the code that uses it together and hidden
+encapsulate	to hide data and details inside a class or module
+visibility	whether a member can be seen and used from other code
+private	able to be used only inside its own class
+public	able to be used from any other code
+protected	able to be used only inside its class and child classes
+accessor	a method that reads or changes an object's property
+getter	a method that returns the value of a property
+setter	a method that changes the value of a property
+decorator	something that adds extra behavior to a function or class
+annotation	extra information added to code, often marked with @
+mixin	a class that adds reusable features to other classes
+singleton	a class that allows only one instance to exist
+factory	a function or class that creates objects
+pattern	a common, reusable solution to a design problem
+delegate	an object or function that handles a task for another
+proxy	something that acts for another object or server in between
+adapter	code that lets incompatible interfaces work together
+wrapper	code that surrounds other code to give it a simpler interface
+wrap	to put code or data inside something else to extend or hide it
+handler	a function that deals with an event or request
+listener	a function that waits for an event and responds to it
+observer	an object that is notified when another object changes
+subscriber	something that signs up to receive messages or events
+emit	to send out an event or signal
+dispatch	to send an event or task to the right handler
+dispatcher	a component that sends events or tasks to the right handler
+hook	a point where you can add your own code to run
+stack	a data structure where the last item added is the first removed
+queue	a data structure where the first item added is the first removed
+heap	a memory area for dynamic data; also a tree-based priority structure
+tree	a data structure of nodes with a root and child branches
+node	a single item in a tree, graph, or list
+graph	a structure of points connected by lines
+vertex	a point in a graph
+edge	a line that connects two points in a graph
+hash	a fixed-size value calculated from data to identify it
+collision	a case where two different inputs get the same hash
+bucket	a slot in a hash table that holds entries
+matrix	a grid of numbers arranged in rows and columns
+vector	a list of numbers; also an array that can grow in size
+index	the position number of an item in a list
+offset	the distance from a starting point, such as a memory address
+length	the number of items or characters in something
+capacity	the most items something can hold before it must grow
+element	a single item in an array or list; also a part of a web page
+item	a single thing in a list or collection
+entry	a single record or item in a table, list, or log
+key	a unique name used to find a value in a collection
+pair	two related values kept together, such as a key and value
+subset	a set whose items are all part of a larger set
+sort	to arrange items in a certain order
+ascending	going from smallest to largest
+descending	going from largest to smallest
+search	to look for an item or information
+traverse	to visit each item in a data structure one by one
+traversal	the process of visiting each item in a data structure
+insertion	the act of adding an item into a structure
+deletion	the act of removing an item
+lookup	the act of finding a value, often by its key
+filter	to keep only the items that meet a condition
+filtering	keeping only the items that meet a condition
+reduce	to combine all items in a list into a single value
+aggregate	to combine many values into one result, such as a sum
+merge	to combine two or more things into one
+split	to break something into smaller parts
+concatenate	to join strings or lists end to end into one
+append	to add an item to the end of a list or file
+prepend	to add an item to the beginning of a list or string
+duplicate	an item that appears more than once; an exact copy of something
+unique	having no duplicates; appearing only once
+complexity	a measure of how time or memory use grows with input size
+linear	growing at the same rate as the input size
+logarithmic	growing very slowly, in proportion to the log of the input size
+exponential	growing extremely fast, doubling or more with each added input
+optimal	the best possible in speed, cost or result
+heuristic	using a practical rule of thumb to find a good-enough answer
+greedy	always choosing the best-looking option at each step
+dynamic	decided or changed while the program is running
+brute	trying every possible option without being clever, as in brute force
+binding	a link between a name and a value, function or object
+mapping	a set of links from keys or items to their matching values
+serialize	to turn an object into text or bytes for storing or sending
+deserialize	to rebuild an object from stored or received text or bytes
+parse	to read text and break it into a structure a program can use
+parser	a program that reads text and turns it into a structure
+format	the way data is arranged or written
+template	a pattern with placeholders used to create similar files or text
+regex	regular expression: a pattern used to search for and match text
+error	a problem that stops code from working correctly
+exception	an error event that interrupts normal program flow
+throw	to signal that an error has happened in code
+catch	to receive and deal with an error that was signaled
+raise	to signal an error so other code can deal with it
+handle	to deal with an event, error or request in code
+bug	a mistake in code that makes a program behave wrongly
+glitch	a small, often temporary problem in a system
+crash	to stop working suddenly because of an error
+fault	a defect or problem that causes a system to fail
+failure	the state of not working or not succeeding
+warning	a message about a possible problem that does not stop the program
+assert	to check in code that a condition is true
+assertion	a check in code that a condition must be true
+trace	a record of what code ran; the list of function calls at an error
+stacktrace	a list of the function calls active when an error happened
+breakpoint	a marked line where a debugger pauses the program
+inspect	to look closely at values or code to find problems
+log	a record of events and messages written by a program
+logger	an object or tool that writes messages to a record
+verbose	giving more detailed output than usual
+diagnostic	information that helps find the cause of a problem
+invalid	not correct or not allowed by the rules
+illegal	not permitted by the language or system rules
+unexpected	not planned for or not what the code expected
+unhandled	not caught or dealt with by any code
+unresolved	still not fixed; not able to be found or linked
+deprecated	still working but no longer recommended and may be removed
+deprecate	to mark a feature as no longer recommended
+obsolete	out of date and no longer used
+legacy	old but still in use, often hard to change
+workaround	a temporary way to avoid a problem without fully fixing it
+fallback	a backup option used when the main one fails
+retry	to try an operation again after it fails
+timeout	a time limit after which an operation is stopped
+abort	to stop an operation before it finishes
+terminate	to end a process or program
+corrupt	damaged so that data can no longer be read correctly
+corruption	damage to data that makes it wrong or unreadable
+leak	a slow loss of resources such as memory that are never freed
+regression	a bug where something that used to work stops working
+reproduce	to make a bug happen again on purpose
+troubleshoot	to find and fix the cause of a problem
+mitigate	to reduce the effect or risk of a problem
+test	code that checks whether other code works correctly
+testing	the process of checking that software works correctly
+unit	the smallest testable part of a program, such as a function
+integration	combining parts of a system so they work together
+coverage	the share of code that is run by tests
+mock	a fake object that copies a real one for testing
+stub	a simple placeholder piece of code that returns fixed results
+fixture	fixed data or setup prepared before running tests
+benchmark	a test that measures how fast or efficient code is
+validate	to check that data is correct and follows the rules
+validation	the process of checking that data is correct
+verify	to confirm that something is true or works as expected
+verification	the process of confirming that something is correct
+lint	automatic checking of code for style problems and likely errors
+linter	a tool that checks code for style problems and likely errors
+refactor	to improve the structure of code without changing what it does
+refactoring	improving code structure without changing its behavior
+readability	how easy code is to read and understand
+maintainability	how easy code is to fix, change and extend
+maintenance	work done to keep software running and up to date
+robust	able to keep working well even with bad input or errors
+reliability	the ability to work correctly over time without failing
+consistency	the quality of data or behavior staying the same everywhere
+correctness	the quality of producing the right results
+redundancy	extra copies or parts that are not strictly needed
+redundant	not needed because it repeats something already there
+boilerplate	standard code that is repeated with little change
+snippet	a small piece of code
+convention	a commonly agreed way of naming or writing code
+specification	a detailed description of how something must work
+compliance	following required rules, standards or laws
+repository	a place where a project's code and history are stored
+commit	to save a set of changes to version control
+push	to send local commits to a remote repository
+pull	to download and merge changes from a remote repository
+fetch	to download data or changes without applying them
+clone	to make a full local copy of a repository
+fork	to make your own copy of someone else's repository
+rebase	to move your commits onto a new base commit
+conflict	a clash when two changes edit the same lines
+diff	the differences between two versions of a file
+patch	a small change or fix applied to code
+revert	to undo a change and go back to an earlier state
+checkout	to switch to a branch or load a version of files
+stash	to save unfinished changes away temporarily
+tag	a label that marks a specific commit or version
+release	a published version of software made available to users
+version	a numbered state of software at a point in time
+changelog	a file listing the changes made in each version
+issue	a reported bug, task or feature request in a project tracker
+review	a check of someone's code changes by other developers
+approve	to officially accept changes, such as a pull request
+contributor	a person who adds code or other work to a project
+maintainer	a person responsible for managing and updating a project
+upstream	the original project or source that changes come from
+downstream	projects or parts that depend on and receive changes from another
+snapshot	a saved copy of the state of something at one moment
+revision	a specific saved version of a file or project
+history	the recorded list of past changes or actions
+documentation	written explanations of how software works and how to use it
+readme	a file that introduces a project and explains how to use it
+license	a legal document saying how software may be used and shared
+open	freely available for anyone to see and use, as in open source
+build	to turn source code into a program that can run
+bundle	a single file that combines many code files and assets
+bundler	a tool that combines many code files into one or a few files
+package	a set of code files shared and installed as one unit
+dependency	a library or package that your code needs to work
+install	to put software on a computer so it can be used
+installation	the process of putting software on a computer
+uninstall	to remove software from a computer
+upgrade	to move to a newer version
+update	to change something to a newer or more current state
+library	a collection of reusable code that programs can use
+framework	a structure of code that shapes how you build an application
+plugin	an add-on that gives a program extra features
+extension	an add-on that adds features to an app such as an editor
+module	a separate file or unit of code with its own purpose
+modular	made of separate parts that can be changed independently
+component	a self-contained part of a system or user interface
+toolchain	a set of tools used together to build software
+toolkit	a set of tools or libraries for a certain task
+script	a small program that automates a task
+command	an instruction typed or sent to make a program do something
+terminal	a text window where you type commands to the computer
+shell	a program that reads and runs typed commands
+console	a text area that shows program output and accepts commands
+prompt	the text a command line shows when it waits for input
+flag	an option added to a command, often starting with a dash
+option	a choice you can set to change how something works
+setting	a value that controls how a program behaves
+configuration	the settings that control how software runs
+configure	to set up options so software works a certain way
+environment	the system, settings and tools where a program runs
+deploy	to put software on a server so people can use it
+deployment	the process of putting software live for users
+pipeline	a series of automated steps to build, test and release code
+artifact	a file produced by a build, such as a package or binary
+container	a packaged, isolated environment that runs an application
+image	a saved template used to create containers or virtual machines
+cluster	a group of connected computers working as one system
+orchestration	automatic management of many containers or services together
+provision	to set up servers and resources so they are ready to use
+staging	a test environment that copies the real one before release
+production	the live environment that real users use
+rollback	a return to an earlier working version after a problem
+migration	moving data or systems from one version or place to another
+migrate	to move data or code to a new system or version
+compatible	able to work together with another system or version
+compatibility	the ability to work with other systems or versions
+incompatible	not able to work together with another system or version
+portable	able to run on different systems with little change
+platform	the hardware or software that programs run on
+target	the system or environment that code is built to run on
+minify	to remove spaces and shorten code to make files smaller
+transpile	to convert source code into another language or version
+polyfill	code that adds a modern feature to older browsers
+system	a set of connected parts that work together as a whole
+operating	running and managing the computer, as in operating system
+kernel	the core part of an operating system that controls hardware
+process	a running instance of a program with its own memory
+thread	a single path of work running inside a process
+concurrent	happening during the same period of time
+concurrency	running several tasks during overlapping periods of time
+parallel	running at exactly the same time on different processors
+synchronous	waiting for each task to finish before starting the next
+asynchronous	letting other work continue while waiting for a task to finish
+async	short for asynchronous: not waiting for a task before moving on
+await	to pause until an asynchronous task finishes
+promise	an object representing a result that will be ready later
+sync	to make data in two places match
+lock	a tool that lets only one thread use a resource at a time
+mutex	mutual exclusion: a lock letting only one thread access shared data
+deadlock	a state where tasks wait for each other forever
+race	competition between tasks for a resource, as in race condition
+atomic	done completely in one step without interruption
+blocking	stopping the program until an operation finishes
+idle	not doing any work; waiting
+schedule	to decide when tasks or processes will run
+scheduler	the part of a system that decides when tasks run
+scheduling	deciding the order and timing in which tasks run
+priority	the level of importance that decides what runs first
+worker	a thread or process that does background tasks
+daemon	a program that runs in the background without a user
+signal	a message sent to a process to tell it an event happened
+interrupt	a signal that makes the processor pause and handle an event
+memory	the part of a computer that holds data while programs run
+allocate	to set aside memory or resources for use
+allocation	the act of setting aside memory or resources
+garbage	unused memory that can be freed, as in garbage collection
+buffer	a memory area that holds data temporarily while it moves
+cache	a fast storage area that keeps copies of data for quicker access
+storage	the place where data is kept long term
+disk	a device that stores data permanently
+file	a named collection of data stored on a computer
+folder	a container that holds files and other containers
+directory	a container in a file system that holds files
+path	the location of a file or folder in a file system
+root	the top level of a file system or tree
+permission	the right to read, write or run a file or resource
+privilege	a special right to do actions others cannot, such as admin access
+executable	a file that the computer can run as a program
+processor	the chip that runs instructions in a computer
+virtual	simulated by software rather than existing as real physical hardware
+resource	something a program uses, such as memory, CPU time, files or data
+quota	a fixed limit on how much of a resource a user or service may use
+throttle	to limit how often something can run or how fast it can go
+debounce	to wait until rapid repeated events stop before running a handler once
+network	a group of connected computers that can share data with each other
+networking	the practice of connecting computers so they can exchange data
+protocol	a set of rules that controls how data is sent between systems
+request	a message sent to a server asking it to do something or return data
+response	the message a server sends back after receiving a request
+server	a computer or program that provides data or services to other programs
+client	a program or device that sends requests to a server and uses its services
+host	a computer connected to a network that runs services or programs
+port	a numbered endpoint on a computer that a network service listens on
+socket	one end of a two-way network connection between two programs
+packet	a small unit of data sent over a network
+header	extra information sent before the main data of a request or response; the top part of a file
+payload	the main data carried in a request or message; the body of a request
+endpoint	a specific URL where an API receives requests
+route	a rule that maps a URL path to the code that handles it
+router	a device that forwards data between networks; code that maps URLs to handlers
+gateway	a server or device that connects two networks and passes traffic between them
+domain	the name of a website, such as example.com; an area of knowledge or business
+address	a value that identifies a location in memory or a device on a network
+bandwidth	the maximum amount of data that can be sent in a given time
+latency	the delay between sending a request and getting the result
+throughput	the amount of work or data handled in a given period of time
+traffic	the amount of data or requests moving across a network or to a site
+upload	to send a file or data from your computer to a server
+download	to copy a file or data from a server to your computer
+browser	a program used to open and view web pages, such as Chrome or Firefox
+render	to turn code or data into visible output on the screen
+rendering	the process of turning code or data into what appears on the screen
+layout	the way elements are arranged and positioned on a page or screen
+viewport	the visible area of a web page in the browser window
+responsive	able to adjust its layout to fit different screen sizes
+stylesheet	a file of rules, usually CSS, that controls how a page looks
+selector	a pattern that chooses which elements a style rule or query applies to
+query	a request for specific data from a database or other source
+session	a period of interaction between a user and a system, with stored state
+cookie	a small piece of data a website stores in the browser
+redirect	to send a user or request automatically to a different URL
+redirection	the act of sending a user or request to a different location
+middleware	code that runs between receiving a request and sending the response
+webhook	an HTTP callback that one service sends to another when an event happens
+backend	the server side of an application that handles data and logic
+frontend	the part of an application that users see and interact with
+online	connected to the internet or a network and available
+offline	not connected to the internet or a network
+database	an organized collection of data stored so it can be easily searched and updated
+table	a set of data in a database arranged in rows and columns
+column	a vertical set of values in a table, all for the same field
+row	a single horizontal entry in a table, holding one record
+record	one complete set of related data, such as a single row in a table
+schema	the structure that defines how data is organized, such as tables and fields
+relational	storing data in tables that are linked to each other by keys
+transaction	a group of database operations that succeed or fail together as one unit
+constraint	a rule that limits what values data is allowed to have
+primary	main or most important, as in a primary key that uniquely identifies a row
+foreign	coming from outside, as in a foreign key that refers to another table's row
+join	a query operation that combines rows from two or more tables
+retrieval	the process of getting stored data back from a database or system
+retrieve	to get stored data back from a database, file or service
+persist	to save data so that it still exists after the program stops
+persistence	the ability of data to remain stored after a program stops running
+replica	a copy of data or a server kept in sync with the original
+replication	the process of copying data to several servers to keep them in sync
+shard	one horizontal piece of a database that has been split across servers
+partition	a separate section that a disk, table or dataset has been divided into
+backup	a copy of data kept so it can be recovered if the original is lost
+restore	to bring data or a system back to an earlier saved state
+integrity	the state of data being accurate, complete and not wrongly changed
+durability	the guarantee that saved data will not be lost, even after a crash
+entity	a thing with its own identity, such as a user or order, stored as data
+model	a representation of data or a system; in ML, a trained program that makes predictions
+cursor	a pointer used to move through database results one row at a time; the text position marker
+security	protection of systems and data from attacks and unauthorized access
+authentication	the process of checking who a user or system really is
+authorization	the process of deciding what a user is allowed to do or access
+authenticate	to check and confirm the identity of a user or system
+credential	information such as a password or key used to prove identity
+password	a secret string of characters used to prove who you are when logging in
+encryption	the process of converting data into a secret code so others cannot read it
+encrypt	to convert data into a secret code so only allowed people can read it
+decrypt	to convert encrypted data back into its original readable form
+cipher	an algorithm used to encrypt and decrypt data
+certificate	a digital document that proves the identity of a website or server
+vulnerability	a weakness in software that attackers can use to cause harm
+exploit	code or a technique that takes advantage of a security weakness
+injection	an attack that inserts harmful code or commands into a program's input
+firewall	a system that blocks or allows network traffic based on security rules
+sanitize	to clean user input by removing or neutralizing unsafe content
+escape	to add special characters so that symbols are treated as plain text
+privacy	the right to keep personal data from being seen or used by others
+anonymous	without a name or identity being known or required
+confidentiality	keeping information secret so only allowed people can access it
+hacker	a person who breaks into computer systems; a skilled programmer
+malicious	written or done on purpose to cause harm
+interactive	responding to the user's actions or input as they happen
+widget	a small user interface element, such as a button or slider
+button	a clickable element on the screen that performs an action
+checkbox	a small box a user can click to select or clear an option
+dropdown	a menu that shows a list of options when you click it
+dialog	a small window that shows information or asks the user for input
+modal	a window that appears on top of the page and blocks it until closed
+tooltip	a small text box that appears when you hover over an element
+icon	a small picture that represents an app, file or action
+font	a set of characters in a particular design and style
+pixel	the smallest single point of color on a screen or image
+palette	a set of colors to choose from; a searchable list of commands
+theme	a set of colors and styles that controls an interface's appearance
+animation	moving images or effects created by changing visuals over time
+transition	a smooth visual change from one state or style to another
+scroll	to move content up, down or sideways to see more of it
+toggle	to switch between two states, such as on and off
+shortcut	a key combination that performs an action quickly; a link to a file
+clipboard	a temporary storage area for text or data you have copied
+foreground	the state of a process the user is directly interacting with; the front layer
+background	the state of a process running without user interaction; the back layer
+accessibility	the design of software so that people with disabilities can use it
+navigation	the way users move between pages or sections of an app
+desktop	the main screen of a computer; a program that runs on a personal computer
+editor	a program used to write and change text or code
+preview	a view of how something will look before it is final
+highlight	to mark text or code with color so it stands out
+performance	how fast and efficiently a program runs
+optimize	to make code or a system run faster or use fewer resources
+optimization	the process of making code or a system faster or more efficient
+efficient	doing a task well without wasting time or resources
+overhead	extra time, memory or work needed beyond the main task
+bottleneck	the slowest part of a system that limits its overall speed
+scalable	able to handle more users or data by adding resources
+scalability	the ability of a system to handle growing amounts of work
+availability	the degree to which a system is working and ready to use
+distributed	spread across several computers that work together
+architecture	the overall structure and design of a software system
+infrastructure	the basic hardware, servers and networks that systems run on
+service	a program or component that performs a specific task for others
+microservice	a small, independent service that does one job within a larger system
+monolith	an application built as a single large unit with all parts together
+layer	one level in a system where each level has its own role
+tier	one level in a system, such as the data, logic or presentation level
+coupling	how much one part of the code depends on another
+cohesion	how closely the parts inside a module are related to one purpose
+granularity	the level of detail or size of the parts something is divided into
+hierarchy	a structure where items are arranged in levels, such as a tree
+hierarchical	arranged in levels, with each item above or below others
+lazy	done only when actually needed rather than in advance
+eager	done immediately rather than waiting until needed
+deferred	delayed so that it runs later instead of right away
+preload	to load data or resources before they are needed
+prefetch	to fetch data in advance so it is ready when needed
+polling	checking a resource again and again at intervals to see if it changed
+stream	a flow of data that is read or written piece by piece over time
+pipe	a channel that passes the output of one process as input to another
+event	something that happens, such as a click, that code can respond to
+trigger	to cause an action, function or event to start
+lifecycle	the series of stages an object or component goes through from creation to removal
+state	the current data or condition of a program or component
+stateless	not keeping any stored data between requests or calls
+idempotent	giving the same result no matter how many times it is repeated
+deterministic	always producing the same output for the same input
+metadata	data that describes other data, such as size or creation date
+monitoring	the ongoing watching of a system to track its health and performance
+metric	a measured value used to track how a system is performing
+threshold	a limit value that causes an action when it is reached or crossed
+granular	divided into small, detailed parts
+specify	to state clearly and exactly what is needed or used
+specified	stated or set clearly and exactly
+optional	not required; can be given or left out
+required	needed; must be given or present
+mandatory	must be done or included; not optional
+explicit	stated or written out clearly in the code
+implicit	happening automatically without being written out in the code
+arbitrary	any value or choice, not limited to a specific one
+corresponding	matching or related to something else
+respectively	in the same order as the items just mentioned
+subsequent	coming after something else
+preceding	coming just before something else
+underlying	at a lower level, beneath what you directly work with
+built	included as part of a language or system from the start, as in built-in
+native	made specifically for a platform or language rather than added on
+custom	made or set by the user rather than the default
+customize	to change something to fit your own needs or preferences
+enable	to turn on a feature or setting
+disable	to turn off a feature or setting
+initialize	to set up a variable or object with its starting values
+initial	first; existing at the beginning
+omit	to leave out something that is optional
+ignore	to skip or not pay attention to something
+expose	to make something available for other code or users to access
+leverage	to use something to get a useful result
+utilize	to make use of something
+utility	a small tool or program that performs a helpful task
+helper	a small function that does a common task to support other code
+feature	a piece of functionality that a program offers
+functionality	the set of things a program or feature can do
+capability	something a system or program is able to do
+behavior	the way a program or object acts in response to input or events
+mechanism	a system of parts or steps that makes something work
+approach	a way of dealing with a problem or task
+scenario	a possible situation in which a program is used
+workflow	a series of steps followed to complete a task
+guideline	a rule or piece of advice about how something should be done
+tutorial	a lesson that teaches how to do something step by step
+overview	a short general description of the main points
+prerequisite	something that must exist or be done before something else
+caveat	a warning about a limitation or something to be careful of
+limitation	a restriction on what something can do
+trade-off	a balance where gaining one benefit means losing another
+best	of the highest quality, as in best practice, the recommended way
+recommend	to suggest something as a good choice
+appropriate	suitable for a particular situation
+sufficient	enough for a particular purpose
+valid	correct and acceptable according to the rules
+populate	to fill a structure, list or form with data
+propagate	to spread or pass something along to other parts of a system
+consume	to receive and use data, messages or resources
+expire	to stop being valid after a set time
+revoke	to take back a permission, key or token so it no longer works
+grant	to give a user or program a permission or access
+manifest	a file that lists an app's information, settings and contents
+experimental	still being tested and may change or be removed
+stable	reliable and not expected to change in a breaking way
+beta	an early version of software released for testing before the final release
+breaking	causing existing code to stop working, as in a breaking change
+backward	working with older versions, as in backward compatible
